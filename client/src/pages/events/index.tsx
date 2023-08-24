@@ -1,4 +1,5 @@
 import LandingLayout from "layouts/LandingLayout";
+import { mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Event, EventList } from "store/types";
 
@@ -8,8 +9,7 @@ export const getServerSideProps: GetServerSideProps<{
   // const endpoint = `${SERVER_URL}/events`
   // const data = await axios.get(endpoint);
   // zod data validation here
-  const mockData = [{ id: "1", name: "placeholder" }];
-  return { props: { events: mockData } };
+  return { props: { events: mockEvents } };
 };
 
 function EventList({

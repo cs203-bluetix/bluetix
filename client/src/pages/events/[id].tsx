@@ -1,4 +1,5 @@
 import LandingLayout from "layouts/LandingLayout";
+import { mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -10,7 +11,17 @@ export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   // const endpoint = `${SERVER_URL}/event/${eventId}`
   // const data = await axios.get(endpoint);
   // zod data validation here
-  return { props: { event: { id: eventId, name: "placeholder" } } };
+  const event = mockEvents.find((e) => e.id == eventId);
+
+  if (!event)
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+
+  return { props: { event: mockEvents[0] as Event } };
 };
 function Event({
   event,
