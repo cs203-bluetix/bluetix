@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.map_container {
+  height: 100% !important;
+}
+
+.goodseat {
+  fill: red;
+}
