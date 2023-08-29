@@ -10,7 +10,7 @@ export default function LandingLayout({ children }: { children: JSX.Element }) {
         <title>Create T3 App</title>
         <meta name="description" content="bluetix" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> 
       <Navbar />
       <main>{children}</main>
       <Footer />
