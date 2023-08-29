@@ -3,6 +3,8 @@ import { Event } from "store/types";
 export const mockEvents: Event[] = [
   {
     id: "123",
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
     name: "Concert des Amis: a SOTA Music Faculty Showcase",
     eventDetails:
       "The SOTA Music Faculty presents the first faculty concert programme performed entirely on historical instruments.\nBe treated to some of the best gems of the Baroque repertory, including works by J.S. and C.P.E Bach, Telemann, Royer and Tartini.\n\nMusicians:\nYang Tien, Harpsichord\nMervyn Lee, Harpsichord\nCheryl Lim, Traverso\nBrenda Koh, Baroque Violin\nAlan Choo, Baroque Violin\nPlacida ho, Baroque Viola\nYeh Tzu Jou, Baroque Cello\nLeslie Tan, Viola da Gamba\n\nThe event will run for 75 minutes.",
@@ -12,7 +14,7 @@ export const mockEvents: Event[] = [
     admissionsPolicy:
       "\nAdmission Policy\nAdmission Rules:\n\n    Admission to show/venue by full ticket only. Printed/electronic tickets must be produced for admission.\n    There will be no admission for infants in arms and children below 6 years old.\n    Individuals aged 6 years old and above will be required to purchase a ticket for admission.\n    No flash photography and videography allowed.\n    No outside food and beverage are allowed into the venue.\n\n",
 
-    dates: [],
+    dates: ["2023-08-23"],
     location: "University Cultural Center",
   },
   {
@@ -207,4 +209,23 @@ export const mockEvents: Event[] = [
     ],
     location: "Curious Explorers Campsite",
   },
+];
+
+export const locations = [
+  "University Cultural Center",
+  "Local Community Center",
+  "FitEx Convention Center",
+  "Nature Center",
+  "City Park",
+  "Local Library",
+  "Central Park",
+  "Tech Hub Convention Center",
+  "Botanical Garden",
+  "The Comedy Club",
+  "Grand Convention Hall",
+  "Culinary Institute",
+  "Tech Innovate Center",
+  "Tranquil Valley Retreat Center",
+  "ArtBeat Festival Grounds",
+  "Curious Explorers Campsite",
 ];
