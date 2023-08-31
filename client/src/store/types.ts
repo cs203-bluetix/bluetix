@@ -1,3 +1,5 @@
+import * as geojson from "geojson";
+import { Layer } from "leaflet";
 export interface Event {
   id: string;
   name: string;
@@ -10,3 +12,8 @@ export interface Event {
 }
 
 export type EventList = Event[];
+
+export interface SeatNode {
+  feature: geojson.Feature;
+  layer: Layer;
+}

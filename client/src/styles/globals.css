@@ -9,3 +9,9 @@
 .goodseat {
   fill: red;
 }
+
+.label {
+  background-color: transparent !important;
+  border: transparent !important;
+  box-shadow: none !important;
+}
