@@ -3,17 +3,25 @@ import Navbar from "components/Navbar/Navbar";
 import Head from "next/head";
 import React from "react";
 
-export default function LandingLayout({ children }: { children: JSX.Element }) {
+export default function LandingLayout({
+  children,
+  title,
+}: {
+  children: JSX.Element;
+  title?: string;
+}) {
   return (
     <>
       <Head>
-        <title>Create T3 App</title>
+        <title>{title ?? "BlueTix"}</title>
         <meta name="description" content="bluetix" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
+      <div>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      </div>
     </>
   );
 }
