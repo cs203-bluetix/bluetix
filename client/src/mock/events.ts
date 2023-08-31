@@ -16,6 +16,7 @@ export const mockEvents: Event[] = [
 
     dates: ["2023-08-23"],
     location: "University Cultural Center",
+    prices: [100, 200, 300],
   },
   {
     id: "101",
@@ -28,6 +29,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- No ticket required for entry.\n- Children must be supervised by guardians at all times.\n- No smoking or vaping on the premises.",
     dates: ["2023-09-20", "2023-09-21"],
     location: "Local Community Center",
+    prices: [50, 89, 100],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "102",
@@ -41,6 +45,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Tickets must be presented for entry.\n- Participants must be at least 16 years old.\n- Photography and videography are allowed only in designated areas.",
     dates: ["2023-11-15", "2023-11-16"],
     location: "FitEx Convention Center",
+    prices: [36, 78],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "103",
@@ -53,6 +60,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Workshop registration is mandatory.\n- Participants must be at least 18 years old.\n- Workshop materials and notes will be provided.",
     dates: ["2023-09-10"],
     location: "Nature Center",
+    prices: [400, 600],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "104",
@@ -65,6 +75,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- No tickets required.\n- Families and pets are welcome.\n- Please dispose of trash responsibly.",
     dates: ["2023-07-25"],
     location: "City Park",
+    prices: [800, 1000],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "105",
@@ -77,6 +90,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Membership registration is required.\n- Participants must have read or be familiar with the book being discussed.\n- Respectful and inclusive behavior is expected.",
     dates: ["2023-08-08", "2023-08-15", "2023-08-22", "2023-08-29"],
     location: "Local Library",
+    prices: [300, 500],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "201",
@@ -89,6 +105,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- No tickets required.\n- Families, friends, and pets are welcome.\n- Please keep the area clean and dispose of trash properly.",
     dates: ["2023-09-05"],
     location: "Central Park",
+    prices: [168, 288, 388],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "202",
@@ -101,6 +120,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Valid tickets must be presented for entry.\n- Minors under 16 must be accompanied by an adult.\n- Follow safety guidelines while using VR equipment.",
     dates: ["2023-10-20", "2023-10-21", "2023-10-22"],
     location: "Tech Hub Convention Center",
+    prices: [80],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "203",
@@ -113,6 +135,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Workshop registration is mandatory.\n- Participants must be at least 18 years old.\n- Workshop materials and tools will be provided.",
     dates: ["2023-08-30"],
     location: "Botanical Garden",
+    prices: [160, 200],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "204",
@@ -125,6 +150,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Tickets must be presented for entry.\n- Seating is on a first-come, first-served basis.\n- No heckling or disruptive behavior.",
     dates: ["2023-11-10"],
     location: "The Comedy Club",
+    prices: [60, 80, 100],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "205",
@@ -137,6 +165,9 @@ export const mockEvents: Event[] = [
       "Admission Policy:\n\n- Tickets must be presented for entry.\n- Age restriction: 18 and above.\n- No recording devices during the show.",
     dates: ["2023-09-15"],
     location: "Grand Convention Hall",
+    prices: [200, 300, 500],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "301",
@@ -150,6 +181,9 @@ export const mockEvents: Event[] = [
       "Admissions Policy:\n\n- Workshop registration is mandatory for entry.\n- Participants must be at least 16 years old.\n- Workshop equipment and utensils will be provided.",
     dates: ["2023-10-10"],
     location: "Culinary Institute",
+    prices: [40, 70, 90],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "302",
@@ -163,6 +197,9 @@ export const mockEvents: Event[] = [
       "Admissions Policy:\n\n- Valid tickets must be presented for entry.\n- Minors under 18 must be accompanied by an adult.\n- Respectful behavior is expected throughout the conference.",
     dates: ["2023-11-25", "2023-11-26"],
     location: "Tech Innovate Center",
+    prices: [12, 20, 30],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "303",
@@ -176,6 +213,9 @@ export const mockEvents: Event[] = [
       "Admissions Policy:\n\n- Retreat pass or ticket confirmation is required for entry.\n- Participants must be at least 18 years old.\n- Respectful and mindful behavior is expected throughout the retreat.",
     dates: ["2023-09-01", "2023-09-02", "2023-09-03"],
     location: "Tranquil Valley Retreat Center",
+    prices: [40, 80, 100],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "304",
@@ -189,6 +229,9 @@ export const mockEvents: Event[] = [
       "Admissions Policy:\n\n- Valid tickets must be presented for entry.\n- Minors must be accompanied by an adult.\n- Respect the artworks and installations; no touching or tampering.",
     dates: ["2023-08-15", "2023-08-16"],
     location: "ArtBeat Festival Grounds",
+    prices: [150, 180, 245],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
   {
     id: "305",
@@ -208,6 +251,9 @@ export const mockEvents: Event[] = [
       "2023-07-14",
     ],
     location: "Curious Explorers Campsite",
+    prices: [300, 400, 500],
+    image:
+      "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
   },
 ];
 
