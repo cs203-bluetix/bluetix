@@ -19,7 +19,7 @@ export default function LandingLayout({
       </Head>
       <div>
         <Navbar />
-        <main>{children}</main>
+        <main className="">{children}</main>
         <Footer />
       </div>
     </>

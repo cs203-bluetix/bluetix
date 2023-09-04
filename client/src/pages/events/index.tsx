@@ -6,6 +6,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import LandingLayout from "layouts/LandingLayout";
+import { Section } from "layouts/Section";
 import { locations, mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
@@ -48,9 +49,8 @@ function EventList({
 
   return (
     <LandingLayout title="BlueTix - Events">
-      <div className="mt-4 w-full">
+      <Section title="Events">
         <div className="flex w-full flex-col items-center justify-center gap-4">
-          <h1>Events</h1>
           <div className="flex h-fit min-h-[56px] w-full max-w-[95%] flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
@@ -112,7 +112,7 @@ function EventList({
             </div>
           </div>
         </div>
-      </div>
+      </Section>
     </LandingLayout>
   );
 }

@@ -7,9 +7,15 @@ import { AboutRow } from "pages/aboutus/aboutRow";
 export default function About() {
     return (
         <>
-            <LandingLayout title="BlueTix - Events">
+            <LandingLayout title="BlueTix - About Us">
                 <main>
-                    <Section title="About BlueTix" description="Welcome to BlueTix, your ultimate destination for hassle-free event ticketing! BlueTix is more than just a ticketing platform; it's a cutting-edge solution designed to revolutionize your event experience.">
+                    <Section>
+                        <div>
+                            <div className="w-full text-center sm:px-6">
+                                <h2 className="text-4xl font-bold text-gray-900">About BlueTix</h2>
+                                <div className="mt-6 text-xl leading-9">Welcome to BlueTix, your ultimate destination for hassle-free event ticketing! BlueTix is more than just a ticketing platform; it's a cutting-edge solution designed to revolutionize your event experience.</div>
+                            </div>
+                        </div>
                         <AboutRow
                             title="A Bridge Between 2.0 and 3.0"
                             description="Say goodbye to counterfeit tickets. BlueTix employs cutting-edge blockchain technology to authenticate and secure event tickets. Every ticket is unique, ensuring that you have a genuine pass to your desired event."
@@ -25,11 +31,12 @@ export default function About() {
                             title="Reseller Prevention"
                             description="We've put a stop to ticket reselling by imposing a cap. This means no more exorbitant ticket prices or sold-out events due to resellers. BlueTix ensures that tickets end up in the hands of genuine event-goers."
                             image="/images/undraw_empty_cart_co35.svg" />
-                    </Section>
-                    <Section
-                        title="Our Technology Stack"
-                        description={
-                            <ul>
+
+                    <div>
+                            <div className="w-full text-center sm:px-6 mt-24">
+                                <h2 className="text-4xl font-bold text-gray-900">Our Technology Stack</h2>
+                                <div className="mt-6 text-xl leading-9">
+                                <ul>
                                 <li>
                                     <span>Frontend:</span> We use ReactJS to create a dynamic and user-friendly interface.
                                 </li>
@@ -45,9 +52,10 @@ export default function About() {
                                 <li>
                                     <span>Deployment:</span> BlueTix is hosted on AWS, ensuring high availability and scalability.
                                 </li>
-                            </ul>
-                        }
-                    />
+                            </ul>                                    </div>
+                            </div>
+                        </div>
+                    </Section>
 
                 </main>
             </LandingLayout>
