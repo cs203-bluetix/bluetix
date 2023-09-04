@@ -15,7 +15,14 @@ export interface Event {
 
 export type EventList = Event[];
 
+export interface SeatInfo {
+  id: string;
+  category: number;
+  numSeats: number;
+}
+
 export interface SeatNode {
   feature: geojson.Feature;
   layer: Layer;
+  info: SeatInfo;
 }

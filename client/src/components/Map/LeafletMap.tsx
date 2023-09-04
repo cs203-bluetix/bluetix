@@ -11,7 +11,7 @@ function LeafletMap() {
     <>
       <MapContainer
         className="h-full w-full"
-        zoom={6}
+        zoom={7}
         center={{ lat: 1.701939977460562, lng: -4.899902343750001 }}
       >
         <MapFunctions />
@@ -19,7 +19,21 @@ function LeafletMap() {
           data={{ type: "FeatureCollection", ...seats }}
           style={{ color: "green", fillColor: "red" }}
           onEachFeature={(f, l) => {
-            store.addNode({ feature: f, layer: l });
+            const id = f.properties.id;
+            const info = store.seats.find((s) => s.id == id);
+            if (info) store.addNode({ feature: f, layer: l, info });
+            l.on("mouseover", (e) => {
+              l.bindPopup(`Number of seats: ${info?.numSeats}`, {
+                className: "popup",
+                closeButton: false,
+              });
+              l.openPopup();
+            });
+
+            l.on("mouseout", (e) => {
+              l.closePopup();
+            });
+
             l.on("mouseover", (e) =>
               e.target.setStyle({ color: "blue", fillColor: "yellow" })
             );
@@ -51,15 +65,15 @@ function LeafletMap() {
 export default LeafletMap;
 
 function MapFunctions() {
-  const state = useMap();
-
+  const map = useMap();
+  const setMap = useStore((state) => state.setMap);
   useEffect(() => {
-    state.on("move", (e) => {
-      console.log(e);
-      console.log(state.getCenter());
-      console.log(state.getBounds());
-    });
-  }, []);
+    if (map) {
+      setMap(map);
+      map.attributionControl.remove();
+      map.zoomControl.remove();
+    }
+  }, [map]);
 
   return null;
 }

@@ -16,6 +16,10 @@
   box-shadow: none !important;
 }
 
+.popup {
+  transition-duration: 0s !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
