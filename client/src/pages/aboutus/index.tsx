@@ -11,7 +11,7 @@ export default function About() {
                 <main>
                     <Section>
                         <div>
-                            <div className="w-full text-center sm:px-6">
+                            <div className="w-full text-center pt-4 sm:px-6">
                                 <h2 className="text-4xl font-bold text-gray-900">About BlueTix</h2>
                                 <div className="mt-6 text-xl leading-9">Welcome to BlueTix, your ultimate destination for hassle-free event ticketing! BlueTix is more than just a ticketing platform; it's a cutting-edge solution designed to revolutionize your event experience.</div>
                             </div>
@@ -38,19 +38,16 @@ export default function About() {
                                 <div className="mt-6 text-xl leading-9">
                                 <ul>
                                 <li>
-                                    <span>Frontend:</span> We use ReactJS to create a dynamic and user-friendly interface.
+                                    <span>Frontend:</span> ReactJS, TailwindCSS
                                 </li>
                                 <li>
-                                    <span>Styling:</span> TailWindCSS gives our website a sleek and responsive design.
+                                    <span>Backend:</span> Java SpringBoot
                                 </li>
                                 <li>
-                                    <span>Backend:</span> Java SpringBoot ensures speed and reliability.
+                                    <span>Database:</span> MySQL Database
                                 </li>
                                 <li>
-                                    <span>Database:</span> MySQL Database securely stores your data.
-                                </li>
-                                <li>
-                                    <span>Deployment:</span> BlueTix is hosted on AWS, ensuring high availability and scalability.
+                                    <span>Deployment:</span> AWS
                                 </li>
                             </ul>                                    </div>
                             </div>

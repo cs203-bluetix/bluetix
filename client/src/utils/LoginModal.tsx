@@ -44,14 +44,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const renderLoginForm = () => {
     return (
       <>
-        <div className='mb-8 flex'><h2 className='text-2xl font-bold w-1/2'>Login</h2>
-        
-        <div
-          className='flex w-1/2 mt-2 justify-end'
-        >
-          <div 
-          onClick={onClose} ><FaTimes /></div>
-        </div>
+        <div className='mb-8 flex'>
+          <h2 className='text-2xl font-bold w-1/2'>Login</h2>
+          <div
+            className='flex w-1/2 mt-2 justify-end'
+          >
+            <div
+              onClick={onClose} ><FaTimes /></div>
+          </div>
         </div>
         <input
           type="text"
@@ -85,10 +85,16 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   const renderRegistrationForm = () => {
     return (
       <>
-        <h2 className='text-2xl font-bold mb-4'>Register Now</h2>
-        {/* Add your registration form fields here */}
-        {/* Include inputs for first name, last name, email, password, etc. */}
-        
+        <div className='mb-8 flex'>
+          <h2 className='text-2xl font-bold w-1/2'>Register Now</h2>
+          <div
+            className='flex w-1/2 mt-2 justify-end'
+          >
+            <div
+              onClick={onClose} ><FaTimes /></div>
+          </div>
+        </div>
+
         <input
           type="text"
           placeholder="Email"
