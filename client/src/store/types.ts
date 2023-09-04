@@ -7,6 +7,8 @@ export interface Event {
   faq: string;
   dates: string[];
   location: string;
+  image?: string;
+  prices: number[];
 }
 
 export type EventList = Event[];
