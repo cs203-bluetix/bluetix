@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios'; // Import Axios
 import LandingLayout from 'layouts/LandingLayout';
 import { Section } from 'layouts/Section';
 import Link from "next/link";
-import { Venue } from "store/types"; // Import the Venue interface
+import { Venue } from "store/types";
+import axiosConfig from 'utils/axiosConfig';
 
 function VenueList() {
-  const [venues, setVenues] = useState<Venue[]>([]); // Change "events" to "venues" and specify the type as Venue[]
+  const [venues, setVenues] = useState<Venue[]>([]); 
 
   useEffect(() => {
-    axios.get('http://localhost:9090/api/venues') // Use the relative path to the API route
+    axiosConfig.get('/api/venues')
       .then((response) => {
         setVenues(response.data);
       })
@@ -18,12 +18,6 @@ function VenueList() {
       });
   }, []);
 
-  // Use useEffect to log the state whenever it changes
-  useEffect(() => {
-    console.log('Venues:', venues);
-  }, [venues]);
-
-  // Render your component with the fetched venues data
   return (
     <LandingLayout title="BlueTix - Venues">
       <Section title="Venues">

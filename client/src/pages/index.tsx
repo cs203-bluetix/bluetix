@@ -9,13 +9,6 @@ export default function Home() {
   return (
     <>
       <LandingLayout>
-
-      {/* <Head>
-        <title>BlueTix</title>
-        <meta name="description" content="bluetix" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Navbar classProps="bg-opacity-70 backdrop-blur-lg absolute inset-x-0" /> */}
       <main>
         <div className="flex h-screen w-screen bg-cover z-0 flex justify-between" style={{ backgroundImage: `url(${image.src})` }}>
           <div className="pl-20 items-start w-1/2 flex flex-col gap-0">
@@ -38,7 +31,6 @@ export default function Home() {
 
         </div>
       </main>
-      {/* <Footer /> */}
       </LandingLayout>
     </>
   );
