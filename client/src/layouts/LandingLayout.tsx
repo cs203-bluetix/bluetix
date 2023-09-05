@@ -6,11 +6,17 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function LandingLayout({ children }: { children: JSX.Element }) {
+export default function LandingLayout({
+  children,
+  title,
+}: {
+  children: JSX.Element;
+  title?: string;
+}) {
   return (
     <>
       <Head>
-        <title>Create T3 App</title>
+        <title>{title ?? "BlueTix"}</title>
         <meta name="description" content="bluetix" />
         <link rel="icon" href="/favicon.ico" />
       </Head> 
