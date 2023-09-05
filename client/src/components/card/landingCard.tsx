@@ -4,38 +4,33 @@ import { mockEvents } from "mock/events";
 import { Event } from "store/types";
 
 type LandingCardProps = {
-    // isActive: boolean;
-    // className: string;
     event: Event;
-    // Add the product ID prop to identify the specific product
 };
 const LandingCard: React.FC<LandingCardProps> = ({event}) => {
     return (
-        // <div className={`landing-card ${isActive ? 'opacity-100' : 'opacity-10'} transition-opacity duration-500 `}>
-            <div className="flex items-center">
-                <div className="border border-1 border-black rounded-lg pb-5">
+            <div className="flex items-center bg-gradient-to-r from-cyan-500 to-blue-600 border border-2 border-black rounded-lg">
+                <div className="">
                     <a href="/">
                         <div className="">
                             <img
                                 src={image.src}
-                                className="w-full h-full rounded-lg"
+                                className="rounded-t-lg"
                                 alt=""
                             />
                         </div>
                     </a>
-                    <div className="justify-items-center px-5">
-                        <div className="text-xl font-semibold ">
+                    <div className="justify-items-center text-center py-2">
+                        <div className="text-2xl font-semibold ">
                             {event.name}
                         </div>
-                        <div className="text-xl font-semibold">
-                            {event.eventDetails}
+                        <div className="text-2xl ">
+                            {event.description}
                         </div>
                     </div>
 
                 </div>
 
             </div>
-        // </div>
 
     );
 };
