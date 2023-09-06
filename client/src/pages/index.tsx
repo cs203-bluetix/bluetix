@@ -76,10 +76,11 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               loop={true}
               slidesPerView={2.5}
               coverflowEffect={{
-                rotate: 0,
-                stretch: 0,
+                rotate: 2,
+                stretch: 50,
                 depth: 100,
                 modifier: 2.5,
+                slideShadows: true,
               }}
               pagination={{ el: ".swiper-pagination", clickable: true }}
               navigation={{
