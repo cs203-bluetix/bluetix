@@ -102,7 +102,14 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               </div>
             </Swiper>
           </div>
-        </main>
+          <div className="flex items-center px-20 w-1/2">
+            <input
+              type="text"
+              name="search"
+              className="text-xl rounded-full w-[450px] h-[50px] border border-0.5 border-black bg-blue-200 bg-opacity-50"
+            />
+          </div>
+      </main>
       </LandingLayout>
     </>
   );

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const getSimpleDate = (date: string | number | Date) => {
   const formattedDate = new Date(date);
   const formattedTime = `${formattedDate
@@ -9,4 +11,12 @@ export const getSimpleDate = (date: string | number | Date) => {
     .padStart(2, "0")}`;
 
   return [formattedDate.toLocaleDateString(), formattedTime];
+};
+
+export const getReadableDate = (date: string) => {
+  const formattedDateTime = dayjs(date)
+    .locale("en")
+    .format("D MMM YYYY - HH:mm");
+  const formattedDate = dayjs(date).locale("en").format("D MMM YYYY");
+  return { formattedDate, formattedDateTime };
 };
