@@ -8,7 +8,7 @@ type LandingCardProps = {
 };
 const LandingCard: React.FC<LandingCardProps> = ({event}) => {
     return (
-            <div className="flex items-center bg-gradient-to-r from-cyan-500 to-blue-600 border border-2 border-black rounded-lg">
+            <div className="flex items-center bg-gradient-to-tr from-neutral-50 to-cyan-600 border border-2 border-black rounded-lg">
                 <div className="">
                     <a href="/">
                         <div className="">

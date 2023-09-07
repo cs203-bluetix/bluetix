@@ -61,7 +61,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               />
             </div>
           </div>
-          <div className="w-screen h-screen">
+          <div className="w-screen h-screen bg-gradient-to-r from-gray-300 to-blue-900" >
             <div className=" text-4xl font-bold text-center py-[50px]">
               Trending
             </div>
@@ -84,32 +84,34 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               }}
               pagination={{ el: ".swiper-pagination", clickable: true }}
               navigation={{
-                nextEl: ".swiper-button-next", 
-                prevEl: ".swiper-button-prev", 
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
               }}
               modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
               className="swiper_container"
             >
               {events.map((item, index) => (
-            <SwiperSlide key={index}
-            className="">
+                <SwiperSlide key={index}
+                  className="">
                   <LandingCard event={item} />
-            </SwiperSlide>
-             ))}
+                </SwiperSlide>
+              ))}
               <div className="slider-control">
                 <div className="swiper-button-prev slider-arrow"></div>
                 <div className="swiper-button-next slider-arrow"></div>
               </div>
             </Swiper>
           </div>
-          <div className="flex items-center px-20 w-1/2">
-            <input
-              type="text"
-              name="search"
-              className="text-xl rounded-full w-[450px] h-[50px] border border-0.5 border-black bg-blue-200 bg-opacity-50"
-            />
+          <div className="w-screen h-screen flex justify-items-center">
+            <div className="grid grid-cols-6 gap-5 w-full h-full p-[150px] font-bold text-2xl">
+              <button className="border border-1 border-black rounded-lg col-span-2"> LOCAL </button>
+              <button className="border border-1 border-black rounded-lg col-span-2"> INTERNATIONAL </button>
+              <button className="border border-1 border-black rounded-lg col-span-2"> OTHERS </button>
+              <button className="border border-1 border-black rounded-lg col-span-3"> MUSIC </button>
+              <button className="border border-1 border-black rounded-lg col-span-3"> SPORTS </button>
+            </div>
           </div>
-      </main>
+        </main>
       </LandingLayout>
     </>
   );
