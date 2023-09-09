@@ -2,6 +2,9 @@ import Footer from "components/Footer/Footer";
 import Navbar from "components/Navbar/Navbar";
 import Head from "next/head";
 import React from "react";
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export default function LandingLayout({
   children,
@@ -16,12 +19,12 @@ export default function LandingLayout({
         <title>{title ?? "BlueTix"}</title>
         <meta name="description" content="bluetix" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-      </div>
+      </Head> 
+      <Navbar />
+      <main className={inter.className}>
+        {children}
+      </main>
+      <Footer />
     </>
   );
 }
