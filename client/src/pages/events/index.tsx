@@ -11,6 +11,7 @@ import { locations, mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useAuthStore } from "store/auth";
 import { Event, EventList } from "store/types";
 import { getReadableDate } from "utils/getSimpleDate";
 
@@ -31,7 +32,6 @@ function EventList({
   const [filterLocation, setFilterLocation] = useState<string | null>(null);
   const [filterPrice, setFilterPrice] = useState<[number, number]>([0, 1000]);
   const [eventsToDisplay, setEventsToDisplay] = useState(events);
-
   useEffect(() => {
     const newEvents = events.filter(
       (e) =>

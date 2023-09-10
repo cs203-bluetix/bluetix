@@ -1,12 +1,21 @@
-import create from "zustand";
+import { create } from "zustand";
+import { UserInfo } from "./types";
 
 interface AuthStoreObject {
-  user: string;
-  loginUser: (user: string) => void;
+  user: UserInfo | null;
+  loading: boolean;
+  setLoading: (l: boolean) => void;
+  loginUser: (user: UserInfo) => void;
+  logoutUser: () => void;
 }
 
-export default create<AuthStoreObject>((set) => ({
-  user: "",
+export const useAuthStore = create<AuthStoreObject>((set, get) => ({
+  user: null,
+  loading: true,
+  setLoading: (l) => set(() => ({ loading: l })),
   loginUser: (user) => set(() => ({ user })),
-  logoutUser: () => set(() => ({ user: "" }), true),
+  logoutUser: () => {
+    set(() => ({ user: null }));
+    get().setLoading(true);
+  },
 }));
