@@ -1,7 +1,10 @@
 import Document, { DocumentContext } from "next/document";
 import { ServerStyles, createStylesServer } from "@mantine/next";
-
-const stylesServer = createStylesServer();
+import { createEmotionCache } from "@mantine/core";
+const cache = createEmotionCache({
+  key: "bluetix-styles",
+});
+const stylesServer = createStylesServer(cache);
 
 export default class _Document extends Document {
   static async getInitialProps(ctx: DocumentContext) {
