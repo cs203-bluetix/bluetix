@@ -42,11 +42,12 @@ export default function AuthLayout({
   }, []);
 
   useEffect(() => {
-    if (
-      (!user && !permissions.includes(Role.GUEST)) ||
-      (user &&
-        !permissions.includes(user.role) &&
-        !permissions.includes(Role.GUEST))
+    if (!user && !permissions.includes(Role.GUEST)) {
+      router.push(`/login${router.pathname}`);
+    } else if (
+      user &&
+      !permissions.includes(user.role) &&
+      !permissions.includes(Role.GUEST)
     ) {
       router.push("/");
     }

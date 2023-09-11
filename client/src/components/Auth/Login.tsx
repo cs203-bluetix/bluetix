@@ -3,12 +3,13 @@ import { useForm } from "@mantine/form";
 import { IconPassword, IconUser } from "@tabler/icons-react";
 import axios, { AxiosResponse } from "axios";
 import { env } from "env.mjs";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { useAuthStore } from "store/auth";
 import { Role } from "store/types";
 
 function Login() {
   const { loginUser } = useAuthStore();
+  const [error, setError] = useState(false);
   const form = useForm({
     initialValues: {
       email: "",
@@ -31,17 +32,22 @@ function Login() {
       })
       .then((resp: AxiosResponse) => {
         if (resp.status === 200) {
+          // to change based on response payload
           loginUser({
             email: form.values.email,
-            isCreator: true,
-            role: Role.ADMIN,
+            isCreator: form.values.email.includes("creator"),
+            role: form.values.email.includes("creator")
+              ? Role.ADMIN
+              : Role.USER,
             firstName: resp.data.firstName,
             lastName: resp.data.lastName,
           });
+        } else {
+          setError(true);
         }
       })
       .catch((e: AxiosResponse) => {
-        form.setErrors({ firstName: "ErroR!" });
+        setError(true);
       });
   };
   return (
@@ -51,6 +57,11 @@ function Login() {
         onSubmit={form.onSubmit(handleSubmit)}
         className="mt-8 flex w-full max-w-md flex-col items-center gap-4"
       >
+        {error && (
+          <div className="w-full">
+            <span className="text-red-500">Invalid email or password!</span>
+          </div>
+        )}
         <TextInput
           size="md"
           radius="md"

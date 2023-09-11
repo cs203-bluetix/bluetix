@@ -1,12 +1,10 @@
-import Head from "next/head";
-import Link from "next/link";
+import { Button } from "@mantine/core";
+import axios from "axios";
+import AuthLayout from "layouts/AuthLayout";
 import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
-import { AboutRow } from "pages/aboutus/aboutRow";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { Button } from "utils/Button";
-import AuthLayout from "layouts/AuthLayout";
+import Link from "next/link";
+import { useState } from "react";
 import { Role } from "store/types";
 
 export default function Creators() {
@@ -83,7 +81,7 @@ export default function Creators() {
 
   return (
     <>
-      <AuthLayout title="BlueTix - About Us" permissions={[Role.ADMIN]}>
+      <LandingLayout title="BlueTix - About Us" permissions={[Role.ADMIN]}>
         {(user) => (
           <Section title="For Creators">
             <div className="mb-4">
@@ -112,7 +110,7 @@ export default function Creators() {
                   <li key={index}>
                     {fileName}
                     {/* Add a download link for each file */}
-                    <Button classProps="ml-10">
+                    <Button className="ml-10">
                       <Link
                         href={`http://localhost:9090/api/nft/${queriedEventName}/${fileName}`}
                         target="_blank"
@@ -121,7 +119,7 @@ export default function Creators() {
                         View
                       </Link>
                     </Button>
-                    <Button classProps="ml-10">
+                    <Button className="ml-10">
                       <Link
                         href={`http://localhost:9090/api/nft/download/${queriedEventName}/${fileName}`}
                         target="_blank"
@@ -136,7 +134,7 @@ export default function Creators() {
             </div>
           </Section>
         )}
-      </AuthLayout>
+      </LandingLayout>
     </>
   );
 }
