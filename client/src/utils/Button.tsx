@@ -1,5 +1,5 @@
 import React from "react";
-import className from "classnames";
+// import className from "classnames";
 
 type IButtonProps = {
   xl?: boolean;
@@ -9,16 +9,16 @@ type IButtonProps = {
 };
 
 const Button = (props: IButtonProps) => {
-  const btnClass = className({
-    btn: true,
-    "btn-xl": props.xl,
-    "btn-base": !props.xl,
-    "btn-primary": true,
-  });
+  // const btnClass = className({
+  //   btn: true,
+  //   "btn-xl": props.xl,
+  //   "btn-base": !props.xl,
+  //   "btn-primary": true,
+  // });
 
   return (
     <button
-      className={`${props.classProps || ""} ${btnClass}`}
+      className={`${props.classProps || ""}`}
       onClick={props.onClick}
     >
       {props.children}

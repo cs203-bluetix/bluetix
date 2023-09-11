@@ -51,7 +51,7 @@ function EventList({
     <LandingLayout title="BlueTix - Events">
       <Section title="Events">
         <div className="flex w-full flex-col items-center justify-center gap-4">
-          <div className="flex h-fit min-h-[56px] w-full max-w-[95%] flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
+          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
                 placeholder="Search events..."
@@ -104,7 +104,7 @@ function EventList({
               </div>
             </div>
           </div>
-          <div className="bg-b1 mx-auto min-h-[600px] w-full max-w-5xl  bg-gray-200 px-4 sm:px-6 xl:max-w-6xl xl:px-8">
+          <div className="bg-b1 mx-auto min-h-[600px] w-full bg-gray-200 px-4 sm:px-6 xl:max-w-6xl xl:px-8">
             <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
               {eventsToDisplay.map((e) => {
                 return <EventCard event={e} key={e.id} />;

@@ -36,11 +36,11 @@ function VenueList() {
 
 export default VenueList;
 
-const VenueCard = ({ venue }: { venue: Venue }) => { // Specify the type of "venue" as Venue
+const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
     <Link href={`/venues/${venue.venueid}`} className="flex justify-center">
       <div className="flex h-[360px] w-[320px] flex-col bg-white shadow-lg">
-        {/* <img src={venue.image} className="aspect-video w-full" /> */}
+        <img src={venue.image} className="aspect-video w-full" />
         <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
           <h2>{venue.name}</h2>
           <span>{venue.description}</span>
