@@ -5,8 +5,8 @@ import { BsCCircle } from "react-icons/bs";
 const Footer = () => {
   const dummyUrl = "http://localhost:3000/404"; // Replace with a valid 404 URL
   return (
-    <div className="bg-[#3D7BBD] p-8 z-50 text-white w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+    <div className="bg-blue-300 p-8 z-50 text-white w-full">
+      <div className="grid grid-cols-1 text-black sm:grid-cols-2 md:grid-cols-4">
         <div className="pb-5">
           <div className="py-2 uppercase text-2xl font-bold">About</div>
           <a href={dummyUrl}>
@@ -53,16 +53,16 @@ const Footer = () => {
           </div>
         </div>
         <div className="pb-5">
-            <div className="text-darkgrey py-2 uppercase">Join Us</div>
+            <div className="text-darkgrey py-2 uppercase font-bold text-2xl">Join Us</div>
             <div className="py-2">Sign up here</div>
           <input
             type="text"
             placeholder="Enter your email address"
             className="p-2 focus:border-grey focus:border focus:ring-0 my-2 text-sm w-full border-grey border"
           />
-          <button className="box-border text-sm my-2 py-2 px-6 border-[1px] tracking-[1px] flex border-solid border-white">
+          <button className="box-border text-sm my-2 py-2 px-6 border-[1px] tracking-[1px] flex border-solid border-black rounded-lg bg-blue-400">
           <a href={dummyUrl}>
-            <div className="uppercase flex items-center justify-center">
+            <div className="uppercase flex items-center justify-center ">
               Sign Up
             </div>
           </a>

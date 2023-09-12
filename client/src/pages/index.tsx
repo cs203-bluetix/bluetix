@@ -1,7 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
 import LandingLayout from "layouts/LandingLayout";
-import image from "../mock/images/image.jpg";
+import image from "../images/background.jpg";
+import local from "../images/local.jpg";
+import international from "../images/international.jpg";
+import music from "../images/music.jpeg";
+import comedy from "../images/comedy.jpg";
+import sports from "../images/sports.jpeg";
 import LandingCard from "../components/card/landingCard";
 import React, { useState, useEffect } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -45,7 +50,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
       <main>
         <div className="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.5)] backdrop-blur-md opacity-70"></div>
           <div className="flex h-screen bg-cover z-0 flex justify-between" style={{ backgroundImage: `url(${image.src})` }}>
-            <div className="pl-20 items-start w-1/2 flex flex-col gap-0">w
+            <div className="pl-20 items-start w-1/2 flex flex-col gap-0">
               <p className="backdrop-blur-none text-6xl font-semibold text-white text-left w-full mt-[190px] mx-12 ">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
                 Premier 
@@ -62,8 +67,8 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
             </div>
 
         </div>
-          <div className="w-screen h-screen bg-gradient-to-r from-gray-300 to-blue-900" >
-            <div className=" text-4xl font-bold text-center py-[50px]">
+          <div className="w-screen h-screen bg-cyan-100" >
+            <div className=" text-6xl font-bold text-center py-[50px]">
               Trending
             </div>
             <Swiper
@@ -72,16 +77,17 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               centeredSlides={true}
               autoplay={{
                 delay: 2500,
-                disableOnInteraction: true,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
               }}
               loop={true}
               slidesPerView={2.5}
               coverflowEffect={{
-                rotate: 2,
+                rotate: 0,
                 stretch: 50,
                 depth: 100,
                 modifier: 2.5,
-                slideShadows: true,
+                slideShadows: false,
               }}
               pagination={{ el: ".swiper-pagination", clickable: true }}
               navigation={{
@@ -93,7 +99,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
             >
               {events.map((item, index) => (
                 <SwiperSlide key={index}
-                  className="">
+                  className=" p-[30px]">
                   <LandingCard event={item} />
                 </SwiperSlide>
               ))}
@@ -103,13 +109,13 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               </div>
             </Swiper>
           </div>
-          <div className="w-screen h-screen flex justify-items-center">
-            <div className="grid grid-cols-6 gap-5 w-full h-full p-[150px] font-bold text-2xl">
-              <button className="border border-1 border-black rounded-lg col-span-2"> LOCAL </button>
-              <button className="border border-1 border-black rounded-lg col-span-2"> INTERNATIONAL </button>
-              <button className="border border-1 border-black rounded-lg col-span-2"> OTHERS </button>
-              <button className="border border-1 border-black rounded-lg col-span-3"> MUSIC </button>
-              <button className="border border-1 border-black rounded-lg col-span-3"> SPORTS </button>
+          <div className="w-screen h-screen flex justify-items-center bg-red-100">
+            <div className="grid grid-cols-6 gap-5 w-full h-full p-[150px] font-bold text-2xl text-white">
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
             </div>
           </div>
         </main>
