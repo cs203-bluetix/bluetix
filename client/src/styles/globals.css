@@ -17,3 +17,12 @@ html {
   margin-right: 1.25rem;
 }
 
+.header {
+  color: white;
+  transition: all 0.5s;
+}
+
+.header-scrolled{
+  color: black;
+  background-color: white;
+}

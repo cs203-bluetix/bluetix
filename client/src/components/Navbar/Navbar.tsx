@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LoginModal from "utils/LoginModal";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { UserInfo } from "store/types";
@@ -35,10 +35,29 @@ function Navbar({ classProps, user }: NavbarProps) {
 
   let [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const headerEl = document.querySelector('.header');
+      if (headerEl && window.scrollY > 50) {
+        headerEl.classList.add('header-scrolled');
+      } else if (headerEl && window.scrollY<=50){
+        headerEl.classList.remove('header-scrolled');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
+    <header>
     <div className="relative">
-      <div id="root" className={`${classProps} fixed top-0 left-0 inset-x-0 shadow-md z-50 bg-white`}>
-        <nav className="md:flex justify-between items-center mx-auto max-w-screen-lg bg-white py-4 md:px-3 px-7">
+      <div id="root" className={`${classProps} header fixed top-0 left-0 inset-x-0 z-50 `}>
+        <nav className="md:flex justify-between items-center mx-auto max-w-screen-lg py-4 md:px-3 px-7">
           <Link href="/" className="text-3xl font-bold ">
             BlueTix
           </Link>
@@ -49,7 +68,7 @@ function Navbar({ classProps, user }: NavbarProps) {
             }
           </div>
 
-          <ul className={`navbar md:flex md:items-center md:pb-0 pb-12 font-medium text-2xl md:text-[1rem] absolute md:static bg-white md:z-auto z-[-1] left-0 w-full h-screen md:w-auto md:h-auto md:pl-0 pl-9 transition-all duration-400 ease-in ${isOpen ? 'top-12' : 'top-[-1024px]'}`}>
+          <ul className={`navbar md:flex md:items-center md:pb-0 pb-12 font-medium text-2xl md:text-[1rem] absolute md:static md:z-auto z-[-1] left-0 w-full h-screen md:w-auto md:h-auto md:pl-0 pl-9 transition-all duration-400 ease-in ${isOpen ? 'top-12' : 'top-[-1024px]'}`}>
             <li className="md:ml-8 md:my-0 my-12">
               <Link href="/aboutus">About</Link>
             </li>
@@ -101,6 +120,7 @@ function Navbar({ classProps, user }: NavbarProps) {
 
       {/* <LoginModal isOpen={isModalOpen} onClose={closeModal} /> */}
     </div>
+    </header>
   );
 }
 
