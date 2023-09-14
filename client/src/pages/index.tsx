@@ -109,13 +109,13 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               </div>
             </Swiper>
           </div>
-          <div className="w-screen h-screen flex justify-items-center bg-red-100">
-            <div className="grid grid-cols-6 gap-5 w-full h-full p-[150px] font-bold text-2xl text-white">
-              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
-              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
-              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
-              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
-              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-110"  style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
+          <div className="w-screen h-screen flex justify-items-center bg-cyan-100">
+            <div className="grid grid-cols-6 gap-5 w-full h-full px-[150px] pb-[150px] font-bold text-2xl text-white">
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105"  style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105"  style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105"  style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105"  style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105"  style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
             </div>
           </div>
         </main>
