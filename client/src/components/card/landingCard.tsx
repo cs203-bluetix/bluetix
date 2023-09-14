@@ -1,6 +1,5 @@
 import React from "react";
 import image from "../../mock/images/image.jpg"
-import { mockEvents } from "mock/events";
 import { Event } from "store/types";
 
 type LandingCardProps = {
@@ -23,7 +22,7 @@ const LandingCard: React.FC<LandingCardProps> = ({event}) => {
                         <div className="text-2xl font-semibold ">
                             {event.name}
                         </div>
-                        <div className="text-2xl ">
+                        <div className="text-xl ">
                             {event.description}
                         </div>
                     </div>

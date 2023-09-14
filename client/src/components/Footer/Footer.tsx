@@ -67,7 +67,7 @@ const Footer = () => {
             placeholder="Enter your email address"
             className="focus:border-grey border-grey my-2 w-full border p-2 text-sm focus:border focus:ring-0"
           />
-          <button className="my-2 box-border flex border-[1px] border-solid border-white px-6 py-2 text-sm tracking-[1px]">
+          <button className="my-2 box-border flex border-[1px] border-solid border-white px-6 py-2 text-sm tracking-[1px] rounded-lg hover:bg-blue-500">
             <a href={dummyUrl}>
               <div className="flex items-center justify-center uppercase">
                 Sign Up

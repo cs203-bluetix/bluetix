@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
 import LandingLayout from "layouts/LandingLayout";
-import local from "../images/local.jpg";
-import international from "../images/international.jpg";
-import music from "../images/music.jpeg";
-import comedy from "../images/comedy.jpg";
-import sports from "../images/sports.jpeg";
+import local from "../../public/images/local.jpg";
+import international from "../../public/images/international.jpg";
+import music from "../../public/images/music.jpeg";
+import comedy from "../../public/images/comedy.jpg";
+import sports from "../../public/images/sports.jpeg";
 import LandingCard from "../components/card/landingCard";
 import React, { useState, useEffect } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
@@ -16,7 +16,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import image from "public/images/background.jpg";
+import image from "../../public/images/background.jpg";
 import { Autoplay, EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
 const SERVER_URL = "http://localhost:9090";
