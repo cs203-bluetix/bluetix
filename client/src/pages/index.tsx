@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import LandingLayout from "layouts/LandingLayout";
-import image from "../images/background.jpg";
 import local from "../images/local.jpg";
 import international from "../images/international.jpg";
 import music from "../images/music.jpeg";
@@ -17,7 +16,7 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-
+import image from "public/images/background.jpg";
 import { Autoplay, EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
 const SERVER_URL = "http://localhost:9090";
@@ -43,7 +42,6 @@ export const getServerSideProps: GetServerSideProps<{
 };
 
 export default function Home({ events, }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  import image from "public/images/background.jpg";
 
   return (
     <>
