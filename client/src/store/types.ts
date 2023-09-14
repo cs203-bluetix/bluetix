@@ -24,3 +24,17 @@ export interface Venue {
 }
 
 export type VenueList = Venue[];
+
+export interface UserInfo {
+  firstName: string;
+  lastName: string;
+  isCreator: boolean;
+  email: string;
+  role: Role;
+}
+
+export enum Role {
+  GUEST,
+  USER,
+  ADMIN,
+}

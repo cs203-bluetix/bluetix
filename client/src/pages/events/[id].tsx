@@ -1,5 +1,6 @@
 import { Button } from "@mantine/core";
 import LandingLayout from "layouts/LandingLayout";
+import { Section } from "layouts/Section";
 import { mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
@@ -28,10 +29,9 @@ export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
 function Event({
   event,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  router.query = {};
   return (
     <LandingLayout title={`BlueTix - ${event.name}`}>
+      <Section>
       <div className="h-fit w-full">
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <div className="mx-auto w-full max-w-5xl sm:px-6 xl:max-w-6xl xl:px-8">
@@ -44,8 +44,8 @@ function Event({
                 </span>
               </div>
             </div>
-            <div className="sticky top-0 z-[100] mx-auto flex h-fit min-h-[72px] w-full flex-col items-center justify-between gap-4 bg-white px-2 shadow-md sm:flex-row sm:flex-row-reverse sm:px-4 md:px-6 lg:px-8">
-              <div className="w-full pb-2 pt-4 sm:max-w-[120px]">
+            <div className="sticky top-0  mx-auto flex h-fit min-h-[72px] w-full flex-col items-center justify-between gap-4 bg-white px-2 shadow-md sm:flex-row sm:flex-row-reverse sm:px-4 md:px-6 lg:px-8">
+              <div className="h-full w-full sm:max-w-[120px]">
                 <Button fullWidth className="sm:max-w-[120px]">
                   <Link href={`/buy/${event.id}`}>Buy Tickets</Link>
                 </Button>
@@ -119,6 +119,7 @@ function Event({
           </div>
         </div>
       </div>
+      </Section>
     </LandingLayout>
   );
 }
