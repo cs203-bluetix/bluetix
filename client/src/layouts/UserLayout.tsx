@@ -6,34 +6,28 @@ import { Inter } from "next/font/google";
 import AuthLayout from "./AuthLayout";
 import { Role, UserInfo } from "store/types";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function LandingLayout({
+export default function UserLayout({
   children,
   title,
   permissions = [Role.GUEST],
-  withNavbar,
-  withFooter,
 }: {
-  children: React.ReactNode | ((userInfo: UserInfo) => React.ReactNode);
+  children: JSX.Element | ((userInfo: UserInfo) => React.ReactNode);
   title?: string;
   permissions?: Role[];
-  withNavbar?: boolean;
-  withFooter?: boolean;
 }) {
   return (
     <>
-      <AuthLayout title={title ?? "BlueTix"} permissions={permissions}>
+      <UserLayout title={title ?? "BlueTix"} permissions={permissions}>
         {(user) => (
           <>
-            {withNavbar && <Navbar user={user!} />}
+            <Navbar user={user!} />
             <main>
               {typeof children === "function" ? children(user!) : children}
             </main>
-            {withFooter && <Footer />}
+            <Footer />
           </>
         )}
-      </AuthLayout>
+      </UserLayout>
     </>
   );
 }

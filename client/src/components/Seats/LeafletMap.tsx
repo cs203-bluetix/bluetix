@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
-import { MapContainer, useMap } from "react-leaflet";
-import { GeoJSON } from "react-leaflet";
+import Loading from "components/Suspense/Loading";
 import * as seats from "mock/cat1.json";
 import * as stage from "mock/stage.json";
+import { useEffect } from "react";
+import { GeoJSON, MapContainer, useMap } from "react-leaflet";
 import { useStore } from "store/seat";
+import { SeatNode } from "store/types";
 
 function LeafletMap() {
-  const store = useStore();
+  const { eventSession, addNode, nodes, setSelectedNode } = useStore();
+  if (!eventSession) return <Loading />;
   return (
     <>
       <MapContainer
@@ -20,8 +22,13 @@ function LeafletMap() {
           style={{ color: "green", fillColor: "red" }}
           onEachFeature={(f, l) => {
             const id = f.properties.id;
-            const info = store.seats.find((s) => s.id == id);
-            if (info) store.addNode({ feature: f, layer: l, info });
+            const info = eventSession.seats.find((s) => s.id == id);
+            if (!info) return;
+            const node: SeatNode = { feature: f, layer: l, info };
+            addNode(node);
+            l.on("click", () => {
+              setSelectedNode(node);
+            });
             l.on("mouseover", (e) => {
               l.bindPopup(`Number of seats: ${info?.numSeats}`, {
                 className: "popup",

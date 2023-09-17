@@ -20,6 +20,17 @@
   transition-duration: 0s !important;
 }
 
+.main {
+  font-family: Inter;
+}
 html {
   scroll-behavior: smooth;
+}
+
+.navbar li:not(:first-child) {
+  margin-top: 0;
+}
+
+.navbar li:not(:last-child) {
+  margin-right: 1.25rem;
 }
