@@ -1,4 +1,5 @@
 export interface Event {
+  [x: string]: ReactNode;
   id: string;
   name: string;
   eventDetails: string;

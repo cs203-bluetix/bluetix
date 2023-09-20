@@ -20,7 +20,7 @@ type AboutRowProps = {
 
 const AboutRow = (props: AboutRowProps) => {
   return (
-    <div
+    <div 
       className={`mt-20 flex flex-wrap items-center ${
         props.reverse && "flex-row-reverse"
       }`}
