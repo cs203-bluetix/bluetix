@@ -12,6 +12,7 @@ function VenueList() {
     axiosConfig.get('/api/venues')
       .then((response) => {
         setVenues(response.data);
+        // console.log(venues[0]);
       })
       .catch((error) => {
         console.error('Error fetching venues:', error);
