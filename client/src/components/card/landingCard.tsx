@@ -1,5 +1,5 @@
 import React from "react";
-import image from "../../mock/images/image.jpg"
+import image from "../../../public/images/landingevents.jpg"
 import { Event } from "store/types";
 
 type LandingCardProps = {
@@ -7,7 +7,7 @@ type LandingCardProps = {
 };
 const LandingCard: React.FC<LandingCardProps> = ({event}) => {
     return (
-            <div className="flex items-center bg-white border border-2 border-black rounded-lg transition-transform duration-500 transform hover:scale-105 shadow-lg">
+            <div className="flex items-center bg-white rounded-lg transition-transform duration-500 transform hover:scale-105 shadow-lg">
                 <div className="">
                     <a href="/">
                         <div className="rounded-t-lg">

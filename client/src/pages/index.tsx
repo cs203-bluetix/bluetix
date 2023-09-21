@@ -47,18 +47,21 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
   useEffect(() => {
     const handleScroll = () => {
       const headerEl = document.querySelector('.header');
-      if (headerEl && window.scrollY <= 50) {
-        headerEl.classList.add('header-scrolled');
-      } else if (headerEl && window.scrollY > 50) {
+      if (headerEl && window.scrollY > 50) {
         headerEl.classList.remove('header-scrolled');
+      } else if (headerEl && window.scrollY <= 50) {
+        headerEl.classList.add('header-scrolled');
       }
     };
-    handleScroll();
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+
+    
+}, []);
+
 
   return (
     <>
@@ -87,7 +90,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
             Trending
           </div>
           <Swiper
-            effect={"coverflow"}
+          effect={"coverflow"}
             grabCursor={true}
             centeredSlides={true}
             autoplay={{
@@ -100,9 +103,10 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
             coverflowEffect={{
               rotate: 0,
               stretch: 50,
-              depth: 100,
+              depth: 50,
               modifier: 2.5,
               slideShadows: false,
+  
             }}
             pagination={{ el: ".swiper-pagination", clickable: true }}
             navigation={{
@@ -114,12 +118,12 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
           >
             {events.map((item, index) => (
               <SwiperSlide key={index}
-                className=" p-[30px]">
+              className={`p-[30px]`}>
                 <LandingCard event={item} />
               </SwiperSlide>
             ))}
             <div className="slider-control">
-              <div className="swiper-button-prev slider-arrow"></div>
+              <div className="swiper-button-prev slider-arrow "></div>
               <div className="swiper-button-next slider-arrow"></div>
             </div>
           </Swiper>
