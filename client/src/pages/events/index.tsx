@@ -50,7 +50,7 @@ function EventList({
   }, [filterName, filterDate, filterLocation, filterPrice]);
 
   return (
-    <LandingLayout title="BlueTix - Events">
+    <LandingLayout title="BlueTix - Events" withNavbar withFooter>
       <Section title="Events">
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">

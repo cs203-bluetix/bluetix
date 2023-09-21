@@ -65,7 +65,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
 
   return (
     <>
-      <LandingLayout>
+      <LandingLayout withFooter withNavbar>
         <main>
           <video className="brightness-50" autoPlay muted loop style={{ width: '100%' }}>
             <source src="videos/landscapebackgroundvideo.mp4" type="video/mp4" />

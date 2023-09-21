@@ -39,7 +39,7 @@ const AboutRow = (props: AboutRowProps) => {
 
 export default function About() {
   return (
-    <LandingLayout title="BlueTix - About Us">
+    <LandingLayout title="BlueTix - About Us" withNavbar withFooter>
       <Section>
         <div>
           <div className="w-full pt-12 text-center sm:px-6">

@@ -2,9 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.map_container {
+  height: 100% !important;
+}
+
+.goodseat {
+  fill: red;
+}
+
+.label {
+  background-color: transparent !important;
+  border: transparent !important;
+  box-shadow: none !important;
+}
+
+.popup {
+  transition-duration: 0s !important;
+}
+
 @font-face {
-  font-family: 'proxima_novaregular';
-  src: '../public/proxima_nova_font-webfont.woff' format('woff');
+  font-family: "proxima_novaregular";
+  src: "../public/proxima_nova_font-webfont.woff" format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -34,11 +52,11 @@
   color: rgb(255, 255, 255) !important;
   background-color: transparent !important;
   transition: all 0.6s;
-  box-shadow:none !important;
+  box-shadow: none !important;
   backdrop-filter: none !important;
 }
 
-.header{
+.header {
   /* color: white;
   background-color: #0E0B16;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1); */
@@ -47,4 +65,3 @@
   background-color: rgba(234, 237, 240, 0.8);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
-
