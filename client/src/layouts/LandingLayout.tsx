@@ -23,7 +23,7 @@ export default function LandingLayout({
         {(user) => (
           <>
             <Navbar user={user!} />
-            <main>
+            <main className="bg-[#fafafd]">
               {typeof children === "function" ? children(user!) : children}
             </main>
             <Footer />

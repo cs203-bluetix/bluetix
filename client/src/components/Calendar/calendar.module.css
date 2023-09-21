@@ -1,0 +1,43 @@
+/* @import 'react-big-calendar/lib/sass/styles'; */
+/* Reduce the font size of event titles */
+.calendar{
+  font-size: 12px !important;
+}
+
+.calendar .rbc-toolbar{
+  font-size: 12px !important;
+}
+
+.calendar .rbc-header{
+    background: black;
+}
+
+.calendar .rbc-event-content {
+    font-size: 12px;
+  }
+  
+  /* Reduce the font size of day and date headers */
+  .calendar  .rbc-header-label {
+    font-size: 14px;
+  }
+  
+  /* Reduce the font size of time slot labels in the day and week views */
+  .calendar  .rbc-time-view {
+    font-size: 12px;
+  }
+
+  .calendar  .rbc-toolbar-label{
+    font-size: 1px;
+  }
+
+  .calendar  .rbc-toolbar .rbc-toolbar-label {
+    font-size: 1px;
+    flex-grow: 1;
+    padding: 0 10px;
+    text-align: center;
+}
+
+.test {
+    height:1000px;
+    font-size: 100px;
+}

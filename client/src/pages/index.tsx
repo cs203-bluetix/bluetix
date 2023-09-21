@@ -43,6 +43,23 @@ export const getServerSideProps: GetServerSideProps<{
 
 export default function Home({ events, }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const headerEl = document.querySelector('.header');
+      if (headerEl && window.scrollY <= 50) {
+        headerEl.classList.add('header-scrolled');
+      } else if (headerEl && window.scrollY > 50) {
+        headerEl.classList.remove('header-scrolled');
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <LandingLayout>
