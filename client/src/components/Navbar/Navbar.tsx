@@ -39,9 +39,11 @@ function Navbar({ classProps, user }: NavbarProps) {
   return (
       <div className="relative">
         <div id="root" className={`${classProps} header fixed top-0 left-0 inset-x-0 z-50`}>
-          <nav className={`md:flex justify-between items-center mx-auto max-w-screen-lg py-4 md:px-3 px-7`}>
-            <Link href="/" className="text-3xl font-bold ">
-              BlueTix
+          <nav className={`md:flex justify-between items-center mx-auto max-w-[1200px] py-3 px-7 md:px-5`}>
+            <Link href="/" className="text-3xl font-bold" >
+              
+            {/* <img src="/logoblue.png" width={24} className="inline-block pb-1.5"/> */}
+            <span style={{ color: "#4c6ef5" }}>Blue</span>tix
             </Link>
 
             <div onClick={() => setIsOpen(!isOpen)} className="w-7 h-7 absolute right-8 top-6 cursor-pointer md:hidden">
@@ -79,7 +81,7 @@ function Navbar({ classProps, user }: NavbarProps) {
                   <UserOptions user={user} />
                 ) : (
                   <Link href="/login">
-                    <Button>Login</Button>
+                    <Button color="indigo" variant="filled" >Login</Button>
                   </Link>
                 )}
               </li>
