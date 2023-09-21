@@ -22,17 +22,6 @@ interface NavbarProps {
 
 function Navbar({ classProps, user }: NavbarProps) {
 
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  // const openModal = () => {
-  //   setIsOpen(!isOpen);
-  //   setIsModalOpen(true);
-  // };
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
-
   let [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -47,7 +36,6 @@ function Navbar({ classProps, user }: NavbarProps) {
 
     window.addEventListener('scroll', handleScroll);
 
-    // Cleanup the event listener when the component unmounts
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
