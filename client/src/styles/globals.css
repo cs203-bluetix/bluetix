@@ -17,12 +17,15 @@ html {
   margin-right: 1.25rem;
 }
 
-.header {
-  color: white;
+.header-scrolled {
+  color: white !important;
+  background-color: transparent !important;
   transition: all 0.5s;
+  box-shadow:none !important;
 }
 
-.header-scrolled{
+.header{
   color: black;
   background-color: white;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
 }
