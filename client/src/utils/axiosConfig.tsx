@@ -5,7 +5,7 @@ const instance = axios.create({
   timeout: 5000,
   headers: {
     // 'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
-    "Content-Type": "application/json",
+    // "Content-Type": "application/json",
   },
 });
 

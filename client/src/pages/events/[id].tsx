@@ -1,5 +1,6 @@
 import { Button } from "@mantine/core";
 import LandingLayout from "layouts/LandingLayout";
+import { Section } from "layouts/Section";
 import { mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
@@ -30,6 +31,7 @@ function Event({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <LandingLayout title={`BlueTix - ${event.name}`} withNavbar withFooter>
+      <Section>
       <div className="h-fit w-full">
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <div className="mx-auto w-full max-w-5xl sm:px-6 xl:max-w-6xl xl:px-8">
@@ -119,6 +121,7 @@ function Event({
           </div>
         </div>
       </div>
+      </Section>
     </LandingLayout>
   );
 }

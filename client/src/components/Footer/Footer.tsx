@@ -4,15 +4,17 @@ import {
   IconBrandPinterest,
   IconBrandYoutube,
 } from "@tabler/icons-react";
+import { Section } from "layouts/Section";
 import React from "react";
 import { BsCCircle } from "react-icons/bs";
 
 const Footer = () => {
   const dummyUrl = "http://localhost:3000/404"; // Replace with a valid 404 URL
   return (
-    <div className="z-50 bg-[#3D7BBD] p-8 text-white">
+    <div className="z-50 bg-[#3D7BBD] text-white">
+    <Section>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-        <div className="pb-5">
+        <div>
           <div className="py-2 text-2xl font-bold uppercase">About</div>
           <a href={dummyUrl}>
             <div className="py-2">About Us</div>
@@ -65,7 +67,7 @@ const Footer = () => {
             placeholder="Enter your email address"
             className="focus:border-grey border-grey my-2 w-full border p-2 text-sm focus:border focus:ring-0"
           />
-          <button className="my-2 box-border flex border-[1px] border-solid border-white px-6 py-2 text-sm tracking-[1px]">
+          <button className="my-2 box-border flex border-[1px] border-solid border-white px-6 py-2 text-sm tracking-[1px] rounded-lg hover:bg-blue-500">
             <a href={dummyUrl}>
               <div className="flex items-center justify-center uppercase">
                 Sign Up
@@ -74,12 +76,13 @@ const Footer = () => {
           </button>
         </div>
       </div>
-      <div className="mt-10 flex">
+      <div className="mt-6 flex">
         <span className="flex items-center pe-3">
           <BsCCircle />{" "}
         </span>
         <span className="text-center text-xs uppercase"> 2023 BlueTix</span>
       </div>
+    </Section>
     </div>
   );
 };

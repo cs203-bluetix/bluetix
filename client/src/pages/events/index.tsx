@@ -1,8 +1,10 @@
-import { Button, Input, Popover, RangeSlider, Select } from "@mantine/core";
+import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group, Center, Badge } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import {
   IconCalendarQuestion,
+  IconEye,
   IconMapPin,
+  IconMessageCircle,
   IconSearch,
 } from "@tabler/icons-react";
 import LandingLayout from "layouts/LandingLayout";
@@ -51,7 +53,7 @@ function EventList({
     <LandingLayout title="BlueTix - Events" withNavbar withFooter>
       <Section title="Events">
         <div className="flex w-full flex-col items-center justify-center gap-4">
-          <div className="flex h-fit min-h-[56px] w-full max-w-[95%] flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
+          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
                 placeholder="Search events..."
@@ -104,13 +106,13 @@ function EventList({
               </div>
             </div>
           </div>
-          <div className="bg-b1 mx-auto min-h-[600px] w-full max-w-5xl  bg-gray-200 px-4 sm:px-6 xl:max-w-6xl xl:px-8">
-            <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
-              {eventsToDisplay.map((e) => {
-                return <EventCard event={e} key={e.id} />;
-              })}
-            </div>
+          {/* <div className="bg-b1 mx-auto min-h-[600px] w-full px-4 sm:px-6 xl:max-w-6xl xl:px-8"> */}
+          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
+            {eventsToDisplay.map((e) => {
+              return <EventCard event={e} key={e.id} />;
+            })}
           </div>
+          {/* </div> */}
         </div>
       </Section>
     </LandingLayout>
@@ -122,15 +124,63 @@ export default EventList;
 const EventCard = ({ event }: { event: Event }) => {
   const { formattedDate } = getReadableDate(event.dates[0]!);
   return (
-    <Link href={`/events/${event.id}`} className="flex justify-center">
-      <div className="flex h-[360px] w-[320px] flex-col  bg-white shadow-lg">
-        <img src={event.image} className="aspect-video w-full" />
-        <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
-          <h2>{event.name}</h2>
-          {formattedDate && <span>{formattedDate}</span>}
-          <span>{event.location}</span>
+    <Card className="relative h-[280px] bg-gradient-to-t from-gray-0 via-dark-6 transition-transform duration-400 transform hover:scale-105" p="lg" shadow="lg" radius="md" component="a" href={`/events/${event.id}`} target="_blank">
+      <Image className="absolute inset-0 bg-cover transition-transform transform duration-500 ease transform hover:scale-105" src="images/event.jpeg" alt={event.name} height={280} />
+
+      <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+
+      <div className="h-full relative flex flex-col justify-end z-1">
+        <div>
+          <Text size="lg" className="text-white mb-1" fw={500} color="white">
+            {event.name}
+          </Text>
+
+          <Group justify="between" gap="xs">
+            <Text size="sm" color="#909296">
+              {event.location}
+            </Text>
+
+            <Text size="sm" className="ml-auto" color="#909296">
+              {formattedDate && <span>{formattedDate}</span>}
+            </Text>
+          </Group>
         </div>
       </div>
-    </Link>
+    </Card>
+
+    // <Link href={`/events/${event.id}`} className="flex flex-wrap">
+    //   <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
+    //     <Card.Section className='border-t border-gray-300'>
+    //       <Image src="images/event.jpeg" alt={event.name} height={220} />
+    //     </Card.Section>
+
+    //     <Group justify="space-between" mt="md">
+    //       <Text fw={500}>{event.name}</Text>
+    //     </Group>
+
+    //     <Group justify="between" gap="xs" className="position-bottom mt-auto">
+    //         <Text size="sm" color="#bl">
+    //           {event.location}
+    //         </Text>
+
+    //         <Text size="sm" className="ml-auto" color="#909296">
+    //           {formattedDate && <span>{formattedDate}</span>}
+    //         </Text>
+    //       </Group>
+    //   </Card>
+    // </Link>
+
+
+
+    // <Link href={`/events/${event.id}`} className="flex justify-center">
+    //   <div className="flex h-[360px] w-[320px] flex-col  bg-white shadow-lg">
+    //     <img src={event.image} className="aspect-video w-full" />
+    //     <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
+    //       <h2>{event.name}</h2>
+    //       {formattedDate && <span>{formattedDate}</span>}
+    //       <span>{event.location}</span>
+    //     </div>
+    //   </div>
+    // </Link>
   );
 };

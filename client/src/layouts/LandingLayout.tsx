@@ -27,7 +27,7 @@ export default function LandingLayout({
         {(user) => (
           <>
             {withNavbar && <Navbar user={user!} />}
-            <main>
+            <main className="bg-[#fafafd]">
               {typeof children === "function" ? children(user!) : children}
             </main>
             {withFooter && <Footer />}

@@ -5,7 +5,7 @@ export const mockEvents: Event[] = [
     id: "123",
     image:
       "https://static.ticketmaster.sg/images/activity/23_vibes2023_7838b3ee8f09a88967c31166a4c6c907.png",
-    name: "Concert des Amis: a SOTA Music Faculty Showcase",
+    name: "Concert des Amis: a SOTA Music Faculty",
     eventDetails:
       "The SOTA Music Faculty presents the first faculty concert programme performed entirely on historical instruments.\nBe treated to some of the best gems of the Baroque repertory, including works by J.S. and C.P.E Bach, Telemann, Royer and Tartini.\n\nMusicians:\nYang Tien, Harpsichord\nMervyn Lee, Harpsichord\nCheryl Lim, Traverso\nBrenda Koh, Baroque Violin\nAlan Choo, Baroque Violin\nPlacida ho, Baroque Viola\nYeh Tzu Jou, Baroque Cello\nLeslie Tan, Viola da Gamba\n\nThe event will run for 75 minutes.",
     ticketPricing:
