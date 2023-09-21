@@ -1,29 +1,57 @@
-import { mockEvents } from "mock/events";
-import { GetServerSideProps } from "next";
-import { Event } from "store/types";
-import React from "react";
+"use client";
+import dynamic from "next/dynamic";
+import "leaflet/dist/leaflet.css";
 
-export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
-  params,
-}) => {
-  const eventId = params?.id as string;
-  // const endpoint = `${SERVER_URL}/event/${eventId}`
+import React, { useEffect } from "react";
+import SeatsView from "components/Seats/SeatsView";
+import { EventSession, Role, SeatInfo } from "store/types";
+import { mockSeats } from "mock/seats";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useStore } from "store/seat";
+import LandingLayout from "layouts/LandingLayout";
+import { mockEventSession } from "mock/session";
+import Loading from "components/Suspense/Loading";
+const LeafletMap = dynamic(() => import("../../components/Seats/LeafletMap"), {
+  ssr: false,
+});
+
+export const getServerSideProps: GetServerSideProps<{
+  eventSession: EventSession;
+}> = async ({ params }) => {
+  // const endpoint = `${SERVER_URL}/events`
   // const data = await axios.get(endpoint);
   // zod data validation here
-  const event = mockEvents.find((e) => e.id == eventId);
-
-  if (!event)
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    };
-
-  return { props: { event } };
+  return { props: { eventSession: mockEventSession } };
 };
-function Buy() {
-  return <div>Buy</div>;
+
+function Leaf({
+  eventSession,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const store = useStore();
+  useEffect(() => {
+    store.setEventSession(eventSession);
+  }, [eventSession]);
+
+  return (
+    <LandingLayout
+      permissions={[Role.USER, Role.ADMIN]}
+      title="Ticket Seating"
+      withNavbar
+    >
+      {store.eventSession ? (
+        <div className="flex h-[calc(100vh-68px)] w-full">
+          <div className="w-full min-w-[300px] max-w-[664px]">
+            <SeatsView />
+          </div>
+          <div className="h-full w-full">
+            <LeafletMap />
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </LandingLayout>
+  );
 }
 
-export default Buy;
+export default Leaf;
