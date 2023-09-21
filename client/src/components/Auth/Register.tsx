@@ -34,7 +34,7 @@ function Register() {
   });
 
   const handleSubmit = async () => {
-    const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signup`;
+    const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signup/customer`;
     const body = {
       firstName: form.values.firstName,
       lastName: form.values.lastName,

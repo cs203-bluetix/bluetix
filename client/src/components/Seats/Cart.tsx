@@ -3,13 +3,13 @@ import { IconShoppingCart, IconX } from "@tabler/icons-react";
 import Drawer from "components/Drawer/Drawer";
 import React, { useState } from "react";
 import { useStore } from "store/seat";
-import { CartItem } from "store/types";
+import { CartItem, SeatNode } from "store/types";
 import { magic } from "utils/magicSDK";
 
 function Cart() {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { cart } = useStore();
+  const { cart, setSelectedNode } = useStore();
 
   const checkoutHandler = async () => {
     setLoading(true);
@@ -70,7 +70,10 @@ function Cart() {
       </Drawer>
       <div
         className="absolute bottom-4 right-8 z-30 flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-blue-400 hover:bg-blue-500"
-        onClick={() => setOpened(true)}
+        onClick={() => {
+          setOpened(true);
+          setSelectedNode(null);
+        }}
       >
         <IconShoppingCart className="stroke-slate-100 hover:stroke-white" />
       </div>
@@ -81,6 +84,28 @@ function Cart() {
 export default Cart;
 
 const CartItem = ({ item }: { item: CartItem }) => {
+  const { nodes, cart, setNodes, setCart } = useStore();
+
+  const onRemove = () => {
+    const currentNode = nodes.find((n) => n.info.id === item.seatId);
+    if (!currentNode) return;
+
+    const newNode: SeatNode = {
+      ...currentNode,
+      info: {
+        ...currentNode.info,
+        numSeats: currentNode.info.numSeats + item.totalSeats,
+      },
+    };
+    const newNodes = nodes.map((n) =>
+      n.info.id !== item.seatId ? n : newNode
+    );
+    const cartItems = cart.cartItems.filter((c) => c.seatId != item.seatId);
+
+    setNodes(newNodes);
+    setCart({ ...cart, cartItems: cartItems });
+  };
+
   return (
     <div className="flex h-[150px] w-full flex-col justify-between rounded-md bg-white px-4 py-4 shadow-sm">
       <div className="flex w-full justify-between">
@@ -93,7 +118,11 @@ const CartItem = ({ item }: { item: CartItem }) => {
       </div>
       <div className="flex w-full justify-between">
         <span>QTY: {item.totalSeats}</span>
-        <Button variant="subtle" className="uppercase">
+        <Button
+          variant="subtle"
+          className="uppercase"
+          onClick={() => onRemove()}
+        >
           Remove
         </Button>
       </div>
