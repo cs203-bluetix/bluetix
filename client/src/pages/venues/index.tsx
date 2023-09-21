@@ -4,9 +4,11 @@ import { Section } from 'layouts/Section';
 import Link from "next/link";
 import { Venue } from "store/types";
 import axiosConfig from 'utils/axiosConfig';
+import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
+import classes from './BadgeCard.module.css';
 
 function VenueList() {
-  const [venues, setVenues] = useState<Venue[]>([]); 
+  const [venues, setVenues] = useState<Venue[]>([]);
 
   useEffect(() => {
     axiosConfig.get('/api/venues')
@@ -21,13 +23,10 @@ function VenueList() {
   return (
     <LandingLayout title="BlueTix - Venues">
       <Section title="Venues">
-        {/* ... */}
-        <div className="bg-b1 mx-auto min-h-[600px] w-full max-w-5xl bg-gray-200 px-4 sm:px-6 xl:max-w-6xl xl:px-8">
-          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
-            {venues.map((venue) => {
-              return <VenueCard venue={venue} key={venue.venueid} />;
-            })}
-          </div>
+        <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {venues.map((venue) => {
+            return <VenueCard venue={venue} key={venue.venueid} />;
+          })}
         </div>
       </Section>
     </LandingLayout>
@@ -38,15 +37,36 @@ export default VenueList;
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
-    <Link href={`/venues/${venue.venueid}`} className="flex justify-center">
-      <div className="flex h-[360px] w-[320px] flex-col bg-white shadow-lg">
-        <img src={venue.image} className="aspect-video w-full" />
-        <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
-          <h2>{venue.name}</h2>
-          <span>{venue.description}</span>
-          <span>{venue.address}</span>
-        </div>
-      </div>
+
+    <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
+      <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
+        <Card.Section className='border-t border-gray-300'>
+          <Image src="images/venue.jpg" alt={venue.name} height={220} />
+        </Card.Section>
+
+        <Group justify="space-between" mt="md">
+          <Text fw={500}>{venue.name}</Text>
+          {/* <Badge variant="light">
+        {venue.address}
+        </Badge> */}
+        </Group>
+
+        <Text size="sm" c="dimmed" mb="xs">
+          {venue.address}
+        </Text>
+
+        <Text size="sm">
+          {venue.description}
+        </Text>
+
+        {/* <Button radius="md" style={{ flex: 1 }}>
+            Show details
+          </Button> */}
+        {/* <ActionIcon variant="default" radius="md" size={36}>
+              <IconHeart className={classes.like} stroke={1.5} />
+            </ActionIcon> */}
+        {/* </Group> */}
+      </Card>
     </Link>
   );
 };

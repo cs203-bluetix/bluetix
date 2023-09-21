@@ -2,10 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-.main {
-  font-family: Inter;
+@font-face {
+  font-family: 'proxima_novaregular';
+  src: '../public/proxima_nova_font-webfont.woff' format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
-html {
+
+.main {
+  /* font-family: Inter; */
+  font-family: "proxima_novaregular", sans-serif;
+}
+
+.body {
+  font-family: "proxima_novaregular", sans-serif;
+}
+
+.html {
   scroll-behavior: smooth;
 }
 
@@ -18,14 +31,20 @@ html {
 }
 
 .header-scrolled {
-  color: white !important;
+  color: rgb(255, 255, 255) !important;
   background-color: transparent !important;
-  transition: all 0.5s;
+  transition: all 0.6s;
   box-shadow:none !important;
+  backdrop-filter: none !important;
 }
 
 .header{
+  /* color: white;
+  background-color: #0E0B16;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1); */
   color: black;
-  background-color: white;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  background-color: rgba(234, 237, 240, 0.8);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
