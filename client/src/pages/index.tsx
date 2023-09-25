@@ -21,30 +21,22 @@ import image from "../../public/images/background.jpg";
 import { Button, } from "@mantine/core";
 import { Carousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import axiosConfig from "utils/axiosConfig";
 
 const SERVER_URL = "http://localhost:9090";
 
-export const getServerSideProps: GetServerSideProps<{
-  events: Event[]; // Change EventList to Event[]
-}> = async () => {
-  try {
-    const endpoint = `${SERVER_URL}/api/events`;
-
-    console.log("Fetching data from:", endpoint);
-
-    const response = await axios.get(endpoint);
-    const events = response.data;
-
-    console.log("Data fetched:", events);
-
-    return { props: { events } };
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    return { props: { events: [] } };
-  }
-};
-
-export default function Home({ events, }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home() {
+  const [events, setEvents] = useState<Event[] | null>(null); 
+  useEffect(() => {
+    axiosConfig.get('/api/events')
+        .then((response) => {
+          setEvents(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+            console.error('Error fetching events:', error);
+        });
+}, []);
 
   const autoplay = useRef(Autoplay({ delay: 2000 }));
 
@@ -141,8 +133,8 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
                 <div className="swiper-button-next slider-arrow"></div>
               </div>
             </Swiper> */}
-            <Carousel
-              // withIndicators
+            {events ? (<Carousel
+              withIndicators
               height={450}
               slideSize="33.333333%"
               slideGap="md"
@@ -152,8 +144,8 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
                 { maxWidth: 'md', slideSize: '50%' },
                 { maxWidth: 'sm', slideSize: '100%', slideGap: 0 },
               ]}
-              // onMouseEnter={autoplay.current.stop}
-              // onMouseLeave={autoplay.current.reset}
+              onMouseEnter={autoplay.current.stop}
+              onMouseLeave={autoplay.current.reset}
             >
               {events.map((item, index) => (
 
@@ -161,7 +153,7 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
                   <LandingCard event={item} />
                 </Carousel.Slide>
               ))}
-            </Carousel>
+            </Carousel>) : null}
 
           </div>
           <div className="w-full h-[150px] bg-cover bg-no-repeat bg-center sectiondivider" style={{ backgroundImage: 'url("/assets/landing-bg1.png")' }}></div>
