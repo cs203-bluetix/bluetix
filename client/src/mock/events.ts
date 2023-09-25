@@ -14,7 +14,7 @@ export const mockEvents: Event[] = [
     admissionsPolicy:
       "\nAdmission Policy\nAdmission Rules:\n\n    Admission to show/venue by full ticket only. Printed/electronic tickets must be produced for admission.\n    There will be no admission for infants in arms and children below 6 years old.\n    Individuals aged 6 years old and above will be required to purchase a ticket for admission.\n    No flash photography and videography allowed.\n    No outside food and beverage are allowed into the venue.\n\n",
 
-    dates: ["2023-08-23"],
+    dates: ["2023-11-15"],
     location: "University Cultural Center",
     prices: [100, 200, 300],
   },

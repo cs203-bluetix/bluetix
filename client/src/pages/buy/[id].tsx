@@ -11,6 +11,7 @@ import { useStore } from "store/seat";
 import LandingLayout from "layouts/LandingLayout";
 import { mockEventSession } from "mock/session";
 import Loading from "components/Suspense/Loading";
+import { Section } from "layouts/Section";
 const LeafletMap = dynamic(() => import("../../components/Seats/LeafletMap"), {
   ssr: false,
 });
@@ -40,7 +41,7 @@ function Leaf({
       withNavbar
     >
       {store.eventSession ? (
-        <div className="flex h-[calc(100vh-68px)] w-full">
+        <div className="mt-[4.2rem] flex h-[calc(100vh-68px)] w-full">
           <div className="w-full min-w-[300px] max-w-[664px]">
             <SeatsView />
           </div>
