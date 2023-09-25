@@ -300,12 +300,13 @@ export default function Create() {
 
     return (
         <>
-            <LandingLayout title="BlueTix - About Us"
-            //   permissions={[Role.ADMIN]}
-            >
+        <LandingLayout
+          permissions={[Role.ADMIN]}
+          title="Creators - Create"
+          withNavbar
+        >
                 {(user) => (
                     <Section title="For Creators - Create New Event">
-                        <Paper>
                             <form onSubmit={handleSubmit}>
                                 <div className="">
                                     <h1 className="font-bold text-size-lg mt-8">Basic Information</h1>
@@ -459,7 +460,6 @@ export default function Create() {
                                     </Button>
                                 </Group>
                             </form>
-                        </Paper>
 
 
 

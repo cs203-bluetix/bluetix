@@ -1,4 +1,4 @@
-import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group, Center, Badge } from "@mantine/core";
+import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import {
   IconCalendarQuestion,
