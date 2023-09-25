@@ -15,6 +15,7 @@ const LeafletMap = dynamic(() => import("../../components/Seats/LeafletMap"), {
   ssr: false,
 });
 
+
 export const getServerSideProps: GetServerSideProps<{
   eventSession: EventSession;
 }> = async ({ params }) => {
@@ -31,7 +32,7 @@ function Leaf({
   useEffect(() => {
     store.setEventSession(eventSession);
   }, [eventSession]);
-
+  
   return (
     <LandingLayout
       permissions={[Role.USER, Role.ADMIN]}
