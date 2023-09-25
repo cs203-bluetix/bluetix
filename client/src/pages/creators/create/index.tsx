@@ -325,280 +325,171 @@ export default function Create() {
     }
   };
 
-  return (
-    <>
-      <LandingLayout
-        title="BlueTix - About Us"
-        //   permissions={[Role.ADMIN]}
-      >
-        {(user) => (
-          <Section title="For Creators - Create New Event">
-            <Paper>
-              <form onSubmit={handleSubmit}>
-                <div className="">
-                  <h1 className="text-size-lg mt-8 font-bold">
-                    Basic Information
-                  </h1>
-                  <span className="text-size-lg font-light">
-                    Craft your event's identity: Name it, share its unique
-                    story, and classify its genre. Lay the foundation for an
-                    unforgettable experience.
-                  </span>
-                  <div className="mt-8 flex flex-col md:flex-row">
-                    <div className="w-full md:w-1/2">
-                      <TextInput
-                        label="Event Name"
-                        name="name"
-                        value={eventDetails.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="w-full md:w-1/2 md:pl-8">
-                      <Select
-                        label="Type"
-                        name="type"
-                        searchValue={eventDetails.type}
-                        onSearchChange={(value) =>
-                          setEventDetails({ ...eventDetails, type: value })
-                        }
-                        data={[
-                          "Rock",
-                          "Pop",
-                          "Classical",
-                          "Country",
-                          "Indie",
-                          "EDM",
-                          "Jazz",
-                          "Reggae",
-                          "Hip-Hop",
-                          "World Music",
-                        ]}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <Textarea
-                    label="Event Description"
-                    name="description"
-                    value={eventDetails.description}
-                    onChange={handleInputChange}
-                    minRows={4}
-                    required
-                    className="mt-4"
-                  />
-                  <Textarea
-                    label="FAQ"
-                    name="faq"
-                    value={eventDetails.faq}
-                    onChange={handleInputChange}
-                    minRows={3}
-                    required
-                    className="mt-4"
-                  />
-                  <h1 className="mt-10 font-bold">Venue</h1>
-                  <span className="font-light">
-                    Choose the perfect backdrop for your event by picking a
-                    venue and setting the date. Create an ambiance that matches
-                    your vision and ensures a memorable gathering.
-                  </span>
-                  <Select
-                    label="Venue"
-                    name="venue"
-                    onChange={handleVenueChange}
-                    data={venues.map((venue) => ({
-                      value: venue.venueid.toString(),
-                      label: venue.name,
-                    }))}
-                    required
-                    className="mt-8"
-                  />
-                  <div className="mt-4 h-[480px] pb-6">
-                    <span
-                      className={`mb-1 inline-block text-[0.875rem] font-medium`}
-                    >
-                      Event Date
-                    </span>
-                    {newEvents.length === 0 && (
-                      <span className="text-red-500"> *</span>
-                    )}
-                    {eventDetails.venue_id === "" && (
-                      <Text
-                        size="sm"
-                        c="red"
-                        fw={500}
-                        className="inline-block pl-2"
-                      >
-                        Please Select Venue First *
-                      </Text>
-                    )}
-                    <Calendar
-                      className={styles.calendar}
-                      localizer={localizer}
-                      events={allEvents}
-                      views={["month", "week", "day"]}
-                      minDate={moment().toDate()}
-                      defaultDate={moment().toDate()} // Set the initial date to today
-                      onSelectEvent={handleSelectEvent}
-                      date={calendarDate}
-                      onNavigate={onNavigate}
-                      onSelectSlot={handleSelectSlot}
-                      view={currentView}
-                      onView={onView}
-                      startAccessor="start"
-                      endAccessor="end"
-                      selectable
-                      components={{
-                        toolbar: (
-                          props: JSX.IntrinsicAttributes & {
-                            label: any;
-                            onView: any;
-                            onNavigate: any;
-                            currentView: any;
-                          }
-                        ) => (
-                          <CustomToolbar {...props} currentView={currentView} />
-                        ),
-                      }}
-                    />
-                  </div>
-                  <h1 className="mt-10 font-bold">Pricing</h1>
-                  <span className="text-size-lg font-light">
-                    Unlock the Full Potential of Your Event: Craft Custom Ticket
-                    Pricing That Opens Doors to a World of Possibilities! Share
-                    Your Unique Pricing Strategy to Attract a Diverse Array of
-                    Attendees, Tailoring Their Experience to Perfection.
-                  </span>
-                  <div>
-                    <Text
-                      size="sm"
-                      className="mt-8 inline-block text-[0.875rem] font-medium"
-                    >
-                      Category Pricings
-                    </Text>
-                    {eventDetails.venue_id === "" && (
-                      <div>
-                        <Text
-                          size="sm"
-                          c="red"
-                          fw={500}
-                          className="inline-block pl-2"
-                        >
-                          Please Select Venue First *
-                        </Text>
-                        <Slider disabled />
-                      </div>
-                    )}
-                    {categoryPricing.map((value, index) => (
-                      <div key={index}>
-                        <Text size="sm">{value.category}</Text>
-                        <Slider
-                          min={0}
-                          max={500}
-                          value={
-                            categoryPricing.find(
-                              (item) => item.category === value.category
-                            )?.price
-                          }
-                          onChange={(newValue) =>
-                            handleSliderChange(value.category, newValue)
-                          }
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <Textarea
-                    label="Ticket Pricing Details"
-                    name="ticket_pricing"
-                    value={eventDetails.ticket_pricing}
-                    onChange={handleInputChange}
-                    minRows={3}
-                    required
-                    className="mt-4"
-                  />
-                  <h1 className="text-size-lg mt-8 font-bold">
-                    Additional Information
-                  </h1>
-                  <span className="text-size-lg font-light">
-                    Share your extras! Tell us about special policies, or any
-                    unique needs. We're all ears! Your input helps us tailor
-                    your experience to your specific needs and preferences.
-                    Plus, Don't Forget to Add an Eye-Catching Event Banner to
-                    Spark Excitement and Anticipation!
-                  </span>
-                  <Textarea
-                    label="Admission Policy"
-                    name="admission_policy"
-                    value={eventDetails.admission_policy}
-                    onChange={handleInputChange}
-                    minRows={3}
-                    required
-                    className="mt-4"
-                  />
-                  <div className="mt-4">
-                    <FileInput
-                      type="file"
-                      accept="image/png,image/jpeg"
-                      onChange={setEventImage}
-                      icon={<IconUpload className="size[1rem]" />}
-                      label="Upload Event Banner Image"
-                      placeholder="Click Me to Upload: .png, .jpeg"
-                      required
-                    />
-                  </div>
-                  <h1 className="mt-10 font-bold">NFT Tokens</h1>
-                  <span className="font-light">
-                    Make Your Event Memorable! Personalize it with Your Unique
-                    NFTs, From Flying Cats to Rainbow Wonders – Let Your
-                    Imagination Soar!
-                  </span>
-                  <div className="mt-8 flex flex-col md:flex-row">
-                    {/* <TextInput
+    return (
+        <>
+        <LandingLayout
+          permissions={[Role.ADMIN]}
+          title="Creators - Create"
+          withNavbar
+        >
+                {(user) => (
+                    <Section title="For Creators - Create New Event">
+                            <form onSubmit={handleSubmit}>
+                                <div className="">
+                                    <h1 className="font-bold text-size-lg mt-8">Basic Information</h1>
+                                    <span className="font-light text-size-lg">Craft your event's identity: Name it, share its unique story, and classify its genre. Lay the foundation for an unforgettable experience.</span>
+                                    <div className="flex flex-col md:flex-row mt-8">
+                                        <div className="md:w-1/2 w-full">
+                                            <TextInput
+                                                label="Event Name"
+                                                name="name"
+                                                value={eventDetails.name}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="md:pl-8 md:w-1/2 w-full">
+                                            <Select
+                                                label="Type"
+                                                name="type"
+                                                searchValue={eventDetails.type}
+                                                onSearchChange={(value) => setEventDetails({ ...eventDetails, type: value })}
+                                                data={['Rock', 'Pop', 'Classical', 'Country', 'Indie', 'EDM', 'Jazz', 'Reggae', 'Hip-Hop', 'World Music']}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    <Textarea
+                                        label="Event Description"
+                                        name="description"
+                                        value={eventDetails.description}
+                                        onChange={handleInputChange}
+                                        minRows={4}
+                                        required
+                                        className="mt-4"
+                                    />
+                                    <Textarea
+                                        label="FAQ"
+                                        name="faq"
+                                        value={eventDetails.faq}
+                                        onChange={handleInputChange}
+                                        minRows={3}
+                                        required
+                                        className="mt-4"
+                                    />
+                                    <h1 className="font-bold mt-10">Venue</h1>
+                                    <span className="font-light">Choose the perfect backdrop for your event by picking a venue and setting the date. Create an ambiance that matches your vision and ensures a memorable gathering.</span>
+                                    <Select
+                                        label="Venue"
+                                        name="venue"
+                                        onChange={handleVenueChange}
+                                        data={venues.map((venue) => ({
+                                            value: venue.venueid.toString(),
+                                            label: venue.name,
+                                        }))}
+                                        required
+                                        className="mt-8"
+                                    />
+                                    <div className="h-[480px] mt-4 pb-6">
+                                        <span className={`inline-block text-[0.875rem] font-medium mb-1`}>Event Date</span>
+                                        {newEvents.length === 0 && (
+                                            <span className="text-red-500"> *</span>
+                                        )}
+                                        {eventDetails.venue_id === '' && (
+                                            <Text size="sm" c="red" fw={500} className="inline-block pl-2">Please Select Venue First *</Text>
+                                        )}
+                                        <Calendar
+                                            className={styles.calendar}
+                                            localizer={localizer}
+                                            events={allEvents}
+                                            views={['month', 'week', 'day']}
+                                            minDate={moment().toDate()}
+                                            defaultDate={moment().toDate()} // Set the initial date to today
+                                            onSelectEvent={handleSelectEvent}
+                                            date={calendarDate}
+                                            onNavigate={onNavigate}
+                                            onSelectSlot={handleSelectSlot}
+                                            view={currentView}
+                                            onView={onView}
+                                            startAccessor="start"
+                                            endAccessor="end"
+                                            selectable
+                                            components={{ toolbar: (props: JSX.IntrinsicAttributes & { label: any; onView: any; onNavigate: any; currentView: any; }) => <CustomToolbar {...props} currentView={currentView} /> }}
+                                        />
+                                    </div>
+                                    <h1 className="font-bold mt-10">Pricing</h1>
+                                    <span className="font-light text-size-lg">Unlock the Full Potential of Your Event: Craft Custom Ticket Pricing That Opens Doors to a World of Possibilities! Share Your Unique Pricing Strategy to Attract a Diverse Array of Attendees, Tailoring Their Experience to Perfection.</span>
+                                    <div>
+                                        <Text size="sm" className="mt-8 text-[0.875rem] font-medium inline-block">Category Pricings</Text>
+                                        {eventDetails.venue_id === '' && (
+                                            <div>
+                                                <Text size="sm" c="red" fw={500} className="inline-block pl-2">Please Select Venue First *</Text>
+                                                <Slider disabled />
+                                            </div>
+                                        )}
+                                        {categoryPricing.map((value, index) => (
+                                            <div key={index}>
+                                                <Text size="sm">{value.category}</Text>
+                                                <Slider
+                                                    min={0}
+                                                    max={500}
+                                                    value={categoryPricing.find((item) => item.category === value.category)?.price}
+                                                    onChange={(newValue) => handleSliderChange(value.category, newValue)}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <Textarea
+                                        label="Ticket Pricing Details"
+                                        name="ticket_pricing"
+                                        value={eventDetails.ticket_pricing}
+                                        onChange={handleInputChange}
+                                        minRows={3}
+                                        required
+                                        className="mt-4"
+                                    />
+                                    <h1 className="font-bold text-size-lg mt-8">Additional Information</h1>
+                                    <span className="font-light text-size-lg">Share your extras! Tell us about special policies, or any unique needs. We're all ears! Your input helps us tailor your experience to your specific needs and preferences. Plus, Don't Forget to Add an Eye-Catching Event Banner to Spark Excitement and Anticipation!</span>
+                                    <Textarea
+                                        label="Admission Policy"
+                                        name="admission_policy"
+                                        value={eventDetails.admission_policy}
+                                        onChange={handleInputChange}
+                                        minRows={3}
+                                        required
+                                        className="mt-4"
+                                    />
+                                    <div className="mt-4">
+                                        <FileInput type="file" accept="image/png,image/jpeg" onChange={setEventImage} icon={<IconUpload className="size[1rem]" />} label="Upload Event Banner Image" placeholder="Click Me to Upload: .png, .jpeg" required />
+                                    </div>
+                                    <h1 className="font-bold mt-10">NFT Tokens</h1>
+                                    <span className="font-light">Make Your Event Memorable! Personalize it with Your Unique NFTs, From Flying Cats to Rainbow Wonders – Let Your Imagination Soar!</span>
+                                    <div className="mt-8 flex flex-col md:flex-row">
+                                        {/* <TextInput
                                             type="text"
                                             placeholder="Enter Event Name"
                                             value={eventNameUpload}
                                             onChange={handleUploadChange}
                                         /> */}
-                    <div className="w-full md:w-1/2 md:pr-6">
-                      <FileInput
-                        type="button"
-                        accept="image/png,image/jpeg"
-                        onChange={setSeatNFT}
-                        icon={<IconUpload className="size[1rem]" />}
-                        label="Upload NFT image for Seating"
-                        placeholder="Click Me to Upload: .png, .jpeg"
-                        required
-                      />
-                    </div>
-                    <div className="w-full md:w-1/2 md:pl-6">
-                      <FileInput
-                        type="button"
-                        accept="image/png,image/jpeg"
-                        onChange={setStandingNFT}
-                        icon={<IconUpload className="size[1rem] " />}
-                        label="Upload NFT image for Standing"
-                        placeholder="Click Me to Upload: .png, .jpeg"
-                        required
-                      />
-                    </div>
-                    {/* <Button onClick={handleFileUpload}>Upload File</Button> */}
-                  </div>
-                </div>
-                <Group className="mt-12 flex justify-between">
-                  <Link href="/creators">
-                    <Button>Back to Dashboard</Button>
-                  </Link>
-                  <Button
-                    type="submit"
-                    variant="filled"
-                    color="blue"
-                    className="ml-auto"
-                  >
-                    Create Event
-                  </Button>
-                </Group>
-              </form>
-            </Paper>
+                                        <div className="md:w-1/2 w-full md:pr-6">
+                                            <FileInput type="button" accept="image/png,image/jpeg" onChange={setSeatNFT} icon={<IconUpload className="size[1rem]" />} label="Upload NFT image for Seating" placeholder="Click Me to Upload: .png, .jpeg" required />
+                                        </div>
+                                        <div className="md:w-1/2 w-full md:pl-6">
+                                            <FileInput type="button" accept="image/png,image/jpeg" onChange={setStandingNFT} icon={<IconUpload className="size[1rem] " />} label="Upload NFT image for Standing" placeholder="Click Me to Upload: .png, .jpeg" required />
+                                        </div>
+                                        {/* <Button onClick={handleFileUpload}>Upload File</Button> */}
+                                    </div>
+                                </div>
+                                <Group className="mt-12 flex justify-between">
+                                    <Link href="/creators"><Button>Back to Dashboard</Button></Link>
+                                    <Button type="submit" variant="filled" color="blue" className="ml-auto">
+                                        Create Event
+                                    </Button>
+                                </Group>
+                            </form>
+
+
+
 
             {/* <div className="mb-4">
                             <h1>Upload JSON</h1>
