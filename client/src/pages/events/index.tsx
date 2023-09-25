@@ -1,4 +1,16 @@
-import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Input,
+  Popover,
+  RangeSlider,
+  Select,
+  Image,
+  Text,
+  Group,
+  Center,
+  Badge,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import {
   IconCalendarQuestion,
@@ -124,29 +136,44 @@ export default EventList;
 const EventCard = ({ event }: { event: Event }) => {
   const { formattedDate } = getReadableDate(event.dates[0]!);
   return (
-    <Card className="relative h-[280px] bg-gradient-to-t from-gray-0 via-dark-6 transition-transform duration-400 transform hover:scale-105" p="lg" shadow="lg" radius="md" component="a" href={`/events/${event.id}`} target="_blank">
-      <Image className="absolute inset-0 bg-cover transition-transform transform duration-500 ease transform hover:scale-105" src="images/event.jpeg" alt={event.name} height={280} />
+    <Link href={`/events/${event.id}`}>
+      <Card
+        className="from-gray-0 via-dark-6 duration-400 relative h-[280px] transform bg-gradient-to-t transition-transform hover:scale-105"
+        p="lg"
+        shadow="lg"
+        radius="md"
+        // component="a"
+        // href={`/events/${event.id}`}
+        // target="_blank"
+      >
+        <Image
+          className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
+          src="images/event.jpeg"
+          alt={event.name}
+          height={280}
+        />
 
-      <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
 
-      <div className="h-full relative flex flex-col justify-end z-1">
-        <div>
-          <Text size="lg" className="text-white mb-1" fw={500} color="white">
-            {event.name}
-          </Text>
-
-          <Group justify="between" gap="xs">
-            <Text size="sm" color="#909296">
-              {event.location}
+        <div className="z-1 relative flex h-full flex-col justify-end">
+          <div>
+            <Text size="lg" className="mb-1 text-white" fw={500} color="white">
+              {event.name}
             </Text>
 
-            <Text size="sm" className="ml-auto" color="#909296">
-              {formattedDate && <span>{formattedDate}</span>}
-            </Text>
-          </Group>
+            <Group justify="between" gap="xs">
+              <Text size="sm" color="#909296">
+                {event.location}
+              </Text>
+
+              <Text size="sm" className="ml-auto" color="#909296">
+                {formattedDate && <span>{formattedDate}</span>}
+              </Text>
+            </Group>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
 
     // <Link href={`/events/${event.id}`} className="flex flex-wrap">
     //   <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
@@ -169,8 +196,6 @@ const EventCard = ({ event }: { event: Event }) => {
     //       </Group>
     //   </Card>
     // </Link>
-
-
 
     // <Link href={`/events/${event.id}`} className="flex justify-center">
     //   <div className="flex h-[360px] w-[320px] flex-col  bg-white shadow-lg">

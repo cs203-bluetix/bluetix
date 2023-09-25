@@ -1,5 +1,6 @@
 import * as geojson from "geojson";
 import { Layer } from "leaflet";
+import { ReactNode } from "react";
 // FETCH
 export interface Event {
   [x: string]: ReactNode;

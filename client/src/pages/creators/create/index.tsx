@@ -4,299 +4,326 @@ import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
 import Link from "next/link";
 import { JSX, useCallback, useEffect, useState } from "react";
-import { CalendarDate, Role, Sections, Session, TimeRange, Venue, categoryPricing, ticketFormDTO } from "store/types";
-import axiosConfig from 'utils/axiosConfig';
+import {
+  CalendarDate,
+  Role,
+  Sections,
+  Session,
+  TimeRange,
+  Venue,
+  categoryPricing,
+  ticketFormDTO,
+} from "store/types";
+import axiosConfig from "utils/axiosConfig";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import moment, { now } from 'moment';
-import styles from 'components/Calendar/calendar.module.css';
-
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import moment, { now } from "moment";
+import styles from "components/Calendar/calendar.module.css";
 
 import {
-    Paper,
-    Select,
-    TextInput,
-    Textarea,
-    Button,
-    Group,
-    FileInput,
-    Slider,
-    Text,
-} from '@mantine/core';
+  Paper,
+  Select,
+  TextInput,
+  Textarea,
+  Button,
+  Group,
+  FileInput,
+  Slider,
+  Text,
+} from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 
-
-
 export default function Create() {
-    const localizer = momentLocalizer(moment);
-    const [venues, setVenues] = useState<Venue[]>([]);
-    const [availDates, setAvailDates] = useState<Session[]>([]);
+  const localizer = momentLocalizer(moment);
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [availDates, setAvailDates] = useState<Session[]>([]);
 
-    const [allEvents, setAllEvents] = useState([]); //both together
-    const [existingEvents, setExistingEvents] = useState<CalendarDate[]>([]); //existing venue used dates
-    const [newEvents, setNewEvents] = useState([]); //new inputs
-    const [eventImage, setEventImage] = useState<File | null>(null);
+  const [allEvents, setAllEvents] = useState([]); //both together
+  const [existingEvents, setExistingEvents] = useState<CalendarDate[]>([]); //existing venue used dates
+  const [newEvents, setNewEvents] = useState([]); //new inputs
+  const [eventImage, setEventImage] = useState<File | null>(null);
 
-    const [categoryPricing, setCategoryPricing] = useState<categoryPricing[]>([]);
+  const [categoryPricing, setCategoryPricing] = useState<categoryPricing[]>([]);
 
+  const [eventDetails, setEventDetails] = useState({
+    name: "",
+    venue_id: "",
+    description: "",
+    faq: "",
+    type: "",
+    ticket_pricing: "",
+    admission_policy: "",
+  });
 
-    const [eventDetails, setEventDetails] = useState({
-        name: '',
-        venue_id: '',
-        description: '',
-        faq: '',
-        type: '',
-        ticket_pricing: '',
-        admission_policy: ''
+  //Automatically fetch available venues
+  useEffect(() => {
+    axiosConfig
+      .get("/api/venues")
+      .then((response) => {
+        setVenues(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching venues:", error);
+      });
+  }, []);
+
+  //For Updating Available Dates after Venue Selected
+  const handleVenueChange = (value) => {
+    setEventDetails((prevDetails) => ({
+      ...prevDetails,
+      venue_id: value,
+    }));
+
+    axiosConfig
+      .get("/api/sessions/findByVenueId/" + (value || ""))
+      .then((response) => {
+        setAvailDates(response.data);
+        const newTimeRanges = response.data.map((item) => ({
+          date: new Date(item.date),
+          start_time: item.start_time,
+          end_time: item.end_time,
+        }));
+        const newCalendarDates = response.data.map((item) => {
+          console.log(item.start_time, item.end_time);
+          const [startHours, startMinutes, startSeconds] = item.start_time
+            .split(":")
+            .map(Number);
+          const startDate = new Date(item.date);
+          startDate.setHours(startHours, startMinutes, startSeconds);
+          const [endHours, endMinutes, endSeconds] = item.end_time
+            .split(":")
+            .map(Number);
+          const endDate = new Date(item.date);
+          endDate.setHours(endHours, endMinutes, endSeconds);
+
+          return {
+            id: item.sessionid,
+            title: "Unavail",
+            start: startDate,
+            end: endDate,
+          };
+        });
+        setExistingEvents(newCalendarDates);
+        setAllEvents(newCalendarDates);
+      })
+      .catch((error) => {
+        console.error("Error fetching available dates:", error);
+      });
+
+    axiosConfig
+      .get("/api/sections/getCategories/" + value)
+      .then((response) => {
+        const categoryPricingData = response.data.map((category) => ({
+          category: category,
+          price: Number(0), // Set the default price to 0
+        }));
+        setCategoryPricing(categoryPricingData);
+      })
+      .catch((error) => {
+        console.error("Error fetching available categories:", error);
+      });
+  };
+
+  const handleSliderChange = (category: string, newValue: number) => {
+    const updatedCategoryPricing = [...categoryPricing];
+    const categoryIndex = updatedCategoryPricing.findIndex(
+      (item) => item.category === category
+    );
+
+    if (categoryIndex !== -1) {
+      updatedCategoryPricing[categoryIndex].price = newValue;
+      setCategoryPricing(updatedCategoryPricing);
+    }
+  };
+
+  const [currentView, setCurrentView] = useState(Views.MONTH);
+  const onView = useCallback(
+    (newView) => setCurrentView(newView),
+    [setCurrentView]
+  );
+  const [calendarDate, setCalendarDate] = useState(new Date());
+
+  const onNavigate = useCallback(
+    (newDate) => {
+      setCalendarDate(newDate);
+    },
+    [setCalendarDate]
+  );
+
+  const handleSelectSlot = useCallback(
+    ({ start, end }) => {
+      if (currentView != "month") {
+        const title = "Selected";
+        const newEvent = { title, start, end };
+        setNewEvents((prevEvents) => [...prevEvents, newEvent]);
+        setAllEvents((prevEvents) => [...prevEvents, newEvent]);
+      } else {
+        setCurrentView(Views.WEEK);
+        onNavigate(start);
+      }
+    },
+    [currentView, onNavigate]
+  );
+  const handleSelectEvent = useCallback(
+    (event) => {
+      if (existingEvents.some((e) => e === event)) {
+        return;
+      }
+
+      if (window.confirm(`Do you want to delete the selected session`)) {
+        const updatedEvents = allEvents.filter((e) => e !== event);
+        const updatedNewEvents = newEvents.filter((e) => e !== event);
+        setNewEvents(updatedNewEvents);
+        setAllEvents(updatedEvents);
+      }
+    },
+    [allEvents, setAllEvents, newEvents, setNewEvents]
+  );
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setEventDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setEventDetails((prevDetails) => ({
+      ...prevDetails,
+      date: date,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    const image_url = eventDetails.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+    e.preventDefault();
+    console.log(eventDetails);
+    console.log(newEvents);
+
+    const sessionDTOArray = newEvents.map((event) => {
+      console.log(event);
+      const { start, end, transaction_addr } = event;
+      return {
+        date: new Date(start),
+        start_time: new Date(start),
+        end_time: new Date(end),
+        transaction_addr: "0x1234567890abcdef",
+      };
     });
 
-    //Automatically fetch available venues
-    useEffect(() => {
-        axiosConfig.get('/api/venues')
-            .then((response) => {
-                setVenues(response.data);
-            })
-            .catch((error) => {
-                console.error('Error fetching venues:', error);
-            });
-    }, []);
-
-    //For Updating Available Dates after Venue Selected
-    const handleVenueChange = (value) => {
-        setEventDetails((prevDetails) => ({
-            ...prevDetails,
-            venue_id: value,
-        }));
-
-        axiosConfig.get('/api/sessions/findByVenueId/' + (value || ""))
-            .then((response) => {
-                setAvailDates(response.data);
-                const newTimeRanges = response.data.map((item) => ({
-                    date: new Date(item.date),
-                    start_time: item.start_time,
-                    end_time: item.end_time,
-                }));
-                const newCalendarDates = response.data.map((item) => {
-                    console.log(item.start_time, item.end_time);
-                    const [startHours, startMinutes, startSeconds] = item.start_time.split(':').map(Number);
-                    const startDate = new Date(item.date);
-                    startDate.setHours(startHours, startMinutes, startSeconds);
-                    const [endHours, endMinutes, endSeconds] = item.end_time.split(':').map(Number);
-                    const endDate = new Date(item.date);
-                    endDate.setHours(endHours, endMinutes, endSeconds);
-
-                    return {
-                        id: item.sessionid,
-                        title: "Unavail",
-                        start: startDate,
-                        end: endDate,
-                    };
-                });
-                setExistingEvents(newCalendarDates);
-                setAllEvents(newCalendarDates);
-            })
-            .catch((error) => {
-                console.error('Error fetching available dates:', error);
-            });
-
-        axiosConfig.get('/api/sections/getCategories/' + value)
-            .then((response) => {
-                const categoryPricingData = response.data.map((category) => ({
-                    category: category,
-                    price: Number(0), // Set the default price to 0
-                }));
-                setCategoryPricing(categoryPricingData);
-            })
-            .catch((error) => {
-                console.error('Error fetching available categories:', error);
-            });
+    const ticketFormDTO = {
+      eventDTO: {
+        name: eventDetails.name,
+        description: eventDetails.description,
+        faq: eventDetails.faq,
+        type: eventDetails.type,
+        ticket_pricing: eventDetails.ticket_pricing,
+        admission_policy: eventDetails.admission_policy,
+        image_url: image_url,
+      },
+      sessionDTOList: sessionDTOArray,
+      ticketDTOList: categoryPricing,
+      venue_id: Number(eventDetails.venue_id),
     };
 
-    const handleSliderChange = (category: string, newValue: number) => {
-        const updatedCategoryPricing = [...categoryPricing];
-        const categoryIndex = updatedCategoryPricing.findIndex((item) => item.category === category);
+    const formDataObj = new FormData();
 
-        if (categoryIndex !== -1) {
-            updatedCategoryPricing[categoryIndex].price = newValue;
-            setCategoryPricing(updatedCategoryPricing);
-        }
-    };
-
-    const [currentView, setCurrentView] = useState(Views.MONTH);
-    const onView = useCallback((newView) => setCurrentView(newView), [setCurrentView]);
-    const [calendarDate, setCalendarDate] = useState(new Date());
-
-    const onNavigate = useCallback((newDate) => {
-        setCalendarDate(newDate);
-    }, [setCalendarDate]);
-
-    const handleSelectSlot = useCallback(
-        ({ start, end }) => {
-            if (currentView != 'month') {
-                const title = 'Selected';
-                const newEvent = { title, start, end };
-                setNewEvents((prevEvents) => [...prevEvents, newEvent]);
-                setAllEvents((prevEvents) => [...prevEvents, newEvent]);
-            } else {
-                setCurrentView(Views.WEEK);
-                onNavigate(start);
-            }
-        },
-        [currentView, onNavigate]
+    formDataObj.append(
+      "ticketFormDTO",
+      new Blob([JSON.stringify(ticketFormDTO)], { type: "application/json" })
     );
-    const handleSelectEvent = useCallback(
-        (event) => {
-            if (existingEvents.some((e) => e === event)) {
-                return;
-            }
+    if (eventImage) {
+      formDataObj.append("file", eventImage);
+    }
 
-            if (window.confirm(`Do you want to delete the selected session`)) {
-                const updatedEvents = allEvents.filter((e) => e !== event);
-                const updatedNewEvents = newEvents.filter((e) => e !== event);
-                setNewEvents(updatedNewEvents);
-                setAllEvents(updatedEvents);
-            }
-        },
-        [allEvents, setAllEvents, newEvents, setNewEvents]
-    );
+    console.log(ticketFormDTO);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setEventDetails((prevDetails) => ({
-            ...prevDetails,
-            [name]: value,
-        }));
-    };
-
-    const handleDateChange = (date: Date | null) => {
-        setEventDetails((prevDetails) => ({
-            ...prevDetails,
-            date: date,
-        }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        const image_url = eventDetails.name.toLowerCase() .replace(/\s+/g, '-') .replace(/[^a-z0-9-]/g, '');
-        e.preventDefault();
-        console.log(eventDetails);
-        console.log(newEvents);
-
-        const sessionDTOArray = newEvents.map((event) => {
-            console.log(event);
-            const { start, end, transaction_addr } = event;
-            return {
-                date: new Date(start),
-                start_time: new Date(start),
-                end_time: new Date(end),
-                transaction_addr: "0x1234567890abcdef",
-            };
-        });
-
-        const ticketFormDTO = ({
-            eventDTO: {
-                name: eventDetails.name,
-                description: eventDetails.description,
-                faq: eventDetails.faq,
-                type: eventDetails.type,
-                ticket_pricing: eventDetails.ticket_pricing,
-                admission_policy: eventDetails.admission_policy,
-                image_url: image_url,
-            },
-            sessionDTOList: sessionDTOArray,
-            ticketDTOList: categoryPricing,
-            venue_id: Number(eventDetails.venue_id),
-        });
-
-        const formDataObj = new FormData();
-
-        formDataObj.append('ticketFormDTO', new Blob([JSON.stringify(ticketFormDTO)], { type: 'application/json' }));        if (eventImage) {
-            formDataObj.append('file', eventImage);
+    try {
+      const response = await axiosConfig.post(
+        "/api/creators/createEventSessionAndTicket",
+        formDataObj,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
+      );
 
-        console.log(ticketFormDTO);
-        
-        try {
-            const response = await axiosConfig.post('/api/creators/createEventSessionAndTicket', formDataObj, {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                },
-              });
-        
-              if (response.status === 200) {
-                console.log('Form data sent successfully.');
-              } else {
-                console.error('Failed to send form data.');
-              }
-            } catch (error) {
-              console.error('Error:', error);
-            }
-    };
+      if (response.status === 200) {
+        console.log("Form data sent successfully.");
+      } else {
+        console.error("Failed to send form data.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
+  //Handling NFT File uploads
+  const [seatNFT, setSeatNFT] = useState<File | null>(null);
+  const [standingNFT, setStandingNFT] = useState<File | null>(null);
+  const [eventNameUpload, setEventNameUpload] = useState("");
+  const [eventNameQuery, setEventNameQuery] = useState("");
+  const [queriedEventName, setQueriedEventName] = useState("");
+  const [fileList, setFileList] = useState([]);
 
+  const handleUploadChange = (event: any) => {
+    setEventNameUpload(event.target.value);
+  };
+  const handleQueryChange = (event: any) => {
+    setEventNameQuery(event.target.value);
+  };
 
-    //Handling NFT File uploads
-    const [seatNFT, setSeatNFT] = useState<File | null>(null);
-    const [standingNFT, setStandingNFT] = useState<File | null>(null);
-    const [eventNameUpload, setEventNameUpload] = useState("");
-    const [eventNameQuery, setEventNameQuery] = useState("");
-    const [queriedEventName, setQueriedEventName] = useState("");
-    const [fileList, setFileList] = useState([]);
-
-    const handleUploadChange = (event: any) => {
-        setEventNameUpload(event.target.value);
-    };
-    const handleQueryChange = (event: any) => {
-        setEventNameQuery(event.target.value);
-    };
-
-    const handleFileUpload = async () => {
-        if (!seatNFT) {
-            console.error("No file selected.");
-            return;
+  const handleFileUpload = async () => {
+    if (!seatNFT) {
+      console.error("No file selected.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", seatNFT);
+    try {
+      const response = await axios.post(
+        "http://localhost:9090/api/nft/upload/" + eventNameUpload,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-        const formData = new FormData();
-        formData.append("file", seatNFT);
-        try {
-            const response = await axios.post(
-                "http://localhost:9090/api/nft/upload/" + eventNameUpload,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
-            console.log(response.data);
-        } catch (error) {
-            console.error("File upload failed:", error);
-        }
-    };
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("File upload failed:", error);
+    }
+  };
 
-    // Function to fetch and update the file list
-    const fetchFileList = async () => {
-        try {
-            if (eventNameQuery) {
-                const response = await axios.get(
-                    "http://localhost:9090/api/nft/events/" + eventNameQuery
-                );
-                setFileList(response.data);
-                setQueriedEventName(eventNameQuery);
-            } else {
-                console.log("Missing name query input");
-                setFileList([]);
-            }
-        } catch (error: any) {
-            if (error.response && error.response.status === 404) {
-                // Handle 404 error here by setting fileList to an empty array
-                setFileList([]);
-            } else {
-                console.error("Failed to fetch file list:", error);
-            }
-        }
-    };
-
-
+  // Function to fetch and update the file list
+  const fetchFileList = async () => {
+    try {
+      if (eventNameQuery) {
+        const response = await axios.get(
+          "http://localhost:9090/api/nft/events/" + eventNameQuery
+        );
+        setFileList(response.data);
+        setQueriedEventName(eventNameQuery);
+      } else {
+        console.log("Missing name query input");
+        setFileList([]);
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        // Handle 404 error here by setting fileList to an empty array
+        setFileList([]);
+      } else {
+        console.error("Failed to fetch file list:", error);
+      }
+    }
+  };
 
     return (
         <>
@@ -464,7 +491,7 @@ export default function Create() {
 
 
 
-                        {/* <div className="mb-4">
+            {/* <div className="mb-4">
                             <h1>Upload JSON</h1>
                             <TextInput
                                 type="text"
@@ -511,27 +538,63 @@ export default function Create() {
                                 ))}
                             </ul>
                         </div> */}
-                    </Section>
-                )}
-            </LandingLayout>
-        </>
-    );
+          </Section>
+        )}
+      </LandingLayout>
+    </>
+  );
 }
 
 function CustomToolbar({ label, onView, onNavigate, currentView }) {
-    return (
-        <div className='rbc-toolbar !text-xs'>
-            <span className="rbc-btn-group">
-                <button type="button" className="!px-[0.5rem]" onClick={() => onNavigate('PREV')}><FaChevronLeft /></button>
-                <button type="button" className="!px-[0.5rem]" onClick={() => onNavigate('TODAY')}>Today</button>
-                <button type="button" className="!px-[0.5rem]" onClick={() => onNavigate('NEXT')}><FaChevronRight /></button>
-            </span>
-            <span className="rbc-toolbar-label">{label}</span>
-            <span className="rbc-btn-group">
-                <button type="button" className={currentView === Views.MONTH ? '!bg-gray-200' : ''} onClick={() => onView(Views.MONTH)}>Month</button>
-                <button type="button" className={currentView === Views.WEEK ? '!bg-gray-200' : ''} onClick={() => onView(Views.WEEK)}>Week</button>
-                <button type="button" className={currentView === Views.DAY ? '!bg-gray-200' : ''} onClick={() => onView(Views.DAY)}>Day</button>
-            </span>
-        </div>
-    );
+  return (
+    <div className="rbc-toolbar !text-xs">
+      <span className="rbc-btn-group">
+        <button
+          type="button"
+          className="!px-[0.5rem]"
+          onClick={() => onNavigate("PREV")}
+        >
+          <FaChevronLeft />
+        </button>
+        <button
+          type="button"
+          className="!px-[0.5rem]"
+          onClick={() => onNavigate("TODAY")}
+        >
+          Today
+        </button>
+        <button
+          type="button"
+          className="!px-[0.5rem]"
+          onClick={() => onNavigate("NEXT")}
+        >
+          <FaChevronRight />
+        </button>
+      </span>
+      <span className="rbc-toolbar-label">{label}</span>
+      <span className="rbc-btn-group">
+        <button
+          type="button"
+          className={currentView === Views.MONTH ? "!bg-gray-200" : ""}
+          onClick={() => onView(Views.MONTH)}
+        >
+          Month
+        </button>
+        <button
+          type="button"
+          className={currentView === Views.WEEK ? "!bg-gray-200" : ""}
+          onClick={() => onView(Views.WEEK)}
+        >
+          Week
+        </button>
+        <button
+          type="button"
+          className={currentView === Views.DAY ? "!bg-gray-200" : ""}
+          onClick={() => onView(Views.DAY)}
+        >
+          Day
+        </button>
+      </span>
+    </div>
+  );
 }

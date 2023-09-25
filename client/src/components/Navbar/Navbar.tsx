@@ -12,9 +12,11 @@ import {
   IconShoppingBag,
   IconShoppingBagCheck,
   IconUserCircle,
+  IconWallet,
 } from "@tabler/icons-react";
 import { useAuthStore } from "store/auth";
 import { useRouter } from "next/router";
+import { magic } from "utils/magicSDK";
 
 interface NavbarProps {
   classProps?: string;
@@ -126,7 +128,7 @@ export default Navbar;
 const UserOptions = ({ user }: { user: UserInfo }) => {
   const { logoutUser } = useAuthStore();
   return (
-    <Menu shadow="md" width={200}>
+    <Menu shadow="md" width={200} zIndex={1000}>
       <Menu.Target>
         <Button variant="transparent">
         <div className="flex h-auto cursor-pointer items-center">
@@ -141,6 +143,12 @@ const UserOptions = ({ user }: { user: UserInfo }) => {
         <Menu.Label>User</Menu.Label>
         <Menu.Item icon={<IconShoppingBagCheck size={16} />}>Orders</Menu.Item>
         <Menu.Item icon={<IconSettings size={16} />}>Settings</Menu.Item>
+        <Menu.Item
+          icon={<IconWallet size={16} />}
+          onClick={async () => await magic?.wallet.showUI()}
+        >
+          Wallet
+        </Menu.Item>
         <Menu.Item onClick={() => logoutUser()} icon={<IconLogout size={16} />}>
           Logout
         </Menu.Item>
