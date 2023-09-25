@@ -7,10 +7,10 @@ type LandingCardProps = {
 };
 const LandingCard: React.FC<LandingCardProps> = ({event}) => {
     return (
-            <div className="flex items-center bg-white rounded-lg transition-transform duration-500 transform hover:scale-105 shadow-lg">
+            <div className="flex items-center bg-white rounded-lg transition-transform duration-500 transform hover:scale-105 ">
                 <div className="">
                     <a href="/">
-                        <div className="rounded-t-lg">
+                        <div className="rounded-lg">
                             <img
                                 src={image.src}
                                 className="rounded-t-lg"

@@ -59,9 +59,8 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
       window.removeEventListener('scroll', handleScroll);
     };
 
-    
-}, []);
 
+  }, []);
 
   return (
     <>
@@ -85,60 +84,61 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
               All Events
             </button>
           </div>
-        <div className="w-screen h-screen bg-cyan-100" >
-          <div className=" text-6xl font-bold text-center py-[50px]">
-            Trending
-          </div>
-          <Swiper
-          effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            loop={true}
-            slidesPerView={2.5}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 50,
-              depth: 50,
-              modifier: 2.5,
-              slideShadows: false,
-  
-            }}
-            pagination={{ el: ".swiper-pagination", clickable: true }}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            }}
-            modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
-            className="swiper_container"
-          >
-            {events.map((item, index) => (
-              <SwiperSlide key={index}
-              className={`p-[30px]`}>
-                <LandingCard event={item} />
-              </SwiperSlide>
-            ))}
-            <div className="slider-control">
-              <div className="swiper-button-prev slider-arrow "></div>
-              <div className="swiper-button-next slider-arrow"></div>
+          <div className="w-screen h-screen bg-cyan-100" >
+            <div className=" text-6xl font-bold text-center py-[50px]">
+              Trending
             </div>
-          </Swiper>
-        </div>
-        <div className="w-screen h-screen flex justify-items-center bg-cyan-100">
-          <div className="grid grid-cols-6 gap-5 w-full h-full px-[150px] pb-[150px] font-bold text-2xl text-white">
-            <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
-            <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
-            <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
-            <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
-            <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
+            <Swiper
+              effect={"coverflow"}
+              grabCursor={true}
+              centeredSlides={true}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                // reverseDirection: true,
+              }}
+              loop={true}
+              slidesPerView={2.5}
+              coverflowEffect={{
+                rotate: 0,
+                stretch: 50,
+                depth: 100,
+                modifier: 2.5,
+                slideShadows: false,
+
+              }}
+              pagination={{ el: ".swiper-pagination", clickable: true }}
+              navigation={{
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }}
+              modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
+              className="swiper_container"
+            >
+              {events.map((item, index) => (
+                <SwiperSlide key={index}
+                  className={`p-[30px]`}>
+                  <LandingCard event={item} />
+                </SwiperSlide>
+              ))}
+              <div className="slider-control">
+                <div className="swiper-button-prev slider-arrow "></div>
+                <div className="swiper-button-next slider-arrow"></div>
+              </div>
+            </Swiper>
           </div>
-        </div>
-      </main>
-    </LandingLayout >
+          <div className="w-screen h-screen flex justify-items-center bg-cyan-100">
+            <div className="grid grid-cols-6 gap-5 w-full h-full px-[150px] pb-[150px] font-bold text-2xl text-white">
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
+              <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
+              <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
+            </div>
+          </div>
+        </main>
+      </LandingLayout >
     </>
   );
 }
