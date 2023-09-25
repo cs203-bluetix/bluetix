@@ -10,6 +10,7 @@ import { Role } from "store/types";
 function Register() {
   const { loginUser } = useAuthStore();
   const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -34,6 +35,7 @@ function Register() {
   });
 
   const handleSubmit = async () => {
+    setLoading(true);
     const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signup/customer`;
     const body = {
       firstName: form.values.firstName,
@@ -48,8 +50,10 @@ function Register() {
           // to change based on response payload
           loginUser({
             email: form.values.email,
-            isCreator: true,
-            role: Role.USER,
+            isCreator: form.values.email.includes("creator"),
+            role: form.values.email.includes("creator")
+              ? Role.ADMIN
+              : Role.USER,
             firstName: resp.data.firstName,
             lastName: resp.data.lastName,
           });
@@ -60,6 +64,7 @@ function Register() {
       .catch((e: AxiosResponse) => {
         setError(true);
       });
+    setLoading(false);
   };
   return (
     <div className="flex w-full max-w-3xl flex-col items-center">
@@ -123,7 +128,7 @@ function Register() {
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
         />
-        <Button type="submit" fullWidth className="mt-1">
+        <Button loading={loading} type="submit" fullWidth className="mt-1">
           Register
         </Button>
       </form>

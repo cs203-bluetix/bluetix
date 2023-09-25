@@ -12,6 +12,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/server": "^11.11.0",
     "@itseasy21/react-elastic-carousel": "^0.12.3",
+    "@mantine/carousel": "^6.0.19",
     "@mantine/core": "^6.0.19",
     "@mantine/dates": "^6.0.19",
     "@mantine/form": "^6.0.20",
@@ -21,9 +22,14 @@
     "@tabler/icons-react": "^2.32.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
-    "moment": "^2.29.4",
+<<<<<<< HEAD
+=======
+    "embla-carousel-autoplay": "^7.0.0",
+    "embla-carousel-react": "^7.0.0",
+>>>>>>> 407dc04a172f5a6e5223c8f216e6566410762cc7
     "leaflet": "^1.9.4",
     "magic-sdk": "^20.0.1",
+    "moment": "^2.29.4",
     "next": "^13.4.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -45,6 +51,7 @@
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.2.6",
+    "@types/react-big-calendar": "^1.6.4",
     "@types/react-dom": "^18.2.4",
     "@types/react-modal": "^3.16.0",
     "@typescript-eslint/eslint-plugin": "6.0.0",
