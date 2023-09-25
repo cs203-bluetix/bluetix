@@ -10,6 +10,7 @@ import { Role } from "store/types";
 function Login() {
   const { loginUser } = useAuthStore();
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
       email: "",
@@ -24,6 +25,7 @@ function Login() {
     },
   });
   const handleSubmit = async () => {
+    setLoading(true);
     const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
     await axios
       .post(endpoint, {
@@ -49,6 +51,7 @@ function Login() {
       .catch((e: AxiosResponse) => {
         setError(true);
       });
+    setLoading(false);
   };
   return (
     <div className="flex w-full max-w-3xl flex-col items-center">
@@ -82,7 +85,7 @@ function Login() {
           placeholder="Password"
           {...form.getInputProps("password")}
         />
-        <Button type="submit" fullWidth className="mt-1">
+        <Button loading={loading} type="submit" fullWidth className="mt-1">
           Login
         </Button>
       </form>
