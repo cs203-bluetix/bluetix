@@ -152,8 +152,8 @@ export default function Home({ events, }: InferGetServerSidePropsType<typeof get
                 { maxWidth: 'md', slideSize: '50%' },
                 { maxWidth: 'sm', slideSize: '100%', slideGap: 0 },
               ]}
-              onMouseEnter={autoplay.current.stop}
-              onMouseLeave={autoplay.current.reset}
+              // onMouseEnter={autoplay.current.stop}
+              // onMouseLeave={autoplay.current.reset}
             >
               {events.map((item, index) => (
 
