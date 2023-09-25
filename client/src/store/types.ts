@@ -2,17 +2,17 @@ import * as geojson from "geojson";
 import { Layer } from "leaflet";
 // FETCH
 export interface Event {
-  [x: string]: ReactNode;
-  id: string;
+  eventId: string;
   name: string;
-  eventDetails: string;
-  admissionsPolicy: string;
-  ticketPricing: string;
+  description: string;
+  admission_policy: string;
+  ticket_pricing: string;
   faq: string;
-  dates: string[];
-  location: string;
-  image?: string;
+  type: string;
+  venue: Venue;
+  image_url?: string;
   prices: number[];
+  sessions: Session[];
 }
 
 export type EventList = Event[];
@@ -43,7 +43,7 @@ export interface Venue {
   description: string; // You can define the specific details for a venue here
   address: string;
   url: string;
-  image?: string; // Venue image (optional)
+  image_url?: string; // Venue image (optional)
 }
 
 export type VenueList = Venue[];
@@ -74,8 +74,8 @@ export interface Ticket {
 }
 
 export interface Session {
-  sessionid: string;
-  date: string;
+  sessionId: string;
+  date: number;
   start_time: string;
   end_time: string;
 }

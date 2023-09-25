@@ -1,16 +1,15 @@
 "use client";
-import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
+import dynamic from "next/dynamic";
 
-import React, { useEffect } from "react";
 import SeatsView from "components/Seats/SeatsView";
-import { EventSession, Role, SeatInfo } from "store/types";
-import { mockSeats } from "mock/seats";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { useStore } from "store/seat";
+import Loading from "components/Suspense/Loading";
 import LandingLayout from "layouts/LandingLayout";
 import { mockEventSession } from "mock/session";
-import Loading from "components/Suspense/Loading";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { useEffect } from "react";
+import { useStore } from "store/seat";
+import { EventSession, Role } from "store/types";
 const LeafletMap = dynamic(() => import("../../components/Seats/LeafletMap"), {
   ssr: false,
 });
@@ -39,7 +38,7 @@ function Leaf({
       withNavbar
     >
       {store.eventSession ? (
-        <div className="flex h-[calc(100vh-68px)] w-full">
+        <div className="mt-[4.2rem] flex h-[calc(100vh-68px)] w-full">
           <div className="w-full min-w-[300px] max-w-[664px]">
             <SeatsView />
           </div>
