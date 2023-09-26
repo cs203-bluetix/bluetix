@@ -22,11 +22,8 @@
     "@tabler/icons-react": "^2.32.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
-<<<<<<< HEAD
-=======
     "embla-carousel-autoplay": "^7.0.0",
     "embla-carousel-react": "^7.0.0",
->>>>>>> 407dc04a172f5a6e5223c8f216e6566410762cc7
     "leaflet": "^1.9.4",
     "magic-sdk": "^20.0.1",
     "moment": "^2.29.4",
