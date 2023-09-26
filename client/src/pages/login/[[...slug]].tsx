@@ -9,7 +9,7 @@ function Auth() {
   const [mode, setMode] = useState<"Login" | "Register">("Login");
   const router = useRouter();
   return (
-    <LandingLayout title={`BlueTix - ${mode}`}>
+    <LandingLayout title={`BlueTix - ${mode}`} withNavbar>
       {(user) => {
         if (user) {
           const slug = router.query.slug;
@@ -21,7 +21,7 @@ function Auth() {
           }
         }
         return (
-          <div className="bg-gray-200">
+          <div className="">
           <Section>
           <div className="flex h-[calc(100vh-68px)] w-full justify-center">
             <div className="mx-auto mb-8 mt-8 flex w-full max-w-5xl flex-col items-center  px-3 pt-4 sm:px-6 xl:max-w-6xl xl:px-8">

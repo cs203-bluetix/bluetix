@@ -31,7 +31,7 @@ function Event({
   const router = useRouter();
   router.query = {};
   return (
-    <LandingLayout title={`BlueTix - ${event.name}`}>
+    <LandingLayout title={`BlueTix - ${event.name}`} withNavbar withFooter>
       <div className="h-fit w-full">
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <div className="mx-auto w-full max-w-5xl sm:px-6 xl:max-w-6xl xl:px-8">
