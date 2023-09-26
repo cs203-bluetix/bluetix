@@ -1,3 +1,7 @@
+import * as geojson from "geojson";
+import { Layer } from "leaflet";
+import { ReactNode } from "react";
+// FETCH
 export interface Event {
   [x: string]: ReactNode;
   id: string;
@@ -13,6 +17,26 @@ export interface Event {
 }
 
 export type EventList = Event[];
+
+export interface SeatInfo {
+  id: string;
+  category: number;
+  numSeats: number;
+  price: number;
+}
+
+export interface EventSession {
+  sessionid: string;
+  seats: SeatInfo[];
+  event: Event;
+  date: string;
+}
+
+export interface SeatNode {
+  feature: geojson.Feature;
+  layer: Layer;
+  info: SeatInfo;
+}
 
 export interface Venue {
   venueid: string;
@@ -88,4 +112,17 @@ export enum Role {
   GUEST,
   USER,
   ADMIN,
+}
+
+export interface CartItem {
+  seatId: string;
+  category: number;
+  totalSeats: number;
+  price: number;
+}
+
+export interface Cart {
+  cartItems: CartItem[];
+  walletAddress: string;
+  totalPrice: number;
 }

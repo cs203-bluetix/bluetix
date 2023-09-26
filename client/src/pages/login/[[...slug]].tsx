@@ -9,7 +9,7 @@ function Auth() {
   const [mode, setMode] = useState<"Login" | "Register">("Login");
   const router = useRouter();
   return (
-    <LandingLayout title={`BlueTix - ${mode}`}>
+    <LandingLayout title={`BlueTix - ${mode}`} withNavbar>
       {(user) => {
         if (user) {
           const slug = router.query.slug;

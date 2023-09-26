@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import LandingLayout from 'layouts/LandingLayout';
-import { Section } from 'layouts/Section';
+import { useEffect, useState } from "react";
+import LandingLayout from "layouts/LandingLayout";
+import { Section } from "layouts/Section";
 import Link from "next/link";
 import { Venue } from "store/types";
 import axiosConfig from 'utils/axiosConfig';
@@ -11,17 +11,18 @@ function VenueList() {
   const [venues, setVenues] = useState<Venue[]>([]);
 
   useEffect(() => {
-    axiosConfig.get('/api/venues')
+    axiosConfig
+      .get("/api/venues")
       .then((response) => {
         setVenues(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching venues:', error);
+        console.error("Error fetching venues:", error);
       });
   }, []);
 
   return (
-    <LandingLayout title="BlueTix - Venues">
+    <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
       <Section title="Venues">
         <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {venues.map((venue) => {

@@ -43,7 +43,7 @@ export default function AuthLayout({
 
   useEffect(() => {
     if (!user && !permissions.includes(Role.GUEST)) {
-      router.push(`/login${router.pathname}`);
+      router.push(`/login${router.asPath}`);
     } else if (
       user &&
       !permissions.includes(user.role) &&
