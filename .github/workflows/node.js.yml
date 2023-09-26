@@ -34,6 +34,10 @@ jobs:
     
   build:
 
+      env:
+      NEXT_PUBLIC_MAGIC_API_KEY: ${{secrets.NEXT_PUBLIC_MAGIC_API_KEY}}
+      NEXT_PUBLIC_SERVER_URL: ${{vars.NEXT_PUBLIC_SERVER_URL}}
+
     runs-on: ubuntu-latest
 
     strategy:
