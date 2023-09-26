@@ -43,17 +43,19 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const headerEl = document.querySelector('.header');
-      if (headerEl && window.scrollY <= 50) {
-        headerEl.classList.add('header-scrolled');
-      } else if (headerEl && window.scrollY > 50) {
+      if (headerEl && window.scrollY > 50) {
         headerEl.classList.remove('header-scrolled');
+      } else if (headerEl && window.scrollY <= 50) {
+        headerEl.classList.add('header-scrolled');
       }
     };
-    handleScroll();
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+
+
   }, []);
 
   return (

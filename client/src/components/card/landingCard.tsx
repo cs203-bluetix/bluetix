@@ -1,5 +1,5 @@
 import React from "react";
-import image from "../../mock/images/image.jpg"
+import image from "../../../public/images/landingevents.jpg"
 import { Event } from "store/types";
 import { Button, Paper, Title, Text, Group, Card} from "@mantine/core";
 
