@@ -60,7 +60,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="pb-5">
-          <div className="text-darkgrey py-2 uppercase">Join Us</div>
+          <div className="text-darkgrey py-2 uppercase font-bold text-2xl">Join Us</div>
           <div className="py-2">Sign up here</div>
           <input
             type="text"
