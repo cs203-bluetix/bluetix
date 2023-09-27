@@ -23,8 +23,6 @@ import { Carousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import axiosConfig from "utils/axiosConfig";
 
-const SERVER_URL = "http://localhost:9090";
-
 export default function Home() {
   const [events, setEvents] = useState<Event[] | null>(null); 
   useEffect(() => {
@@ -135,7 +133,7 @@ export default function Home() {
                 <div className="swiper-button-next slider-arrow"></div>
               </div>
             </Swiper> */}
-            {events ? (<Carousel
+            {events && events.length > 0 ? (<Carousel
               withIndicators
               height={450}
               slideSize="33.333333%"

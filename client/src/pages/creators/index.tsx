@@ -6,12 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Role } from "store/types";
 import axiosConfig from "utils/axiosConfig";
-<<<<<<< HEAD
-=======
 import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group } from "@mantine/core";
 import { getReadableDate } from "utils/getSimpleDate";
 
->>>>>>> main
 
 export default function Creators() {
   //   const [file, setFile] = useState(null);
@@ -90,15 +87,6 @@ export default function Creators() {
 
   // Simulate fetching creator events from your backend
   useEffect(() => {
-<<<<<<< HEAD
-    axiosConfig.get('/api/events/' + 1)
-      .then((response) => {
-        setCreatorEvents(response.data);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch creator events: ', error);
-      });
-=======
     // Replace this with your actual API call to fetch creator events
     const fetchData = async () => {
       try {
@@ -117,39 +105,10 @@ export default function Creators() {
     };
 
     fetchData();
->>>>>>> main
   }, []);
 
   return (
     <>
-<<<<<<< HEAD
-      <LandingLayout title="BlueTix - About Us"
-      //   permissions={[Role.ADMIN]}
-      >
-        {(user) => (
-          <Section title="For Creators">
-            <div>
-              <div>
-                <Link href="creators/create">
-                  <Button>Create New Event</Button>
-                </Link>
-              </div>
-              <hr className="mt-4 mb-4" />
-              <h2>Your Past Events</h2>
-              <ul>
-                {creatorEvents.map((event) => (
-                  <li key={event.id}>
-                    {/* Display event details, you can customize this */}
-                    <div>{event.name}</div>
-                    <div>Date: {event.date}</div>
-                    {/* Add more event details as needed */}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Section>
-        )}
-=======
       <LandingLayout
         permissions={[Role.ADMIN]}
         title="About Us"
@@ -199,7 +158,6 @@ export default function Creators() {
             </div>
           </div>
         </Section>
->>>>>>> main
       </LandingLayout>
     </>
   );

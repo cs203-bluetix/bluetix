@@ -36,13 +36,15 @@ function VenueList() {
 
 export default VenueList;
 
+// const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
+
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
 
     <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
       <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
         <Card.Section className='border-t border-gray-300'>
-          <Image src="images/venue.jpg" alt={venue.name} height={220} />
+          <Image src={`http://d12ykruzi8enec.cloudfront.net/venues/${venue.image_url}`} alt={venue.name} height={220} />
         </Card.Section>
 
         <Group justify="space-between" mt="md">

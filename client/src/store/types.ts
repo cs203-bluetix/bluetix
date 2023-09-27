@@ -44,7 +44,7 @@ export interface Venue {
   description: string; // You can define the specific details for a venue here
   address: string;
   url: string;
-  image?: string; // Venue image (optional)
+  image_url: string; // Venue image (optional)
 }
 
 export type VenueList = Venue[];
