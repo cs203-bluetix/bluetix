@@ -24,16 +24,6 @@ interface NavbarProps {
 }
 
 function Navbar({ classProps, user }: NavbarProps) {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const toggleModal = () => setIsModalOpen(!isModalOpen);
-
-  // const openModal = () => {
-  //   setIsOpen(!isOpen);
-  //   setIsModalOpen(true);
-  // };
-  // const closeModal = () => {
-  //   setIsModalOpen(false);
-  // };
 
   let [isOpen, setIsOpen] = useState(false);
 
