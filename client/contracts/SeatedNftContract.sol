@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 using Counters for Counters.Counter;
@@ -22,14 +23,16 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     uint public startPrice;
     uint public startSeat;
     string public eventName;
-    // IERC20 public usdcToken;
+    IERC20 public usdcToken;
 
     Counters.Counter private tokenId;
+
+    event minted(address indexed minter, uint256 amount);
 
     //Maps token to its current owner
     mapping(uint256=>address) public tokenOwner;
 
-    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event) 
+    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event, address _usdc) 
     ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","{id}.json"))){
         section = _section;
         supply=_supply;
@@ -37,6 +40,7 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
         startSeat=_startSeat;
         startPrice = _startPrice;
         eventName = _event;
+        usdcToken = IERC20(_usdc);
     }
 
     /*
@@ -62,22 +66,19 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     amount - amount of tokens to mint
     */
 
-    function mint(address _userwallet) external payable
-    {
-        //Mint fee has to be equal to start price
-        require(msg.value == startPrice, "Amount sent must be equal to the required price");
-        
-        //Number of tickets sold cannot exceed supply
+    function mint() external
+    {   
         require(tokenId.current()<supply,"Sorry, we're sold out");
-        
+        //Mint fee has to be equal to start price
+        require(usdcToken.transferFrom(msg.sender, address(this), startPrice), "USDC transfer failed");
+        //Number of tickets sold cannot exceed supply
         //Assign seat Number
         uint256 newTokenId = startSeat+tokenId.current();
-        _mint(_userwallet, newTokenId, 1, "");
-
+        _mint(msg.sender, newTokenId, 1, "");
         tokenOwner[newTokenId] = msg.sender;
         //Increments tokenId
         tokenId.increment();
-        
+        emit minted(msg.sender,1);
     }
     
     /*
@@ -88,15 +89,15 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     amounts - amount of tokens to mint given ID
     bytes - additional field to pass data to function
     */
-    function mintBatch(address to, uint256 _amounts)
-        public payable
+    function mintBatch(uint256 _amounts)
+        public
     {
         //Number of tickets sold cannot exceed supply
         require(tokenId.current().add(_amounts) <= supply, "Sorry, we're sold out");
 
         //Amount sent has to be lower than the required price
         uint256 totalRequiredPrice = _amounts.mul(startPrice);
-        require(msg.value == totalRequiredPrice, "Amount sent is lower than the required price"); 
+        require(usdcToken.transferFrom(msg.sender,address(this),totalRequiredPrice),"USDC transfer failed");
 
         //Create an array of Ids & Create an array of item assigned to each ID
         uint256[] memory tmpIDArr = new uint256[](_amounts);
@@ -109,8 +110,8 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
             tokenId.increment();
             amounts[i] = 1;
         }
-
-        _mintBatch(to, tmpIDArr, amounts, "");
+        _mintBatch(msg.sender, tmpIDArr, amounts, "");
+        emit minted(msg.sender,_amounts);
     }
 
     function getTicketsLeft() public view returns (uint){

@@ -29,21 +29,20 @@ function Cart() {
         throw new Error('Provider not available. Contract cannot be initialized.');
       };
       const signer = await provider?.getSigner();
-      const contractAddr = '0x8c482816C508fe3792dDfB5c13bBa9e2BAbC30bc';
+      const contractAddr = '0x4CBfc13d57f79895C0c1F74866cFF4F3551345f3';
       
-      //0x049A02CDBDAa6b8FF3B9f27093b1880a4ca6EE30
+      //Deployed on sepolia, simple test nft:
+      //0x8c482816C508fe3792dDfB5c13bBa9e2BAbC30bc
 
       const contract = new ethers.Contract(contractAddr, abi, signer);
       const mintAmount = await contract.getStartPrice?.();
 
-      const estimatedGas = await contract.mint?.estimateGas?.(userPublicKey,{value:10});
+      const estimatedGas = await contract.mint?.estimateGas?.();
       console.log("This is mint amount: " +mintAmount);
       console.log("This is estimated Gas: " + estimatedGas);
       const gasPrice = ethers.parseUnits("40", "gwei");
       // console.log(gasPrice);
-      const tx = await contract.mint?.(userPublicKey,{
-        value: 10,
-        gasLimit: estimatedGas,})
+      const tx = await contract.mint?.({gasLimit: estimatedGas})
       const receipt = await tx.wait();
       // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
       // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);

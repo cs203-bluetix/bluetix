@@ -7,6 +7,9 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
 
 using Counters for Counters.Counter;
 
@@ -21,8 +24,13 @@ contract StandingNftContract is ERC1155, Ownable{
     //Keeps track of how many times the contract has been minted
     uint public mintCount;
     string public eventName;
+    IERC20 public usdcToken;
 
-    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _event) 
+
+    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _event, address _usdc)
+    /// @author The name of the author
+    /// @notice Explain to an end user what this does
+    /// @dev Explain to a developer any extra details) 
     ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","0.json"))){
         section = _section;
         supply=_supply;
@@ -30,6 +38,7 @@ contract StandingNftContract is ERC1155, Ownable{
         priceCap=_priceCap;
         mintCount = 0;
         eventName = _event;
+        usdcToken = IERC20(_usdc);
     }
 
     /*
@@ -49,7 +58,7 @@ contract StandingNftContract is ERC1155, Ownable{
     function mint() public payable
     {
         //Mint fee has to be equal to start price
-        require(msg.value == startPrice, "Amount sent is lower than the required price");
+        require(usdcToken.transferFrom(msg.sender, address(this), startPrice), "USDC transfer failed");
         //Number of tickets sold cannot exceed supply
         require(mintCount<supply,"Sorry, we're sold out");
         
@@ -61,13 +70,14 @@ contract StandingNftContract is ERC1155, Ownable{
     function mintBatch(uint256 _amount) public payable{
         require(_amount>1,"To use this function, there has to be more NFTs minted");
         require(_amount+mintCount<=supply,"The amount you wish to purchase is more than the tickets left");
+        uint256 requiredAmt = _amount * startPrice;
+        require(usdcToken.transferFrom(msg.sender, address(this), requiredAmt), "USDC transfer failed");
         uint[] memory myArray = new uint[](1);
         uint[] memory tokenIds = new uint[](1);
         myArray[0] = _amount;
         tokenIds[0]=0;
         _mintBatch(msg.sender,tokenIds, myArray, "");
         mintCount+=_amount;
-
     }
 
     function getTicketsLeft() public view returns (uint){

@@ -5,6 +5,7 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 // import ethers from 'hardhat'
+import USDC from "./USDC.json" assert { type: "json" };
 
 async function main() {
   const [owner] = await ethers.getSigners();
@@ -14,6 +15,7 @@ async function main() {
   const balanceHuman = ethers.formatUnits(balance, 18);
   console.log(`Owner address: ${owner.address} with balance: ${balanceHuman}`);
   
+  const contract = new ethers.Contract(owner,USDC,"0x52D800ca262522580CeBAD275395ca6e7598C014");
   const seatedFactory = await ethers.getContractFactory("SeatedNftContract");
   const seatedInstance = await seatedFactory.deploy(
             "A", //Section
@@ -21,9 +23,11 @@ async function main() {
             10, //startprice
             100,//price Cap
             1,//startSeat
-            "Miley Cyrus" //event Name 
+            "Miley Cyrus", //event Name 
+            "0x52D800ca262522580CeBAD275395ca6e7598C014"
   );
   await seatedInstance.waitForDeployment();
+  await contract.connect(owner).approve(seatedInstance, ethers.parseUnits("2000", 6));
   console.log("seatedInstance address:", await seatedInstance.getAddress());
   const receipt = await seatedInstance.deploymentTransaction().wait();
   const gasUsed = receipt.gasUsed;

@@ -41,17 +41,19 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const headerEl = document.querySelector('.header');
-      if (headerEl && window.scrollY <= 50) {
-        headerEl.classList.add('header-scrolled');
-      } else if (headerEl && window.scrollY > 50) {
+      if (headerEl && window.scrollY > 50) {
         headerEl.classList.remove('header-scrolled');
+      } else if (headerEl && window.scrollY <= 50) {
+        headerEl.classList.add('header-scrolled');
       }
     };
-    handleScroll();
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+
+
   }, []);
 
   return (
@@ -93,46 +95,7 @@ export default function Home() {
               <br></br>
               Where the world's latest buzz meets the eager crowd.
             </div>
-            {/* <Swiper
-              effect={"coverflow"}
-              grabCursor={true}
-              centeredSlides={true}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-                // reverseDirection: true,
-              }}
-              loop={true}
-              slidesPerView={3}
-              coverflowEffect={{
-                rotate: 0,
-                stretch: 50,
-                depth: 100,
-                modifier: 2.5,
-                slideShadows: false,
-
-              }}
-              pagination={{ el: ".swiper-pagination", clickable: true }}
-              navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              }}
-              modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
-              className="swiper_container"
-            >
-              {events.map((item, index) => (
-                <SwiperSlide key={index}
-                  className={`p-[30px]`}>
-                  <LandingCard event={item} />
-                </SwiperSlide>
-              ))}
-              <div className="slider-control">
-                <div className="swiper-button-prev slider-arrow "></div>
-                <div className="swiper-button-next slider-arrow"></div>
-              </div>
-            </Swiper> */}
-            {events ? (<Carousel
+            {events && events.length > 0 ? (<Carousel
               withIndicators
               height={450}
               slideSize="33.333333%"
@@ -144,7 +107,8 @@ export default function Home() {
                 { maxWidth: 'sm', slideSize: '100%', slideGap: 0 },
               ]}
               onMouseEnter={autoplay.current.stop}
-              onMouseLeave={autoplay.current.reset}>
+              onMouseLeave={autoplay.current.reset}
+            >
               {events.map((item, index) => (
 
                 <Carousel.Slide>

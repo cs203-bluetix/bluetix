@@ -1,5 +1,5 @@
 [
-  "constructor(string,uint256,uint256,uint256,string)",
+  "constructor(string,uint256,uint256,uint256,string,address)",
   "event ApprovalForAll(address indexed,address indexed,bool)",
   "event OwnershipTransferred(address indexed,address indexed)",
   "event TransferBatch(address indexed,address indexed,address indexed,uint256[],uint256[])",
@@ -35,5 +35,6 @@
   "function supply() view returns (uint256)",
   "function supportsInterface(bytes4) view returns (bool)",
   "function transferOwnership(address)",
-  "function uri(uint256) view returns (string)"
+  "function uri(uint256) view returns (string)",
+  "function usdcToken() view returns (address)"
 ]
