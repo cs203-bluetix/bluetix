@@ -126,7 +126,7 @@ export default function Creators() {
             <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
               {creatorEvents.map((event) => (
                 <Card className="relative h-[280px] bg-gradient-to-t from-gray-0 via-dark-6 transition-transform duration-400 transform hover:scale-105" p="lg" shadow="lg" radius="md" component="a" href={`/events/${event.id}`} target="_blank">
-                  <Image className="absolute inset-0 bg-cover transition-transform transform duration-500 ease transform hover:scale-105" src="images/event.jpeg" alt={event.name} height={280} />
+                  <Image className="absolute inset-0 bg-cover transition-transform transform duration-500 ease transform hover:scale-105" src={`http://d12ykruzi8enec.cloudfront.net/events/${event.image_url}`} alt={event.name} height={280} />
 
                   <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
 
