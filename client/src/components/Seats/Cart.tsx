@@ -34,8 +34,8 @@ function Cart() {
       //0x049A02CDBDAa6b8FF3B9f27093b1880a4ca6EE30
 
       const contract = new ethers.Contract(contractAddr, abi, signer);
-      
       const mintAmount = await contract.getStartPrice?.();
+
       const estimatedGas = await contract.mint?.estimateGas?.(userPublicKey,{value:10});
       console.log("This is mint amount: " +mintAmount);
       console.log("This is estimated Gas: " + estimatedGas);
@@ -43,7 +43,6 @@ function Cart() {
       // console.log(gasPrice);
       const tx = await contract.mint?.(userPublicKey,{
         value: 10,
-        gasPrice: 100000000000,
         gasLimit: estimatedGas,})
       const receipt = await tx.wait();
       // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
