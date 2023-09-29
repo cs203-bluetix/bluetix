@@ -12,7 +12,7 @@ import {
   TimeRange,
   Venue,
   categoryPricing,
-  ticketFormDTO,
+  // ticketFormDTO,
 } from "store/types";
 import axiosConfig from "utils/axiosConfig";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";

@@ -23,8 +23,6 @@ import { Carousel } from '@mantine/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import axiosConfig from "utils/axiosConfig";
 
-const SERVER_URL = "http://localhost:9090";
-
 export default function Home() {
   const [events, setEvents] = useState<Event[] | null>(null); 
   useEffect(() => {
@@ -60,8 +58,8 @@ export default function Home() {
     <>
       <LandingLayout withFooter withNavbar>
         <main>
-          <div className="relative w-screen h-screen">
-            <video className="brightness-50 h-screen w-screen object-cover" autoPlay muted loop>
+          <div className="relative w-full h-screen">
+            <video className="brightness-50 h-screen w-full object-cover" autoPlay muted loop>
               <source src="videos/landscapebackgroundvideo.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-100"></div>
@@ -87,11 +85,12 @@ export default function Home() {
             </button> */}
           </div>
           <div className="absolute w-full h-[150px] bg-cover bg-no-repeat bg-center sectiondivider" style={{ backgroundImage: 'url("/assets/landing-bg3.png")' }}></div>
-          <div className="w-screen h-[90vh] bg-gradient-to-b from-[#e8e9eb] via-transparent to-transparent mb-12" >
+          <div className="w-full h-[90vh] bg-gradient-to-b from-[#e8e9eb] via-transparent to-transparent mb-12" >
             <div className=" text-5xl font-bold text-center pt-36">
               Trending
             </div>
             <div className="text-center pb-4">
+              <br></br>
               Where the world's latest buzz meets the eager crowd.
             </div>
             {/* <Swiper
@@ -121,6 +120,7 @@ export default function Home() {
               }}
               modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
               className="swiper_container"
+            >
               {events.map((item, index) => (
                 <SwiperSlide key={index}
                   className={`p-[30px]`}>
@@ -132,7 +132,7 @@ export default function Home() {
                 <div className="swiper-button-next slider-arrow"></div>
               </div>
             </Swiper> */}
-            {events && events.length>0 ? (<Carousel
+            {events ? (<Carousel
               withIndicators
               height={450}
               slideSize="33.333333%"
@@ -155,11 +155,12 @@ export default function Home() {
 
           </div>
           <div className="w-full h-[150px] bg-cover bg-no-repeat bg-center sectiondivider" style={{ backgroundImage: 'url("/assets/landing-bg1.png")' }}></div>
-          <div className="w-screen h-screen pt-2 pb-4 bg-[#4c6ef5]">
+          <div className="w-full h-screen pt-2 pb-4 bg-[#4c6ef5]">
             <div className="text-white text-5xl font-bold text-center pt-4">
               Categories
             </div>
             <div className="text-white text-center">
+              <br></br>
               Your guide to organized discovery, where interests find their perfect niche.
             </div>
             <div className="w-full h-full flex justify-items-center pt-6">

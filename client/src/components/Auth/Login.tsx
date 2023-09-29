@@ -85,7 +85,7 @@ function Login() {
           placeholder="Password"
           {...form.getInputProps("password")}
         />
-        <Button loading={loading} type="submit" fullWidth className="mt-1">
+        <Button color="indigo" loading={loading} type="submit" fullWidth className="mt-1">
           Login
         </Button>
       </form>
