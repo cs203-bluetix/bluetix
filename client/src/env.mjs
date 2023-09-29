@@ -19,6 +19,8 @@ export const env = createEnv({
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     NEXT_PUBLIC_SERVER_URL: z.string(),
     NEXT_PUBLIC_MAGIC_API_KEY: z.string(),
+    NEXT_PUBLIC_MUMBAI_RPC_URL: z.string(),
+    NEXT_PUBLIC_SEPOLIA_RPC_URL: z.string()
   },
 
   /**
@@ -29,6 +31,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
     NEXT_PUBLIC_MAGIC_API_KEY: process.env.NEXT_PUBLIC_MAGIC_API_KEY,
+    NEXT_PUBLIC_MUMBAI_RPC_URL: process.env.NEXT_PUBLIC_MUMBAI_RPC_URL,
+    NEXT_PUBLIC_SEPOLIA_RPC_URL: process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

@@ -1,0 +1,9 @@
+[
+  "event NFTAdded(string indexed,address,address,uint256,uint256,uint256,string indexed)",
+  "event OwnershipTransferred(address indexed,address indexed)",
+  "function addNft(address)",
+  "function getSeatedSections() view returns (string[])",
+  "function owner() view returns (address)",
+  "function renounceOwnership()",
+  "function transferOwnership(address)"
+]
