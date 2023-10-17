@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { Event } from "store/types";
+
 export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   params,
 }) => {

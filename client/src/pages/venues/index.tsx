@@ -20,7 +20,6 @@ function VenueList() {
         console.error("Error fetching venues:", error);
       });
   }, []);
-
   return (
     <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
       <Section title="Venues">

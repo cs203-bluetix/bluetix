@@ -21,21 +21,44 @@ import {
 } from "@tabler/icons-react";
 import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
-import { locations, mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "store/auth";
-import { Event, EventList } from "store/types";
+import { Event, EventList, Venue } from "store/types";
 import { getReadableDate } from "utils/getSimpleDate";
+import axiosConfig from 'utils/axiosConfig';
+import axios from "axios";
+
+function  VenueList() {
+  const [venues, setVenues] = useState<Venue[]>([]);
+
+  useEffect(() => {
+    axiosConfig
+      .get("/api/venues")
+      .then((response) => {
+        setVenues(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching venues:", error);
+      });
+  }, []);
+  const venueNames: string[] = venues.map((venue) => venue.name);
+
+  return venueNames;
+}
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
 }> = async ({ params }) => {
-  // const endpoint = `${SERVER_URL}/events`
-  // const data = await axios.get(endpoint);
-  // zod data validation here
-  return { props: { events: mockEvents } };
+  try {
+    const response = await axios.get("http://ec2-13-211-240-56.ap-southeast-2.compute.amazonaws.com/api/events");
+    const events = response.data;
+    return { props: { events } };
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return { props: { events: [] } };
+  }
 };
 
 function EventList({
@@ -46,21 +69,25 @@ function EventList({
   const [filterLocation, setFilterLocation] = useState<string | null>(null);
   const [filterPrice, setFilterPrice] = useState<[number, number]>([0, 1000]);
   const [eventsToDisplay, setEventsToDisplay] = useState(events);
+
+  const venues = VenueList();
   useEffect(() => {
+    
     const newEvents = events.filter(
       (e) =>
         (!filterName ||
           e.name.toLowerCase().includes(filterName.toLowerCase())) &&
-        (!filterDate ||
-          e.dates.some(
-            (d) => new Date(d).setHours(0) <= filterDate.getTime()
-          )) &&
-        (!filterLocation || e.location === filterLocation) &&
-        e.prices.some((p) => p <= filterPrice[1])
+        // (!filterDate ||
+        //   e.dates.some(
+        //     (d) => new Date(d).setHours(0) <= filterDate.getTime()
+        //   )) &&
+        (!filterLocation || e.venue.name === filterLocation) 
+        // && e.prices.some((p) => p <= filterPrice[1])
     );
     setEventsToDisplay(newEvents);
   }, [filterName, filterDate, filterLocation, filterPrice]);
 
+  
   return (
     <LandingLayout title="BlueTix - Events" withNavbar withFooter>
       <Section title="Events">
@@ -88,7 +115,7 @@ function EventList({
                 className="grow-[2]"
                 clearable
                 placeholder="Location"
-                data={locations}
+                data={venues}
                 value={filterLocation}
                 onChange={setFilterLocation}
                 icon={<IconMapPin size={18} />}
@@ -134,7 +161,7 @@ function EventList({
 export default EventList;
 
 const EventCard = ({ event }: { event: Event }) => {
-  const { formattedDate } = getReadableDate(event.dates[0]!);
+  // const { formattedDate } = getReadableDate(event.dates[0]!);
   return (
     <Link href={`/events/${event.id}`}>
       <Card
@@ -148,8 +175,7 @@ const EventCard = ({ event }: { event: Event }) => {
       >
         <Image
           className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
-          src="images/event.jpeg"
-          alt={event.name}
+          src={`http://d12ykruzi8enec.cloudfront.net/events/${event.image_url}`}
           height={280}
         />
 
@@ -163,12 +189,12 @@ const EventCard = ({ event }: { event: Event }) => {
 
             <Group justify="between" gap="xs">
               <Text size="sm" color="#909296">
-                {event.location}
+                {event.venue.name}
               </Text>
 
-              <Text size="sm" className="ml-auto" color="#909296">
+              {/* <Text size="sm" className="ml-auto" color="#909296">
                 {formattedDate && <span>{formattedDate}</span>}
-              </Text>
+              </Text> */}
             </Group>
           </div>
         </div>
