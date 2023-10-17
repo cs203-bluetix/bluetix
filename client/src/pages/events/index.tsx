@@ -1,45 +1,71 @@
 import {
   Button,
   Card,
+  Group,
+  Image,
   Input,
   Popover,
   RangeSlider,
   Select,
-  Image,
   Text,
-  Group,
-  Center,
-  Badge,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import {
   IconCalendarQuestion,
-  IconEye,
   IconMapPin,
-  IconMessageCircle,
   IconSearch,
 } from "@tabler/icons-react";
+import axios from "axios";
+import { env } from "env.mjs";
 import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
-import { locations, mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useAuthStore } from "store/auth";
-import { Event, EventList } from "store/types";
-import { getReadableDate } from "utils/getSimpleDate";
+import { Event, EventList, Session } from "store/types";
+import { getReadableDate, isSameDate } from "utils/getSimpleDate";
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
+  venues: string[];
 }> = async ({ params }) => {
-  // const endpoint = `${SERVER_URL}/events`
+  const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/sessions`;
+  const resp = await axios.get(endpoint);
+  const payload: EventList = [];
+  const venues: string[] = [];
+  const sessionsMap: Map<string, Session[]> = new Map();
+  const eventMap: Map<string, Event> = new Map();
+  resp.data.map((d: any) => {
+    const eventId = d.event.eventId;
+    if (!sessionsMap.has(eventId)) sessionsMap.set(eventId, []);
+    if (!eventMap.has(eventId)) eventMap.set(eventId, d.event);
+    sessionsMap.get(eventId)?.push({
+      sessionId: d.sessionId,
+      date: d.date,
+      start_time: d.start_time,
+      end_time: d.end_time,
+    });
+  });
+
+  sessionsMap.forEach((sessions, eventId) => {
+    const event = eventMap.get(eventId);
+    if (!event) return;
+    if (!venues.includes(event.venue.name)) venues.push(event.venue.name);
+    payload.push({
+      ...event,
+      sessions,
+      prices: [20],
+    });
+  });
+
   // const data = await axios.get(endpoint);
   // zod data validation here
-  return { props: { events: mockEvents } };
+  return { props: { events: payload, venues } };
 };
 
 function EventList({
   events,
+  venues,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [filterName, setFilterName] = useState("");
   const [filterDate, setFilterDate] = useState<Date | null>(null);
@@ -52,11 +78,9 @@ function EventList({
         (!filterName ||
           e.name.toLowerCase().includes(filterName.toLowerCase())) &&
         (!filterDate ||
-          e.dates.some(
-            (d) => new Date(d).setHours(0) <= filterDate.getTime()
-          )) &&
-        (!filterLocation || e.location === filterLocation) &&
-        e.prices.some((p) => p <= filterPrice[1])
+          e.sessions.some((d) => isSameDate(new Date(d.date), filterDate))) &&
+        (!filterLocation || e.venue.name === filterLocation) &&
+        e.prices.some((p) => p <= filterPrice[1] && p >= filterPrice[0])
     );
     setEventsToDisplay(newEvents);
   }, [filterName, filterDate, filterLocation, filterPrice]);
@@ -88,7 +112,7 @@ function EventList({
                 className="grow-[2]"
                 clearable
                 placeholder="Location"
-                data={locations}
+                data={venues}
                 value={filterLocation}
                 onChange={setFilterLocation}
                 icon={<IconMapPin size={18} />}
@@ -121,7 +145,7 @@ function EventList({
           {/* <div className="bg-b1 mx-auto min-h-[600px] w-full px-4 sm:px-6 xl:max-w-6xl xl:px-8"> */}
           <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
             {eventsToDisplay.map((e) => {
-              return <EventCard event={e} key={e.id} />;
+              return <EventCard event={e} key={e.eventId} />;
             })}
           </div>
           {/* </div> */}
@@ -134,17 +158,15 @@ function EventList({
 export default EventList;
 
 const EventCard = ({ event }: { event: Event }) => {
-  const { formattedDate } = getReadableDate(event.dates[0]!);
+  const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
   return (
-    <Link href={`/events/${event.id}`}>
+    <Link href={`/events/${event.eventId}`}>
       <Card
         className="from-gray-0 via-dark-6 duration-400 relative h-[280px] transform bg-gradient-to-t transition-transform hover:scale-105"
         p="lg"
         shadow="lg"
         radius="md"
-        // component="a"
-        // href={`/events/${event.id}`}
-        // target="_blank"
+        // href={`/events/${event.eventId}`}
       >
         <Image
           className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
@@ -163,7 +185,7 @@ const EventCard = ({ event }: { event: Event }) => {
 
             <Group justify="between" gap="xs">
               <Text size="sm" color="#909296">
-                {event.location}
+                {event.venue.name}
               </Text>
 
               <Text size="sm" className="ml-auto" color="#909296">

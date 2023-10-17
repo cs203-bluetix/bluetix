@@ -9,7 +9,7 @@ function SessionInfo({ info, date }: { info: Event; date: string }) {
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-bold">{info.name}</h1>
         <span className="font-semibold text-gray-500">
-          {getReadableDate(date).formattedDate} · {info.location}
+          {getReadableDate(date).formattedDate} · {info.venue.name}
         </span>
       </div>
     </div>
