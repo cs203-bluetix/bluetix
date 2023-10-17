@@ -16,8 +16,8 @@ const LandingCard: React.FC<LandingCardProps> = ({ event }) => {
             p="xl"
             my="lg"
             radius="md"
-            style={{ backgroundImage: `url(${'images/event.jpeg'})` }}
-            className="h-[400px] flex flex-col justify-between items-start bg-cover bg-center transition-transform duration-500 transform hover:scale-105"
+            style={{   backgroundImage: `url(http://d12ykruzi8enec.cloudfront.net/events/${event.image_url})`}}
+            className="h-[380px] flex flex-col justify-between items-start bg-cover bg-center transition-transform duration-500 transform hover:scale-105"
         >
         <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
             <div className="h-full relative flex flex-col justify-between z-1">

@@ -66,10 +66,10 @@ function Register() {
   };
   return (
     <div className="flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+      <h1 className="text-4xl font-bold text-gray-900">Sign up now!</h1>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
-        className="mt-8 flex w-full max-w-md flex-col items-center gap-4"
+        className="mt-4 flex w-full max-w-md flex-col items-center gap-4"
       >
         {error && (
           <div className="w-full">
@@ -126,7 +126,7 @@ function Register() {
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
         />
-        <Button loading={loading} type="submit" fullWidth className="mt-1">
+        <Button color="indigo" loading={loading} type="submit" fullWidth className="mt-1">
           Register
         </Button>
       </form>
