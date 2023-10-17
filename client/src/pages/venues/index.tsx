@@ -47,7 +47,6 @@ export default VenueList;
 // const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
-  console.log(venue);
   return (
     <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
       <Card
