@@ -10,12 +10,12 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Event, Session } from "store/types";
 import { getReadableDate } from "utils/getSimpleDate";
-import { CDN_API_URL } from "utils/globals";
+import { CDN_API_URL, SERVER_API_URL } from "utils/globals";
 export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   params,
 }) => {
   const eventId = params?.id as string;
-  const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/sessions/byEventId/${eventId}`;
+  const endpoint = `${SERVER_API_URL}/api/sessions/byEventId/${eventId}`;
   const resp = await axios.get(endpoint);
   const sessions: Session[] = [];
 
