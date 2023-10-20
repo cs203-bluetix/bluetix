@@ -3,11 +3,7 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -30,7 +26,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      - run: cd client; npm ci
-      - run: cd client; npm run build --if-present
+      - name: Install Dependencies
+        run: cd client; npm ci
       - name: Run Jest Tests
-        run: npm run test
+        run: |
+          cd client
+          npm run test
+      - name: Build Dist
+        run: cd client; npm run build --if-present
