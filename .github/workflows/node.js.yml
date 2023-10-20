@@ -5,16 +5,17 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
     env:
       NEXT_PUBLIC_MAGIC_API_KEY: ${{secrets.NEXT_PUBLIC_MAGIC_API_KEY}}
       NEXT_PUBLIC_SERVER_URL: ${{vars.NEXT_PUBLIC_SERVER_URL}}
+      NEXT_PUBLIC_MUMBAI_RPC_URL: ${{secrets.NEXT_PUBLIC_MUMBAI_RPC_URL}}
+      NEXT_PUBLIC_SEPOLIA_RPC_URL: ${{secrets.NEXT_PUBLIC_SEPOLIA_RPC_URL}}
     runs-on: ubuntu-latest
 
     strategy:
@@ -23,11 +24,13 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: cd client; npm ci
-    - run: cd client; npm run build --if-present
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: cd client; npm ci
+      - run: cd client; npm run build --if-present
+      - name: Run Jest Tests
+        run: npm run test
