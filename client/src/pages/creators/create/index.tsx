@@ -33,6 +33,7 @@ import {
   Text,
 } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
+import router from "next/router";
 
 export default function Create() {
   const localizer = momentLocalizer(moment);
@@ -256,6 +257,7 @@ export default function Create() {
 
       if (response.status === 200) {
         console.log("Form data sent successfully.");
+        router.push('/creators');
       } else {
         console.error("Failed to send form data.");
       }

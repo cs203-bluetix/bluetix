@@ -6,6 +6,7 @@ import { env } from "env.mjs";
 import { useState } from "react";
 import { useAuthStore } from "store/auth";
 import { Role } from "store/types";
+import { SERVER_API_URL } from "utils/globals";
 
 function Login() {
   const { loginUser } = useAuthStore();
@@ -26,7 +27,7 @@ function Login() {
   });
   const handleSubmit = async () => {
     setLoading(true);
-    const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
+    const endpoint = `${SERVER_API_URL}/api/auth/signin`;
     await axios
       .post(endpoint, {
         email: form.values.email,
@@ -36,11 +37,9 @@ function Login() {
         if (resp.status === 200) {
           // to change based on response payload
           loginUser({
-            email: form.values.email,
-            isCreator: form.values.email.includes("creator"),
-            role: form.values.email.includes("creator")
-              ? Role.ADMIN
-              : Role.USER,
+            email: resp.data.token,
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
             firstName: resp.data.firstName,
             lastName: resp.data.lastName,
           });
@@ -54,11 +53,11 @@ function Login() {
     setLoading(false);
   };
   return (
-    <div className="flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+    <div className="mt-10 flex w-full max-w-3xl flex-col items-center">
+      <h1 className="text-4xl font-bold text-gray-900">Welcome back!</h1>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
-        className="mt-8 flex w-full max-w-md flex-col items-center gap-4"
+        className="mt-4 flex w-full max-w-md flex-col items-center gap-4"
       >
         {error && (
           <div className="w-full">
@@ -85,7 +84,13 @@ function Login() {
           placeholder="Password"
           {...form.getInputProps("password")}
         />
-        <Button color="indigo" loading={loading} type="submit" fullWidth className="mt-1">
+        <Button
+          color="indigo"
+          loading={loading}
+          type="submit"
+          fullWidth
+          className="mt-1"
+        >
           Login
         </Button>
       </form>
