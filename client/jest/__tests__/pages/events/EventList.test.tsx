@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import EventListPage from "../../../../src/pages/events/index";
 describe("Event List page", () => {
   it("should render event list correctly", () => {
@@ -18,6 +19,9 @@ describe("Event List page", () => {
       prefetch: jest.fn(() => null),
     }));
     render(<EventListPage events={[]} venues={[]} />);
+
+    const x = screen.getAllByText("Events")[0];
+    expect(x).toBeInTheDocument();
 
     // 1. Correct Events listed
     // 2. Correct info on events
