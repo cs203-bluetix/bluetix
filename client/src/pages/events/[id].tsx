@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Event, Session } from "store/types";
 import { getReadableDate } from "utils/getSimpleDate";
+import { CDN_API_URL } from "utils/globals";
 export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   params,
 }) => {
@@ -56,7 +57,10 @@ function Event({
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <div className="mx-auto w-full max-w-5xl sm:px-6 xl:max-w-6xl xl:px-8">
               <div className="h-fit bg-gray-200">
-                <img src={event.image_url} className="aspect-auto w-full" />
+                <img
+                  src={`${CDN_API_URL}/events/${event.image_url}`}
+                  className="aspect-auto w-full"
+                />
                 <div className="flex flex-col gap-4 px-2 py-4 sm:px-4 lg:px-6">
                   <h1>{event.name}</h1>
                   <span className="text-lg font-semibold">

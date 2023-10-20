@@ -14,6 +14,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import classes from "./BadgeCard.module.css";
+import { CDN_API_URL } from "utils/globals";
 
 function VenueList() {
   const [venues, setVenues] = useState<Venue[]>([]);
@@ -59,7 +60,7 @@ const VenueCard = ({ venue }: { venue: Venue }) => {
       >
         <Card.Section className="border-t border-gray-300">
           <Image
-            src={`http://d12ykruzi8enec.cloudfront.net/venues/${venue.image_url}`}
+            src={`${CDN_API_URL}/venues/${venue.image_url}`}
             alt={venue.name}
             height={220}
           />

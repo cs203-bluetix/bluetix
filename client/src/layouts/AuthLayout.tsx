@@ -38,7 +38,7 @@ export default function AuthLayout({
     };
 
     if (loading) {
-      getUser();
+      // getUser();
     } else if (strict && !user) {
       logoutUser();
       router.push("/404");

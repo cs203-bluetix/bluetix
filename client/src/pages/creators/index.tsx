@@ -6,9 +6,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Role } from "store/types";
 import axiosConfig from "utils/axiosConfig";
-import { Button, Card, Input, Popover, RangeSlider, Select, Image, Text, Group } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Input,
+  Popover,
+  RangeSlider,
+  Select,
+  Image,
+  Text,
+  Group,
+} from "@mantine/core";
 import { getReadableDate } from "utils/getSimpleDate";
-
+import { CDN_API_URL } from "utils/globals";
 
 export default function Creators() {
   //   const [file, setFile] = useState(null);
@@ -84,7 +94,6 @@ export default function Creators() {
 
   const [creatorEvents, setCreatorEvents] = useState<any[]>([]); // Replace 'any[]' with the actual type for your events
 
-
   // Simulate fetching creator events from your backend
   useEffect(() => {
     // Replace this with your actual API call to fetch creator events
@@ -92,12 +101,13 @@ export default function Creators() {
       try {
         // Fetch creator events and set them in the state
         const creatorId = Number(1);
-        axiosConfig.get('/api/creators/' + creatorId)
+        axiosConfig
+          .get("/api/creators/" + creatorId)
           .then((response) => {
             setCreatorEvents(response.data);
           })
           .catch((error) => {
-            console.error('Error fetching Creator Events:', error);
+            console.error("Error fetching Creator Events:", error);
           });
       } catch (error) {
         console.error(error);
@@ -109,11 +119,7 @@ export default function Creators() {
 
   return (
     <>
-      <LandingLayout
-        permissions={[Role.ADMIN]}
-        title="About Us"
-        withNavbar
-      >
+      <LandingLayout permissions={[Role.ADMIN]} title="About Us" withNavbar>
         <Section title="For Creators">
           <div>
             <div>
@@ -121,18 +127,36 @@ export default function Creators() {
                 <Button>Create New Event</Button>
               </Link>
             </div>
-            <hr className="mt-4 mb-4" />
+            <hr className="mb-4 mt-4" />
             <h2>Your Events</h2>
             <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
               {creatorEvents.map((event) => (
-                <Card className="relative h-[280px] bg-gradient-to-t from-gray-0 via-dark-6 transition-transform duration-400 transform hover:scale-105" p="lg" shadow="lg" radius="md" component="a" href={`/events/${event.id}`} target="_blank">
-                  <Image className="absolute inset-0 bg-cover transition-transform transform duration-500 ease transform hover:scale-105" src={`http://d12ykruzi8enec.cloudfront.net/events/${event.image_url}`} alt={event.name} height={280} />
+                <Card
+                  className="from-gray-0 via-dark-6 duration-400 relative h-[280px] transform bg-gradient-to-t transition-transform hover:scale-105"
+                  p="lg"
+                  shadow="lg"
+                  radius="md"
+                  component="a"
+                  href={`/events/${event.id}`}
+                  target="_blank"
+                >
+                  <Image
+                    className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
+                    src={`${CDN_API_URL}/events/${event.image_url}`}
+                    alt={event.name}
+                    height={280}
+                  />
 
-                  <div className="absolute top-0 left-0 right-0 bottom-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+                  <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
 
-                  <div className="h-full relative flex flex-col justify-end z-1">
+                  <div className="z-1 relative flex h-full flex-col justify-end">
                     <div>
-                      <Text size="lg" className="text-white mb-1" fw={500} color="white">
+                      <Text
+                        size="lg"
+                        className="mb-1 text-white"
+                        fw={500}
+                        color="white"
+                      >
                         {event.name}
                       </Text>
 
@@ -161,7 +185,4 @@ export default function Creators() {
       </LandingLayout>
     </>
   );
-
 }
-
-

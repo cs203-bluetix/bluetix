@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Event, EventList, Session } from "store/types";
 import { getReadableDate, isSameDate } from "utils/getSimpleDate";
+import { CDN_API_URL } from "utils/globals";
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
@@ -170,7 +171,7 @@ const EventCard = ({ event }: { event: Event }) => {
       >
         <Image
           className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
-          src="images/event.jpeg"
+          src={`${CDN_API_URL}/events/${event.image_url}`}
           alt={event.name}
           height={280}
         />

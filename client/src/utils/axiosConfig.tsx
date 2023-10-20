@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SERVER_API_URL } from "./globals";
 
 const instance = axios.create({
-  baseURL: "http://ec2-13-211-240-56.ap-southeast-2.compute.amazonaws.com",
+  baseURL: SERVER_API_URL,
   timeout: 5000,
   headers: {
     // 'Authorization': `Bearer ${process.env.REACT_APP_API_KEY}`,
