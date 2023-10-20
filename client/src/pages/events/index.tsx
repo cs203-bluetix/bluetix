@@ -24,13 +24,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Event, EventList, Session } from "store/types";
 import { getReadableDate, isSameDate } from "utils/getSimpleDate";
-import { CDN_API_URL } from "utils/globals";
+import { CDN_API_URL, SERVER_API_URL } from "utils/globals";
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
   venues: string[];
 }> = async ({ params }) => {
-  const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/sessions`;
+  const endpoint = `${SERVER_API_URL}/api/sessions`;
   const resp = await axios.get(endpoint);
   const payload: EventList = [];
   const venues: string[] = [];
