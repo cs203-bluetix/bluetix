@@ -47,13 +47,11 @@ function Register() {
       .post(endpoint, body)
       .then((resp: AxiosResponse) => {
         if (resp.status === 200) {
-          // to change based on response payload
+          // add zod validation
           loginUser({
-            email: form.values.email,
-            isCreator: form.values.email.includes("creator"),
-            role: form.values.email.includes("creator")
-              ? Role.ADMIN
-              : Role.USER,
+            email: resp.data.email,
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
             firstName: resp.data.firstName,
             lastName: resp.data.lastName,
           });

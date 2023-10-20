@@ -3,9 +3,18 @@ import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
 import Link from "next/link";
 import { Venue } from "store/types";
-import axiosConfig from 'utils/axiosConfig';
-import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
-import classes from './BadgeCard.module.css';
+import axiosConfig from "utils/axiosConfig";
+import {
+  Card,
+  Image,
+  Text,
+  Group,
+  Badge,
+  Button,
+  ActionIcon,
+} from "@mantine/core";
+import classes from "./BadgeCard.module.css";
+import { CDN_API_URL } from "utils/globals";
 
 function VenueList() {
   const [venues, setVenues] = useState<Venue[]>([]);
@@ -40,11 +49,21 @@ export default VenueList;
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
-
     <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
-      <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
-        <Card.Section className='border-t border-gray-300'>
-          <Image src={`http://d12ykruzi8enec.cloudfront.net/venues/${venue.image_url}`} alt={venue.name} height={220} />
+      <Card
+        style={{ border: "none" }}
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        className="duration-400 w-full transform transition-transform hover:scale-105"
+      >
+        <Card.Section className="border-t border-gray-300">
+          <Image
+            src={`${CDN_API_URL}/venues/${venue.image_url}`}
+            alt={venue.name}
+            height={220}
+          />
         </Card.Section>
 
         <Group justify="space-between" mt="md">
@@ -58,9 +77,7 @@ const VenueCard = ({ venue }: { venue: Venue }) => {
           {venue.address}
         </Text>
 
-        <Text size="sm">
-          {venue.description}
-        </Text>
+        <Text size="sm">{venue.description}</Text>
 
         {/* <Button radius="md" style={{ flex: 1 }}>
             Show details

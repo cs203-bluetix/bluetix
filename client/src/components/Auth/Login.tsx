@@ -36,9 +36,9 @@ function Login() {
         if (resp.status === 200) {
           // to change based on response payload
           loginUser({
-            email: form.values.email,
-            isCreator: form.values.email.includes("creator"),
-            role: form.values.email.includes("creator")
+            email: resp.data.token,
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR"
               ? Role.ADMIN
               : Role.USER,
             firstName: resp.data.firstName,
