@@ -11,7 +11,7 @@ import { BsCCircle } from "react-icons/bs";
 const Footer = () => {
   const dummyUrl = "http://localhost:3000/404"; // Replace with a valid 404 URL
   return (
-    <div className="z-50 bg-[#3D7BBD] text-white">
+    <div className="z-50 bg-[#4c6ef5] text-white">
     <Section>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         <div>
