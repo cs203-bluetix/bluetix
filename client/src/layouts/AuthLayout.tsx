@@ -22,18 +22,23 @@ export default function AuthLayout({
   useEffect(() => {
     // tentative session persistence function
     const getUser = async () => {
-      const endpoint = `http://localhost:9090/api/user`;
-      const resp = await axios.get(endpoint);
-      if (resp.status === 200) {
-        loginUser(resp.data.username);
-      } else {
-        logoutUser();
-        if (strict) router.push("/404");
+      try {
+        const endpoint = `http://localhost:8080/api/auth/validateJwt`;
+        const resp = await axios.post(endpoint);
+        console.log(resp);
+      } catch (error) {
+        console.log(error);
       }
+      // if (resp.status === 200) {
+      //   loginUser(resp.data.username);
+      // } else {
+      //   logoutUser();
+      //   if (strict) router.push("/404");
+      // }
     };
 
     if (loading) {
-      //   getUser();
+      // getUser();
     } else if (strict && !user) {
       logoutUser();
       router.push("/404");

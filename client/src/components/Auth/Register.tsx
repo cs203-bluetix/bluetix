@@ -6,6 +6,7 @@ import { env } from "env.mjs";
 import React, { useState } from "react";
 import { useAuthStore } from "store/auth";
 import { Role } from "store/types";
+import { SERVER_API_URL } from "utils/globals";
 
 function Register() {
   const { loginUser } = useAuthStore();
@@ -36,7 +37,7 @@ function Register() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signup/customer`;
+    const endpoint = `${SERVER_API_URL}/api/auth/signup/customer`;
     const body = {
       firstName: form.values.firstName,
       lastName: form.values.lastName,
@@ -47,13 +48,11 @@ function Register() {
       .post(endpoint, body)
       .then((resp: AxiosResponse) => {
         if (resp.status === 200) {
-          // to change based on response payload
+          // add zod validation
           loginUser({
-            email: form.values.email,
-            isCreator: form.values.email.includes("creator"),
-            role: form.values.email.includes("creator")
-              ? Role.ADMIN
-              : Role.USER,
+            email: resp.data.email,
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
             firstName: resp.data.firstName,
             lastName: resp.data.lastName,
           });
@@ -128,7 +127,13 @@ function Register() {
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
         />
-        <Button color="indigo" loading={loading} type="submit" fullWidth className="mt-1">
+        <Button
+          color="indigo"
+          loading={loading}
+          type="submit"
+          fullWidth
+          className="mt-1"
+        >
           Register
         </Button>
       </form>
