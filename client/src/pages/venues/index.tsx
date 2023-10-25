@@ -9,26 +9,14 @@ import {
   Image,
   Text,
   Group,
-  Badge,
-  Button,
-  ActionIcon,
 } from "@mantine/core";
-import classes from "./BadgeCard.module.css";
 import { CDN_API_URL } from "utils/globals";
 
-function VenueList() {
-  const [venues, setVenues] = useState<Venue[]>([]);
+interface VenueListProps {
+  venues: Venue[];
+}
 
-  useEffect(() => {
-    axiosConfig
-      .get("/api/venues")
-      .then((response) => {
-        setVenues(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching venues:", error);
-      });
-  }, []);
+function VenueList({ venues }: VenueListProps) {
 
   return (
     <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
@@ -42,10 +30,23 @@ function VenueList() {
     </LandingLayout>
   );
 }
-
 export default VenueList;
 
-// const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
+export async function getServerSideProps() {
+  try {
+    const response = await axiosConfig.get('/api/venues');
+    const venues: Venue[] = response.data;
+
+    return {
+      props: { venues },
+    };
+  } catch (error) {
+    console.error('Error fetching venues:', error);
+    return {
+      props: { venues: [] }, 
+    };
+  }
+}
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
@@ -66,7 +67,7 @@ const VenueCard = ({ venue }: { venue: Venue }) => {
           />
         </Card.Section>
 
-        <Group justify="space-between" mt="md">
+        <Group mt="md">
           <Text fw={500}>{venue.name}</Text>
           {/* <Badge variant="light">
         {venue.address}
