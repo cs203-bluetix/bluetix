@@ -68,7 +68,7 @@ export default function Home() {
             <br></br>
 
             <Link href={"/events"}>
-              <Button color="indigo" variant="filled" size="xl" radius="xl" className="mx-12 px-10 py-2 opacity-90">
+              <Button color="orange" variant="filled" size="xl" radius="xl" className="mx-12 px-10 py-2 opacity-90">
                 All Events
               </Button>
             </Link>

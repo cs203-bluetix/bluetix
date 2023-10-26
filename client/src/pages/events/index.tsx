@@ -102,7 +102,7 @@ function EventList({ events, venues,
               <div className="grow">
                 <Popover>
                   <Popover.Target>
-                    <Button variant="filled" color="blue" fullWidth>
+                    <Button variant="default" color="blue" fullWidth>
                       Price
                     </Button>
                   </Popover.Target>
