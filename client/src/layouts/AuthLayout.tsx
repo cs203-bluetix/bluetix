@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect } from "react";
 import { useAuthStore } from "store/auth";
 import { Role, UserInfo } from "store/types";
+import { SERVER_API_URL } from "utils/globals";
 
 export default function AuthLayout({
   children,
@@ -23,9 +24,17 @@ export default function AuthLayout({
     // tentative session persistence function
     const getUser = async () => {
       try {
-        const endpoint = `http://localhost:8080/api/auth/validateJwt`;
-        const resp = await axios.post(endpoint);
-        console.log(resp);
+        const endpoint = `${SERVER_API_URL}/api/auth/validateJwt`;
+        const resp = await axios.post(endpoint, {}, { withCredentials: true });
+        if (resp.status === 200) {
+          loginUser({
+            email: resp.data.email,
+            firstName: "x",
+            lastName: "x",
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -38,11 +47,12 @@ export default function AuthLayout({
     };
 
     if (loading) {
-      // getUser();
+      getUser();
     } else if (strict && !user) {
       logoutUser();
       router.push("/404");
     }
+    console.log(user);
     setLoading(false);
   }, []);
 

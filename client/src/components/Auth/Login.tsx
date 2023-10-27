@@ -6,7 +6,7 @@ import { env } from "env.mjs";
 import { useState } from "react";
 import { useAuthStore } from "store/auth";
 import { Role } from "store/types";
-import { SERVER_API_URL } from "utils/globals";
+import { SERVER_API_LOGIN_URL, SERVER_API_URL } from "utils/globals";
 
 function Login() {
   const { loginUser } = useAuthStore();
@@ -27,12 +27,17 @@ function Login() {
   });
   const handleSubmit = async () => {
     setLoading(true);
-    const endpoint = `${SERVER_API_URL}/api/auth/signin`;
     await axios
-      .post(endpoint, {
-        email: form.values.email,
-        password: form.values.password,
-      })
+      .post(
+        SERVER_API_LOGIN_URL,
+        {
+          email: form.values.email,
+          password: form.values.password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((resp: AxiosResponse) => {
         if (resp.status === 200) {
           // to change based on response payload
