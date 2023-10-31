@@ -31,6 +31,7 @@ function Leaf({
     store.setEventSession(eventSession);
   }, [eventSession]);
 
+  console.log(store.eventSession);
   return (
     <LandingLayout
       permissions={[Role.USER, Role.ADMIN]}

@@ -52,7 +52,6 @@ export default function AuthLayout({
       logoutUser();
       router.push("/404");
     }
-    console.log(user);
     setLoading(false);
   }, []);
 

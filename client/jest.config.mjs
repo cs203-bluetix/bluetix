@@ -12,10 +12,12 @@ const config = {
 
   testEnvironment: "jsdom",
   verbose: true,
+  injectGlobals: true,
   preset: "ts-jest",
   modulePaths: ["<rootDir>"],
   moduleDirectories: ["node_modules", "src"],
   setupFilesAfterEnv: ["<rootDir>/jest/setup.js"],
+  roots: ["<rootDir>"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

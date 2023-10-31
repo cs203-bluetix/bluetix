@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import EventListPage from "../../../../src/pages/events/index";
+import { testMockEvents } from "../../../mocks/events";
+import { testMockVenues } from "../../../mocks/venues";
 describe("Event List page", () => {
   it("should render event list correctly", () => {
     const useRouter = jest.spyOn(require("next/router"), "useRouter");
@@ -18,7 +20,7 @@ describe("Event List page", () => {
       beforePopState: jest.fn(() => null),
       prefetch: jest.fn(() => null),
     }));
-    render(<EventListPage events={[]} venues={[]} />);
+    render(<EventListPage events={testMockEvents} venues={testMockVenues} />);
 
     const x = screen.getAllByText("Events")[0];
     expect(x).toBeInTheDocument();

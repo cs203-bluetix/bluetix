@@ -28,7 +28,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "jest/setup.ts"
+    "jest/setup.ts",
+    "jest/__mocks__/zustand.fts"
   ],
   "exclude": ["node_modules"]
 }

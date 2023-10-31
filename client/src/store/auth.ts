@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { UserInfo } from "./types";
 import { MagicSDK } from "utils/magicSDK";
 
-interface AuthStoreObject {
+export interface AuthStoreObject {
   user: UserInfo | null;
   loading: boolean;
 

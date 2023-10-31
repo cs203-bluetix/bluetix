@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { SeatNode, SeatInfo, EventSession, Cart } from "./types";
 import { Map } from "leaflet";
 
-interface StoreObject {
+export interface StoreObject {
   nodes: SeatNode[];
   addNode: (n: SeatNode) => void;
   clearNodes: () => void;
