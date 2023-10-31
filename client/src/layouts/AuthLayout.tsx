@@ -25,8 +25,16 @@ export default function AuthLayout({
     const getUser = async () => {
       try {
         const endpoint = `${SERVER_API_URL}/api/auth/validateJwt`;
-        const resp = await axios.post(endpoint);
-        console.log(resp);
+        const resp = await axios.post(endpoint, {}, { withCredentials: true });
+        if (resp.status === 200) {
+          loginUser({
+            email: resp.data.email,
+            firstName: "x",
+            lastName: "x",
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -44,6 +52,7 @@ export default function AuthLayout({
       logoutUser();
       router.push("/404");
     }
+    console.log(user);
     setLoading(false);
   }, []);
 
