@@ -1,40 +1,30 @@
 import Head from "next/head";
 import Link from "next/link";
 import LandingLayout from "layouts/LandingLayout";
-import local from "../../public/images/local.jpg";
-import international from "../../public/images/international.jpg";
-import music from "../../public/images/music.jpeg";
-import comedy from "../../public/images/comedy.jpg";
-import sports from "../../public/images/sports.jpeg";
 import LandingCard from "../components/card/landingCard";
 import React, { useState, useEffect, useRef } from 'react';
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Event } from "store/types";
-import axios from "axios";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Button, Image, Card } from "@mantine/core";
+import { Carousel } from '@mantine/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import axiosConfig from "utils/axiosConfig";
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import image from "../../public/images/background.jpg";
-// import { Autoplay, EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
-import { Button, } from "@mantine/core";
-import { Carousel } from '@mantine/carousel';
-import Autoplay from 'embla-carousel-autoplay';
-import axiosConfig from "utils/axiosConfig";
 
 export default function Home() {
-  const [events, setEvents] = useState<Event[] | null>(null); 
+  const [events, setEvents] = useState<Event[] | null>(null);
   useEffect(() => {
     axiosConfig.get('/api/events')
-        .then((response) => {
-          setEvents(response.data);
-          console.log(response.data);
-        })
-        .catch((error) => {
-            console.error('Error fetching events:', error);
-        });
-}, []);
+      .then((response) => {
+        setEvents(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching events:', error);
+      });
+  }, []);
 
   const autoplay = useRef(Autoplay({ delay: 2000 }));
 
@@ -77,9 +67,11 @@ export default function Home() {
             </p>
             <br></br>
 
-            <Button color="indigo" variant="filled" size="xl" radius="xl" className="mx-12 px-10 py-2 opacity-80">
-              All Events
-            </Button>
+            <Link href={"/events"}>
+              <Button color="orange" variant="filled" size="xl" radius="xl" className="mx-12 px-10 py-2 opacity-90">
+                All Events
+              </Button>
+            </Link>
             {/* <button className=" mt-14 mx-12 mt-4 rounded-lg border bg-gradient-to-br from-blue-500 to-purple-400 px-10 py-2 text-xl font-bold text-white opacity-80">
               All Events
             </button> */}
@@ -93,45 +85,6 @@ export default function Home() {
               <br></br>
               Where the world's latest buzz meets the eager crowd.
             </div>
-            {/* <Swiper
-              effect={"coverflow"}
-              grabCursor={true}
-              centeredSlides={true}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-                // reverseDirection: true,
-              }}
-              loop={true}
-              slidesPerView={3}
-              coverflowEffect={{
-                rotate: 0,
-                stretch: 50,
-                depth: 100,
-                modifier: 2.5,
-                slideShadows: false,
-
-              }}
-              pagination={{ el: ".swiper-pagination", clickable: true }}
-              navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              }}
-              modules={[Autoplay, EffectCoverflow, Pagination, Navigation]}
-              className="swiper_container"
-            >
-              {events.map((item, index) => (
-                <SwiperSlide key={index}
-                  className={`p-[30px]`}>
-                  <LandingCard event={item} />
-                </SwiperSlide>
-              ))}
-              <div className="slider-control">
-                <div className="swiper-button-prev slider-arrow "></div>
-                <div className="swiper-button-next slider-arrow"></div>
-              </div>
-            </Swiper> */}
             {events ? (<Carousel
               withIndicators
               height={450}
@@ -165,11 +118,11 @@ export default function Home() {
             </div>
             <div className="w-full h-full flex justify-items-center pt-6">
               <div className="grid grid-cols-6 gap-5 w-full h-full px-[150px] pb-[150px] font-bold text-2xl text-white">
-                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${local.src})` }}><Link href={"/"}>LOCAL</Link> </button>
-                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${international.src})` }}> <Link href={"/"}>INTERNATIONAL </Link></button>
-                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${comedy.src})` }}> <Link href={"/"}>COMEDY</Link> </button>
-                <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${music.src})` }}> <Link href={"/"}>MUSIC</Link> </button>
-                <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: `url(${sports.src})` }}> <Link href={"/"}>SPORTS</Link> </button>
+                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: 'url("/images/landing/local.jpg")' }}><Link className="w-full h-full" href={"/events"}>LOCAL</Link> </button>
+                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: 'url("/images/landing/international.jpg")' }}> <Link href={"/events"}>INTERNATIONAL</Link></button>
+                <button className="rounded-lg col-span-2 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: 'url("/images/landing/comedy.jpg")' }}> <Link href={"/events"}>COMEDY</Link> </button>
+                <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: 'url("/images/landing/music.jpeg")' }}> <Link href={"/events"}>MUSIC</Link> </button>
+                <button className="rounded-lg col-span-3 bg-center bg-cover transition-transform duration-500 transform hover:scale-105" style={{ backgroundImage: 'url("/images/landing/sports.jpeg")' }}> <Link href={"/events"}>SPORTS</Link> </button>
               </div>
             </div>
           </div>

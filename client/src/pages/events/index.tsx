@@ -1,30 +1,15 @@
-import {
-  Button,
-  Card,
-  Group,
-  Image,
-  Input,
-  Popover,
-  RangeSlider,
-  Select,
-  Text,
-} from "@mantine/core";
+import { Button, Card, Group, Image, Input, Popover, RangeSlider, Select, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import {
-  IconCalendarQuestion,
-  IconMapPin,
-  IconSearch,
-} from "@tabler/icons-react";
-import axios from "axios";
-import { env } from "env.mjs";
-import LandingLayout from "layouts/LandingLayout";
+import { IconCalendarQuestion, IconMapPin, IconSearch } from "@tabler/icons-react";
 import { Section } from "layouts/Section";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Event, EventList, Session } from "store/types";
 import { getReadableDate, isSameDate } from "utils/getSimpleDate";
 import { CDN_API_URL, SERVER_API_URL } from "utils/globals";
+import axios from "axios";
+import LandingLayout from "layouts/LandingLayout";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
@@ -59,14 +44,10 @@ export const getServerSideProps: GetServerSideProps<{
     });
   });
 
-  // const data = await axios.get(endpoint);
-  // zod data validation here
   return { props: { events: payload, venues } };
 };
 
-function EventList({
-  events,
-  venues,
+function EventList({ events, venues,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [filterName, setFilterName] = useState("");
   const [filterDate, setFilterDate] = useState<Date | null>(null);
@@ -90,7 +71,7 @@ function EventList({
     <LandingLayout title="BlueTix - Events" withNavbar withFooter>
       <Section title="Events">
         <div className="flex w-full flex-col items-center justify-center gap-4">
-          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
+          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-4 py-4 sm:max-w-7xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
                 placeholder="Search events..."
@@ -121,7 +102,7 @@ function EventList({
               <div className="grow">
                 <Popover>
                   <Popover.Target>
-                    <Button variant="filled" color="blue" fullWidth>
+                    <Button variant="default" color="blue" fullWidth>
                       Price
                     </Button>
                   </Popover.Target>
@@ -143,13 +124,11 @@ function EventList({
               </div>
             </div>
           </div>
-          {/* <div className="bg-b1 mx-auto min-h-[600px] w-full px-4 sm:px-6 xl:max-w-6xl xl:px-8"> */}
           <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
             {eventsToDisplay.map((e) => {
               return <EventCard event={e} key={e.eventId} />;
             })}
           </div>
-          {/* </div> */}
         </div>
       </Section>
     </LandingLayout>
@@ -167,7 +146,6 @@ const EventCard = ({ event }: { event: Event }) => {
         p="lg"
         shadow="lg"
         radius="md"
-        // href={`/events/${event.eventId}`}
       >
         <Image
           className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
@@ -184,7 +162,7 @@ const EventCard = ({ event }: { event: Event }) => {
               {event.name}
             </Text>
 
-            <Group justify="between" gap="xs">
+            <Group>
               <Text size="sm" color="#909296">
                 {event.venue.name}
               </Text>
@@ -197,38 +175,5 @@ const EventCard = ({ event }: { event: Event }) => {
         </div>
       </Card>
     </Link>
-
-    // <Link href={`/events/${event.id}`} className="flex flex-wrap">
-    //   <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
-    //     <Card.Section className='border-t border-gray-300'>
-    //       <Image src="images/event.jpeg" alt={event.name} height={220} />
-    //     </Card.Section>
-
-    //     <Group justify="space-between" mt="md">
-    //       <Text fw={500}>{event.name}</Text>
-    //     </Group>
-
-    //     <Group justify="between" gap="xs" className="position-bottom mt-auto">
-    //         <Text size="sm" color="#bl">
-    //           {event.location}
-    //         </Text>
-
-    //         <Text size="sm" className="ml-auto" color="#909296">
-    //           {formattedDate && <span>{formattedDate}</span>}
-    //         </Text>
-    //       </Group>
-    //   </Card>
-    // </Link>
-
-    // <Link href={`/events/${event.id}`} className="flex justify-center">
-    //   <div className="flex h-[360px] w-[320px] flex-col  bg-white shadow-lg">
-    //     <img src={event.image} className="aspect-video w-full" />
-    //     <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
-    //       <h2>{event.name}</h2>
-    //       {formattedDate && <span>{formattedDate}</span>}
-    //       <span>{event.location}</span>
-    //     </div>
-    //   </div>
-    // </Link>
   );
 };

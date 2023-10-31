@@ -34,7 +34,7 @@ function Navbar({ classProps, user }: NavbarProps) {
         className={`${classProps} header fixed inset-x-0 left-0 top-0 z-50`}
       >
         <nav
-          className={`mx-auto max-w-[1200px] items-center justify-between px-7 py-3 md:flex md:px-5`}
+          className={`mx-auto max-w-[1280px] items-center justify-between px-7 py-3 md:flex md:px-5`}
         >
           <Link href="/" className="text-3xl font-bold">
             {/* <img src="/logoblue.png" width={24} className="inline-block pb-1.5"/> */}
