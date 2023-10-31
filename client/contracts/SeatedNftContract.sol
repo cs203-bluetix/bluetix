@@ -16,6 +16,8 @@ using Counters for Counters.Counter;
 using SafeMath for uint256;
 
 contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
+    uint eventId;
+    uint sessionId;
     address public marketPlaceAddress;
     string public section;
     uint public supply;
@@ -32,8 +34,10 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     //Maps token to its current owner
     mapping(uint256=>address) public tokenOwner;
 
-    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event, address _usdc) 
+    constructor(uint _eventId, uint _sessionId, string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event, address _usdc) 
     ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","{id}.json"))){
+        eventId = _eventId;
+        sessionId = _sessionId;
         section = _section;
         supply=_supply;
         priceCap=_priceCap;
@@ -81,16 +85,15 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
         emit minted(msg.sender,1);
     }
     
-    /*
-    mintBatch(address to, uint256[] memory _ids, uint256[] memory amounts, bytes memory data)
+    // /*
+    // mintBatch(address to, uint256[] memory _ids, uint256[] memory amounts, bytes memory data)
 
-    to - address to mint the token to
-    _ids - the IDs being minted
-    amounts - amount of tokens to mint given ID
-    bytes - additional field to pass data to function
-    */
-    function mintBatch(uint256 _amounts)
-        public
+    // to - address to mint the token to
+    // _ids - the IDs being minted
+    // amounts - amount of tokens to mint given ID
+    // bytes - additional field to pass data to function
+    // */
+    function mintBatch(uint256 _amounts) public
     {
         //Number of tickets sold cannot exceed supply
         require(tokenId.current().add(_amounts) <= supply, "Sorry, we're sold out");

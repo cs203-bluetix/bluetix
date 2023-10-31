@@ -14,8 +14,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 using Counters for Counters.Counter;
 
 contract StandingNftContract is ERC1155, Ownable{
+    uint eventId;
     address public marketPlaceAddress;
     string public section;
+    uint public sessionId;
     uint public supply;
     //Keeps a price Cap on the ticket to ensure no reselling
     uint public priceCap;
@@ -27,11 +29,10 @@ contract StandingNftContract is ERC1155, Ownable{
     IERC20 public usdcToken;
 
 
-    constructor(string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _event, address _usdc)
-    /// @author The name of the author
-    /// @notice Explain to an end user what this does
-    /// @dev Explain to a developer any extra details) 
+    constructor(uint _eventId, uint _session, string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _event, address _usdc)
     ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","0.json"))){
+        eventId = _eventId;
+        sessionId = _session;
         section = _section;
         supply=_supply;
         startPrice = _startPrice;

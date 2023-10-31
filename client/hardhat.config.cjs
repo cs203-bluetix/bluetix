@@ -34,15 +34,24 @@ module.exports = {
   etherscan: {
     apiKey: process.env.POLYGONSCAN_API_KEY
   },
-  solidity: "0.8.19",
-  paths: {
-    artifacts: "./compiledContract",
-    cache:"./compiledContract"
+  solidity: {
+    version: "0.8.19", // Replace with your desired Solidity version
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 10, // You can adjust the number of runs as needed
+      },
+    },
   },
-  abiExporter: {
-    path: "./src/abi",
-    runOnCompile: true,
-    clear: true,
-    pretty: true
-  }
+  // abiExporter: {
+  //   path: "./src/compiledContracts/jsonInput",
+  //   runOnCompile: true,
+  //   clear: true,
+  //   pretty: true
+  // },
+  paths: {
+    cache: "./src/compiledContracts",
+    artifacts: "./src/compiledContracts"
+  },
+
 };
