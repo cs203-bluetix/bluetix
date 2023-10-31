@@ -69,9 +69,25 @@ function EventList({ events, venues,
 
   return (
     <LandingLayout title="BlueTix - Events" withNavbar withFooter>
-      <Section title="Events">
-        <div className="flex w-full flex-col items-center justify-center gap-4">
-          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-4 py-4 sm:max-w-7xl sm:flex-row sm:py-0">
+    <div 
+      // className="items-center justify-center gap-4 pt-4 bg-cover bg-no-repeat bg-center bg-fixed" style={{ backgroundImage: 'url("/images/bg.png")' }}
+    >
+
+      <Section title="" >
+        <div className="flex w-full flex-col items-center justify-center gap-4 pt-4">
+          <div className="rounded-xl w-full px-6 pb-5 bg-gradient-to-r from-white-400 to-white-400  ">
+            <h1 className="text-black font-semibold  py-[0.5]">Trending</h1>
+            <div className="flex w-full">
+              <div className="grid h-full w-full  gap-6  sm:grid-cols-2 lg:grid-cols-4">
+              {eventsToDisplay.slice(eventsToDisplay.length-4, eventsToDisplay.length).map((e) => {
+                return <UpcomingEventCard event={e} key={e.eventId} />;
+              })}
+            </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-white-400 to-white-400 w-full px-8 rounded-xl">
+          <h1 className="w-full text-black text-left font-bold pt-2">Events</h1>
+          <div className="flex h-fit w-full flex-col items-center gap-2 rounded-xl  sm:max-w-7xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
                 placeholder="Search events..."
@@ -124,13 +140,15 @@ function EventList({ events, venues,
               </div>
             </div>
           </div>
-          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3 ">
             {eventsToDisplay.map((e) => {
               return <EventCard event={e} key={e.eventId} />;
             })}
           </div>
+          </div>
         </div>
       </Section>
+      </div>
     </LandingLayout>
   );
 }
@@ -168,6 +186,48 @@ const EventCard = ({ event }: { event: Event }) => {
               </Text>
 
               <Text size="sm" className="ml-auto" color="#909296">
+                {formattedDate && <span>{formattedDate}</span>}
+              </Text>
+            </Group>
+          </div>
+        </div>
+      </Card>
+    </Link>
+  );
+};
+
+
+const UpcomingEventCard = ({ event }: { event: Event }) => {
+  const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
+  return (
+    <Link href={`/events/${event.eventId}`}>
+      <Card
+        className="from-gray-0 via-dark-6 duration-400 relative h-[220px] transform bg-gradient-to-t transition-transform hover:scale-105"
+        p="lg"
+        shadow="lg"
+        radius="md"
+      >
+        <Image
+          className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
+          src={`${CDN_API_URL}/events/${event.image_url}`}
+          alt={event.name}
+          height={280}
+        />
+
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+
+        <div className="z-1 relative flex h-full flex-col justify-end">
+          <div className="flex-row">
+            <Text size="lg" className="mb-1 text-white flex-col" fw={500} color="white">
+              {event.name}
+            </Text>
+
+            <Group className="flex-row">
+              <Text size="sm" color="#909296" className="flex-col">
+                {event.venue.name}
+              </Text>
+
+              <Text size="sm" className="ml-auto flex-col" color="#909296">
                 {formattedDate && <span>{formattedDate}</span>}
               </Text>
             </Group>
