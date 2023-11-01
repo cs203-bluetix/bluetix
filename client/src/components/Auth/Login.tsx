@@ -1,17 +1,10 @@
 import { Button, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPassword, IconUser } from "@tabler/icons-react";
-import axios, { AxiosResponse } from "axios";
-import { env } from "env.mjs";
-import { useState } from "react";
-import { useAuthStore } from "store/auth";
-import { Role } from "store/types";
-import { SERVER_API_LOGIN_URL, SERVER_API_URL } from "utils/globals";
+import { useLogin } from "hooks/useLogin";
 
 function Login() {
-  const { loginUser } = useAuthStore();
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loading, error, handleSubmit } = useLogin();
   const form = useForm({
     initialValues: {
       email: "",
@@ -25,43 +18,14 @@ function Login() {
           : "Passwords must be at least 8 characters long",
     },
   });
-  const handleSubmit = async () => {
-    setLoading(true);
-    await axios
-      .post(
-        SERVER_API_LOGIN_URL,
-        {
-          email: form.values.email,
-          password: form.values.password,
-        },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((resp: AxiosResponse) => {
-        if (resp.status === 200) {
-          // to change based on response payload
-          loginUser({
-            email: resp.data.token,
-            isCreator: resp.data.role === "CREATOR",
-            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
-            firstName: resp.data.firstName,
-            lastName: resp.data.lastName,
-          });
-        } else {
-          setError(true);
-        }
-      })
-      .catch((e: AxiosResponse) => {
-        setError(true);
-      });
-    setLoading(false);
-  };
+
   return (
     <div className="mt-10 flex w-full max-w-3xl flex-col items-center">
       <h1 className="text-4xl font-bold text-gray-900">Welcome back!</h1>
       <form
-        onSubmit={form.onSubmit(handleSubmit)}
+        onSubmit={form.onSubmit(({ email, password }) =>
+          handleSubmit(email, password)
+        )}
         className="mt-4 flex w-full max-w-md flex-col items-center gap-4"
       >
         {error && (
