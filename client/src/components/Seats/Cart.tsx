@@ -35,8 +35,10 @@ function Cart() {
       const signer = await provider?.getSigner();
       //Simple test NFT contract address
       const contractAddr = '0x499924EcDA9927f5fEd7040fc9A01A0C9A6c5FFb';
-      // Get Session address
 
+      // Get Session address
+      
+      
       // Get section address from session 
       
       // Create a contract interface of session using ethers
