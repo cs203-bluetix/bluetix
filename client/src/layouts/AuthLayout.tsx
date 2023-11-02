@@ -38,12 +38,6 @@ export default function AuthLayout({
       } catch (error) {
         console.log(error);
       }
-      // if (resp.status === 200) {
-      //   loginUser(resp.data.username);
-      // } else {
-      //   logoutUser();
-      //   if (strict) router.push("/404");
-      // }
     };
 
     if (loading) {
@@ -52,11 +46,11 @@ export default function AuthLayout({
       logoutUser();
       router.push("/404");
     }
-    console.log(user);
     setLoading(false);
   }, []);
 
   useEffect(() => {
+    if (!router) return;
     if (!user && !permissions.includes(Role.GUEST)) {
       router.push(`/login${router.asPath}`);
     } else if (
@@ -66,7 +60,7 @@ export default function AuthLayout({
     ) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
 
   if (strict && !user) return <Loading />;
 

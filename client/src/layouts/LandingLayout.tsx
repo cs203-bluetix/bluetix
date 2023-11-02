@@ -14,16 +14,22 @@ export default function LandingLayout({
   permissions = [Role.GUEST],
   withNavbar,
   withFooter,
+  strict = false,
 }: {
   children: React.ReactNode | ((userInfo: UserInfo) => React.ReactNode);
   title?: string;
   permissions?: Role[];
   withNavbar?: boolean;
   withFooter?: boolean;
+  strict?: boolean;
 }) {
   return (
     <>
-      <AuthLayout title={title ?? "BlueTix"} permissions={permissions}>
+      <AuthLayout
+        strict={strict}
+        title={title ?? "BlueTix"}
+        permissions={permissions}
+      >
         {(user) => (
           <>
             {withNavbar && <Navbar user={user!} />}
