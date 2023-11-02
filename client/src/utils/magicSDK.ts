@@ -9,7 +9,7 @@ const createMagic = (): Magic | null => {
   };
   return typeof window != "undefined"
     ? new Magic(env.NEXT_PUBLIC_MAGIC_API_KEY, {
-        // network: customNodeOptions,
+        network: customNodeOptions,
       })
     : null;
 };

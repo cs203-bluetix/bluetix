@@ -6,7 +6,11 @@ import { useStore } from "store/seat";
 import { CartItem, SeatNode } from "store/types";
 import { magic } from "utils/magicSDK";
 import { ethers } from "ethers";
-import abi from "abi/contracts/SeatedNftContract.sol/SeatedNftContract.json";
+import abi from "compiledContracts/contracts/SeatedNftContract.sol/SeatedNftContract.json";
+import sessionAbi from "compiledContracts/contracts/Session.sol/Session.json";
+import usdcAbi from "../../../deploy/USDC.json";
+import axios from "axios";
+import { SERVER_API_URL } from "utils/globals";
 // import tempAbi from  "abi/contracts/testNFT.sol/testNFT.json";
 
 function Cart() {
@@ -16,8 +20,10 @@ function Cart() {
 
   const checkoutHandler = async () => {
     setLoading(true);
+    if (cart.cartItems.length == 0) return;
     try {
       let user = (await magic?.wallet.connectWithUI()) ?? [];
+      console.log(user);
 
       let userPublicKey = user[0];
       console.log(userPublicKey);
@@ -31,25 +37,50 @@ function Cart() {
         );
       }
       const signer = await provider?.getSigner();
-      const contractAddr = "0x8c482816C508fe3792dDfB5c13bBa9e2BAbC30bc";
 
-      //0x049A02CDBDAa6b8FF3B9f27093b1880a4ca6EE30
+      // Retrieve session ID
+      // Get Session ID transaction/contract addr
+      // Make sessionId contract interface to interact with session contract
+      // Call getSectionToAddress(*place section ID here*) to get section address
+      // Make Section contract interface to interact with section contract
+      // Use USDC to approve section to spend signer's money
+      // Call mint on section contract
 
-      const contract = new ethers.Contract(contractAddr, abi, signer);
+      const sessionContract = new ethers.Contract(
+        "0x0739Ab67Dd1dB81d1b41415c5C1ddDD4578C1907",
+        sessionAbi["abi"],
+        signer
+      );
+
+      //Official new address for Seated contract
+      // const contractAddr = "0x18bf8d00302EfD826f01daEae39CaCc0E2A29803";
+
+      const contractAddr = await sessionContract.getSectionToAddress?.(
+        cart.cartItems[0]?.seatId
+      );
+
+      console.log(contractAddr);
+      let testAbi = abi["abi"];
+
+      const USDCcontract = new ethers.Contract(
+        "0x52D800ca262522580CeBAD275395ca6e7598C014",
+        usdcAbi,
+        signer
+      );
+
+      const contract = new ethers.Contract(contractAddr, testAbi, signer);
+      await USDCcontract.connect(signer).approve(
+        contract,
+        ethers.parseUnits("2000", 6)
+      );
       const mintAmount = await contract.getStartPrice?.();
 
-      const estimatedGas = await contract.mint?.estimateGas?.(userPublicKey, {
-        value: 10,
-      });
       console.log("This is mint amount: " + mintAmount);
-      console.log("This is estimated Gas: " + estimatedGas);
       const gasPrice = ethers.parseUnits("40", "gwei");
       // console.log(gasPrice);
-      const tx = await contract.mint?.(userPublicKey, {
-        value: 10,
-        gasLimit: estimatedGas,
-      });
+      const tx = await contract.mint?.();
       const receipt = await tx.wait();
+      console.log(receipt);
       // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
       // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);
       // console.log(`You spent ${transactionFeeHuman} matic`)

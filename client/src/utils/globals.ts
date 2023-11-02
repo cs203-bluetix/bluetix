@@ -1,4 +1,5 @@
-export const SERVER_API_URL = "http://localhost:8080";
+export const SERVER_API_URL =
+  "http://ec2-13-211-240-56.ap-southeast-2.compute.amazonaws.com";
 
 export const CDN_API_URL = "http://d12ykruzi8enec.cloudfront.net";
 
