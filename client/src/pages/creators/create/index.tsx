@@ -4,6 +4,7 @@ import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
 import Link from "next/link";
 import { JSX, useCallback, useEffect, useState } from "react";
+import { env } from "env.mjs";
 import {
   CalendarDate,
   Role,
@@ -20,6 +21,10 @@ import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment, { now } from "moment";
 import styles from "components/Calendar/calendar.module.css";
+import compiledSessionFactory from "compiledContracts/contracts/SessionFactory.sol/SessionFactory.json" assert {type:'json'}
+import {NFTDetails} from "utils/deploySessionFactory" // Replace 'yourModule' with the actual path to the module containing the function.
+import { magic } from "utils/magicSDK";
+import { ethers } from "ethers";
 
 import {
   Paper,
@@ -34,12 +39,14 @@ import {
 } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 import router from "next/router";
+import { log } from "console";
 
 export default function Create() {
   const localizer = momentLocalizer(moment);
   const [venues, setVenues] = useState<Venue[]>([]);
   const [availDates, setAvailDates] = useState<Session[]>([]);
-
+  const [sections, setSections] = useState<Sections[]>([]);
+  
   const [allEvents, setAllEvents] = useState([]); //both together
   const [existingEvents, setExistingEvents] = useState<CalendarDate[]>([]); //existing venue used dates
   const [newEvents, setNewEvents] = useState([]); //new inputs
@@ -124,6 +131,22 @@ export default function Create() {
       .catch((error) => {
         console.error("Error fetching available categories:", error);
       });
+
+      axiosConfig
+      .get("/api/sections/" + value)
+      .then((response) => {
+        const sectionsData = response.data.map((section) => ({
+          venue_id: section.id.venueId,
+          section_id: section.id.sectionId,
+          category: section.category,
+          max_seat: section.maxSeat,
+        }));
+        setSections(sectionsData);
+        console.log("Sections...:", sections);
+      })
+      .catch((error) => {
+        console.error("Error fetching available sections:", error);
+      });
   };
 
   const handleSliderChange = (category: string, newValue: number) => {
@@ -197,6 +220,15 @@ export default function Create() {
     }));
   };
 
+  const [retSessionId, setRetSessionId] = useState([]);
+  const [retSectionId, setRetSectionId] = useState([]);
+  const [retSupplyPerSection, setRetSupplyPerSection] = useState([]);
+  const [retStartPrice, setRetStartPrice] = useState([]);
+  const [retEventId, setRetEventId] = useState();
+  const [retStartSeats, setRetStartSeats] = useState();
+  const [nftDetails, setNftDetails] = useState(null);
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     const image_url = eventDetails.name
       .toLowerCase()
@@ -207,7 +239,7 @@ export default function Create() {
     console.log(newEvents);
 
     const sessionDTOArray = newEvents.map((event) => {
-      console.log(event);
+      // console.log(event);
       const { start, end, transaction_addr } = event;
       return {
         date: new Date(start),
@@ -230,6 +262,7 @@ export default function Create() {
       sessionDTOList: sessionDTOArray,
       ticketDTOList: categoryPricing,
       venue_id: Number(eventDetails.venue_id),
+      user_id: Number(1)
     };
 
     const formDataObj = new FormData();
@@ -243,7 +276,6 @@ export default function Create() {
     }
 
     console.log(ticketFormDTO);
-
     try {
       const response = await axiosConfig.post(
         "/api/creators/createEventSessionAndTicket",
@@ -257,7 +289,10 @@ export default function Create() {
 
       if (response.status === 200) {
         console.log("Form data sent successfully.");
-        router.push('/creators');
+        setTimeout(() => {
+          handleSessionFactory();
+        }, 1000);
+        // router.push('/creators');
       } else {
         console.error("Failed to send form data.");
       }
@@ -265,6 +300,135 @@ export default function Create() {
       console.error("Error:", error);
     }
   };
+
+
+  //Receiving details for on-chain transaction
+  
+  
+  const handleSessionFactory = () => {
+    //Handle Information collection
+    axiosConfig
+    .get("/api/creators/" + 1) //NEED TO CHANGE
+    .then((response) => {
+      const retEventId1 = response.data[response.data.length-1].eventId;
+      console.log("This is event ID:"+retEventId1)
+      setRetEventId(retEventId1);
+    })
+    .catch((error) => {
+      console.error("Error fetching last event id:", error);
+    });
+
+    axiosConfig
+    .get("/api/ticket/getUnique/" + retEventId + "/" + eventDetails.venue_id)
+    .then((response) => {
+      const sessionIds = response.data.map((item) => item);
+      setRetSessionId(sessionIds);
+    })
+    .catch((error) => {
+      console.error("Error fetching available sessions:", error);
+    });
+
+    axiosConfig
+    .get("/api/sections/" + eventDetails.venue_id)
+    .then((response) => {
+      const sectionIds = response.data.map((item) => item.id.sectionId);
+      const supply = response.data.map((item) => item.maxSeat);
+
+      let sum = 0;
+      const startSeats = response.data.map((item) => {
+        sum += item.maxSeat;
+        return  sum; 
+      });
+
+      setRetSectionId(sectionIds);
+      setRetSupplyPerSection(supply);
+      setRetStartSeats(startSeats);
+    })
+    .catch((error) => {
+      console.error("Error fetching available sections:", error);
+    });
+
+
+    const startPrice = categoryPricing.map((item) => Number(item.price));
+    setRetStartPrice(startPrice);
+    //Packages information into an object
+  }
+
+  useEffect(() => {
+
+    const nftDetails:NFTDetails = {
+      standingFactoryAddress: env.NEXT_PUBLIC_STANDING_FACTORY,
+      seatedFactoryAddress: env.NEXT_PUBLIC_SEATED_FACTORY,
+      eventId: retEventId,
+      numSessions: retSessionId.length,//newEvents.length,
+      sessionId: retSessionId,
+      sectionId: retSectionId,
+      supplyPerSection: retSupplyPerSection,
+      startPrice: retStartPrice,
+      priceCap: 1000,
+      startSeats: retStartSeats,
+      eventName: eventDetails.name,
+    };
+    console.log(nftDetails);
+    console.log("This is event name"+eventDetails.name)
+    
+    //deploys the Session Factory contract
+    const deploySessionFactoryContract = async () => {
+      try{
+        let user = await magic?.wallet.connectWithUI() ?? [];
+        let userPublicKey = user[0];
+        const provider = magic?.rpcProvider ? new ethers.BrowserProvider(magic?.rpcProvider) : null;
+        if (provider == null) {
+          throw new Error('Provider not available. Contract cannot be initialized.');
+      };
+        const signer = await provider?.getSigner();
+        const SessionFactory = new ethers.ContractFactory(compiledSessionFactory.abi,compiledSessionFactory.bytecode,signer);
+        console.log(`Deploying...`);
+        const SessionFactoryInstance = await SessionFactory.deploy(
+              nftDetails.standingFactoryAddress,
+              nftDetails.seatedFactoryAddress,
+              nftDetails.eventId,
+              nftDetails.numSessions,
+              nftDetails.sessionId,
+              nftDetails.sectionId,
+              nftDetails.supplyPerSection,
+              nftDetails.startPrice,
+              nftDetails.priceCap,
+              nftDetails.startSeats,
+              nftDetails.eventName         
+        );
+        await SessionFactoryInstance.waitForDeployment();
+        console.log(`Deployed!`);
+        const SessionFactoryAddress = await SessionFactoryInstance.getAddress();
+        console.log(`SessionFactory Address: ${SessionFactoryAddress}`);
+      // let contractAddr = "0x46CB039034Ce705f5efd981F40817ac0F42aCbdB";
+      let contract = new ethers.Contract(SessionFactoryAddress, compiledSessionFactory.abi, signer);
+
+        for(let i = 0;i<nftDetails.numSessions;i++){
+          let sessionId = nftDetails.sessionId[i];
+          let sessionAddresses = await contract.getSessionAddresses(sessionId);
+          console.log("This is Contract address: ",sessionAddresses);
+          console.log(sessionAddresses)
+          console.log(typeof(sessionAddresses));          
+          try {
+            const response = await axiosConfig.put(
+              "/api/sessions/updateAddr/"+nftDetails.eventId+"/"+sessionId,
+              sessionAddresses
+            );
+              console.log(response.data);
+            } catch (error) {
+              console.error("File upload failed:", error);
+              } 
+            }
+          }
+      catch(error:any){
+        console.log(error);
+      }
+    }
+    deploySessionFactoryContract();
+  },[retSessionId]);
+
+  
 
   //Handling NFT File uploads
   const [seatNFT, setSeatNFT] = useState<File | null>(null);
@@ -489,6 +653,7 @@ export default function Create() {
                                     </Button>
                                 </Group>
                             </form>
+                            <Button onClick={handleSessionFactory}>nigganigniga</Button>
 
 
 

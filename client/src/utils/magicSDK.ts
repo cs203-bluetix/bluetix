@@ -4,7 +4,7 @@ import { env } from "env.mjs";
 
 const createMagic = (): Magic|null=> {
   const customNodeOptions={
-    rpcUrl: env.NEXT_PUBLIC_SEPOLIA_RPC_URL,
+    rpcUrl: env.NEXT_PUBLIC_MUMBAI_RPC_URL,
     chainId: 80001,
   }
   return typeof window != "undefined"

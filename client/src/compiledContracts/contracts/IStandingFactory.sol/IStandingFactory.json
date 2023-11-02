@@ -1,0 +1,79 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IStandingFactory",
+  "sourceName": "contracts/IStandingFactory.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_eventId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_sessionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_section",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_supply",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_startPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_priceCap",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_event",
+          "type": "string"
+        }
+      ],
+      "name": "addStandingNft",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_eventId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getStandingSections",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -8,10 +8,17 @@ describe("Testing Seated NFT Contract's function", function() {
     let owner;
     let addr1;
     let seatedContract;
+    let DeployedUSDC;
 
     beforeEach(async function() {
-        let seatedFactory = await ethers.getContractFactory("SeatedNftContract");
         [owner, addr1] = await ethers.getSigners();
+        
+        let USDC = await ethers.getContractFactory("MockUSDC");
+        let usdcToken = await USDC.deploy();
+        let DeployedUSDC = await usdcToken.waitForDeployment();
+        let usdcAddress = await DeployedUSDC.getAddress();
+        let seatedFactory = await ethers.getContractFactory("testNFT");
+        
         // string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event
         const seatedInstance = await seatedFactory.deploy(
             "A", //Section
@@ -19,10 +26,14 @@ describe("Testing Seated NFT Contract's function", function() {
             10, //startprice
             100,//price Cap
             1,//startSeat
-            "Miley Cyrus" //event Name
+            "Miley Cyrus", //event Name
+            usdcAddress
         );
         seatedContract = await seatedInstance.waitForDeployment();
-        
+
+        await DeployedUSDC.mint(addr1.address, ethers.parseUnits("2000", 6)); // 2000 USDC
+        await DeployedUSDC.connect(addr1).approve(seatedContract.getAddress(), ethers.parseUnits("2000", 6));
+        console.log("USDC balance: ", )
         console.log("VerificationInstance address:", await seatedContract.getAddress());
       });
 
@@ -43,7 +54,8 @@ describe("Testing Seated NFT Contract's function", function() {
 
     it("Should mint an NFT correctly", async function (){
         // Mint a single ticket
-        await seatedContract.connect(addr1).mint(addr1.address, { value: 10, gasPrice: 40187453400});
+
+        await seatedContract.connect(addr1).mint();
 
         // Check the balance of the user
         const balance = await seatedContract.balanceOf(addr1.address, 1);
@@ -56,7 +68,7 @@ describe("Testing Seated NFT Contract's function", function() {
 
     it("Should mint a batch of tickets correctly", async function() {
         // Mint a batch of 5 tickets
-        await seatedContract.connect(addr1).mintBatch(addr1.address, 5, { value: 50 });
+        await seatedContract.connect(addr1).mintBatch(5);
 
         // Check the balance of the user for each ticket
         for (let i = 1; i <= 5; i++) {
@@ -70,19 +82,19 @@ describe("Testing Seated NFT Contract's function", function() {
     });
 
     it("Should map tokens to the right owners", async function(){
-        await seatedContract.connect(addr1).mintBatch(addr1.address, 5, { value: 50 });
+        await seatedContract.connect(addr1).mintBatch(5);
         
         for(let i = 1;i<=5;i++){
             expect(await seatedContract.tokenOwner(i)).to.equal(addr1.address);
         }
         
-        await seatedContract.connect(addr1).mint(addr1.address,{value:10});
+        await seatedContract.connect(addr1).mint();
         expect(await seatedContract.tokenOwner(6)).to.equal(addr1.address);
     });
 
     it("Should revert with no more seats",async function()  {
-        await seatedContract.connect(addr1).mintBatch(addr1.address, 100, { value: 1000 });
+        await seatedContract.connect(addr1).mintBatch(100);
         expect(await seatedContract.getTicketsLeft()).to.equal(0);
-        await expect(seatedContract.connect(addr1).mint(addr1.address, { value: 10 })).to.be.revertedWith("Sorry, we're sold out");
+        await expect(seatedContract.connect(addr1).mint()).to.be.revertedWith("Sorry, we're sold out");
     });
 })
