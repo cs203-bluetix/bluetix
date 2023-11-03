@@ -1,45 +1,53 @@
-import {
-  Button,
-  Card,
-  Input,
-  Popover,
-  RangeSlider,
-  Select,
-  Image,
-  Text,
-  Group,
-  Center,
-  Badge,
-} from "@mantine/core";
+import { Button, Card, Group, Image, Input, Popover, RangeSlider, Select, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
-import {
-  IconCalendarQuestion,
-  IconEye,
-  IconMapPin,
-  IconMessageCircle,
-  IconSearch,
-} from "@tabler/icons-react";
-import LandingLayout from "layouts/LandingLayout";
+import { IconCalendarQuestion, IconMapPin, IconSearch } from "@tabler/icons-react";
 import { Section } from "layouts/Section";
-import { locations, mockEvents } from "mock/events";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useAuthStore } from "store/auth";
-import { Event, EventList } from "store/types";
-import { getReadableDate } from "utils/getSimpleDate";
+import { Event, EventList, Session } from "store/types";
+import { getReadableDate, isSameDate } from "utils/getSimpleDate";
+import { CDN_API_URL, SERVER_API_URL } from "utils/globals";
+import axios from "axios";
+import LandingLayout from "layouts/LandingLayout";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps<{
   events: EventList;
+  venues: string[];
 }> = async ({ params }) => {
-  // const endpoint = `${SERVER_URL}/events`
-  // const data = await axios.get(endpoint);
-  // zod data validation here
-  return { props: { events: mockEvents } };
+  const endpoint = `${SERVER_API_URL}/api/sessions`;
+  const resp = await axios.get(endpoint);
+  const payload: EventList = [];
+  const venues: string[] = [];
+  const sessionsMap: Map<string, Session[]> = new Map();
+  const eventMap: Map<string, Event> = new Map();
+  resp.data.map((d: any) => {
+    const eventId = d.event.eventId;
+    if (!sessionsMap.has(eventId)) sessionsMap.set(eventId, []);
+    if (!eventMap.has(eventId)) eventMap.set(eventId, d.event);
+    sessionsMap.get(eventId)?.push({
+      sessionId: d.sessionId,
+      date: d.date,
+      start_time: d.start_time,
+      end_time: d.end_time,
+    });
+  });
+
+  sessionsMap.forEach((sessions, eventId) => {
+    const event = eventMap.get(eventId);
+    if (!event) return;
+    if (!venues.includes(event.venue.name)) venues.push(event.venue.name);
+    payload.push({
+      ...event,
+      sessions,
+      prices: [20],
+    });
+  });
+
+  return { props: { events: payload, venues } };
 };
 
-function EventList({
-  events,
+function EventList({ events, venues,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [filterName, setFilterName] = useState("");
   const [filterDate, setFilterDate] = useState<Date | null>(null);
@@ -52,20 +60,34 @@ function EventList({
         (!filterName ||
           e.name.toLowerCase().includes(filterName.toLowerCase())) &&
         (!filterDate ||
-          e.dates.some(
-            (d) => new Date(d).setHours(0) <= filterDate.getTime()
-          )) &&
-        (!filterLocation || e.location === filterLocation) &&
-        e.prices.some((p) => p <= filterPrice[1])
+          e.sessions.some((d) => isSameDate(new Date(d.date), filterDate))) &&
+        (!filterLocation || e.venue.name === filterLocation) &&
+        e.prices.some((p) => p <= filterPrice[1] && p >= filterPrice[0])
     );
     setEventsToDisplay(newEvents);
   }, [filterName, filterDate, filterLocation, filterPrice]);
 
   return (
     <LandingLayout title="BlueTix - Events" withNavbar withFooter>
-      <Section title="Events">
-        <div className="flex w-full flex-col items-center justify-center gap-4">
-          <div className="flex h-fit min-h-[56px] w-full flex-col items-center gap-2 rounded-xl  bg-gray-300 px-2 py-4 sm:max-w-5xl sm:flex-row sm:py-0">
+    <div 
+      // className="items-center justify-center gap-4 pt-4 bg-cover bg-no-repeat bg-center bg-fixed" style={{ backgroundImage: 'url("/images/bg.png")' }}
+    >
+
+      <Section title="" >
+        <div className="flex w-full flex-col items-center justify-center gap-4 pt-4">
+          <div className="rounded-xl w-full px-6 pb-5 bg-gradient-to-r from-white-400 to-white-400  ">
+            <h1 className="text-black font-semibold  py-[0.5]">Trending</h1>
+            <div className="flex w-full">
+              <div className="grid h-full w-full  gap-6  sm:grid-cols-2 lg:grid-cols-4">
+              {eventsToDisplay.slice(eventsToDisplay.length-4, eventsToDisplay.length).map((e) => {
+                return <UpcomingEventCard event={e} key={e.eventId} />;
+              })}
+            </div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-white-400 to-white-400 w-full px-8 rounded-xl">
+          <h1 className="w-full text-black text-left font-bold pt-2">Events</h1>
+          <div className="flex h-fit w-full flex-col items-center gap-2 rounded-xl  sm:max-w-7xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
                 placeholder="Search events..."
@@ -88,7 +110,7 @@ function EventList({
                 className="grow-[2]"
                 clearable
                 placeholder="Location"
-                data={locations}
+                data={venues}
                 value={filterLocation}
                 onChange={setFilterLocation}
                 icon={<IconMapPin size={18} />}
@@ -96,7 +118,7 @@ function EventList({
               <div className="grow">
                 <Popover>
                   <Popover.Target>
-                    <Button variant="filled" color="blue" fullWidth>
+                    <Button variant="default" color="blue" fullWidth>
                       Price
                     </Button>
                   </Popover.Target>
@@ -118,15 +140,15 @@ function EventList({
               </div>
             </div>
           </div>
-          {/* <div className="bg-b1 mx-auto min-h-[600px] w-full px-4 sm:px-6 xl:max-w-6xl xl:px-8"> */}
-          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3 ">
             {eventsToDisplay.map((e) => {
-              return <EventCard event={e} key={e.id} />;
+              return <EventCard event={e} key={e.eventId} />;
             })}
           </div>
-          {/* </div> */}
+          </div>
         </div>
       </Section>
+      </div>
     </LandingLayout>
   );
 }
@@ -134,21 +156,18 @@ function EventList({
 export default EventList;
 
 const EventCard = ({ event }: { event: Event }) => {
-  const { formattedDate } = getReadableDate(event.dates[0]!);
+  const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
   return (
-    <Link href={`/events/${event.id}`}>
+    <Link href={`/events/${event.eventId}`}>
       <Card
         className="from-gray-0 via-dark-6 duration-400 relative h-[280px] transform bg-gradient-to-t transition-transform hover:scale-105"
         p="lg"
         shadow="lg"
         radius="md"
-        // component="a"
-        // href={`/events/${event.id}`}
-        // target="_blank"
       >
         <Image
           className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
-          src="images/event.jpeg"
+          src={`${CDN_API_URL}/events/${event.image_url}`}
           alt={event.name}
           height={280}
         />
@@ -161,9 +180,9 @@ const EventCard = ({ event }: { event: Event }) => {
               {event.name}
             </Text>
 
-            <Group justify="between" gap="xs">
+            <Group>
               <Text size="sm" color="#909296">
-                {event.location}
+                {event.venue.name}
               </Text>
 
               <Text size="sm" className="ml-auto" color="#909296">
@@ -174,38 +193,47 @@ const EventCard = ({ event }: { event: Event }) => {
         </div>
       </Card>
     </Link>
+  );
+};
 
-    // <Link href={`/events/${event.id}`} className="flex flex-wrap">
-    //   <Card style={{ border: "none" }} shadow="sm" padding="lg" radius="md" withBorder className='w-full transition-transform duration-400 transform hover:scale-105'>
-    //     <Card.Section className='border-t border-gray-300'>
-    //       <Image src="images/event.jpeg" alt={event.name} height={220} />
-    //     </Card.Section>
 
-    //     <Group justify="space-between" mt="md">
-    //       <Text fw={500}>{event.name}</Text>
-    //     </Group>
+const UpcomingEventCard = ({ event }: { event: Event }) => {
+  const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
+  return (
+    <Link href={`/events/${event.eventId}`}>
+      <Card
+        className="from-gray-0 via-dark-6 duration-400 relative h-[220px] transform bg-gradient-to-t transition-transform hover:scale-105"
+        p="lg"
+        shadow="lg"
+        radius="md"
+      >
+        <Image
+          className="ease absolute inset-0 transform transform bg-cover transition-transform duration-500 hover:scale-105"
+          src={`${CDN_API_URL}/events/${event.image_url}`}
+          alt={event.name}
+          height={280}
+        />
 
-    //     <Group justify="between" gap="xs" className="position-bottom mt-auto">
-    //         <Text size="sm" color="#bl">
-    //           {event.location}
-    //         </Text>
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
 
-    //         <Text size="sm" className="ml-auto" color="#909296">
-    //           {formattedDate && <span>{formattedDate}</span>}
-    //         </Text>
-    //       </Group>
-    //   </Card>
-    // </Link>
+        <div className="z-1 relative flex h-full flex-col justify-end">
+          <div className="flex-row">
+            <Text size="lg" className="mb-1 text-white flex-col" fw={500} color="white">
+              {event.name}
+            </Text>
 
-    // <Link href={`/events/${event.id}`} className="flex justify-center">
-    //   <div className="flex h-[360px] w-[320px] flex-col  bg-white shadow-lg">
-    //     <img src={event.image} className="aspect-video w-full" />
-    //     <div className="mt-2 flex h-full w-full flex-col gap-2 bg-white px-2">
-    //       <h2>{event.name}</h2>
-    //       {formattedDate && <span>{formattedDate}</span>}
-    //       <span>{event.location}</span>
-    //     </div>
-    //   </div>
-    // </Link>
+            <Group className="flex-row">
+              <Text size="sm" color="#909296" className="flex-col">
+                {event.venue.name}
+              </Text>
+
+              <Text size="sm" className="ml-auto flex-col" color="#909296">
+                {formattedDate && <span>{formattedDate}</span>}
+              </Text>
+            </Group>
+          </div>
+        </div>
+      </Card>
+    </Link>
   );
 };

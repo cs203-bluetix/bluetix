@@ -1,16 +1,11 @@
-import { TextInput, PasswordInput, Button } from "@mantine/core";
+import { Button, PasswordInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconUser, IconPassword } from "@tabler/icons-react";
-import axios, { AxiosResponse } from "axios";
-import { env } from "env.mjs";
-import React, { useState } from "react";
-import { useAuthStore } from "store/auth";
-import { Role } from "store/types";
+import { IconPassword, IconUser } from "@tabler/icons-react";
+import { useRegister } from "hooks/useRegister";
 
 function Register() {
-  const { loginUser } = useAuthStore();
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { loading, error, handleSubmit } = useRegister();
+
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -34,44 +29,14 @@ function Register() {
     },
   });
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signup/customer`;
-    const body = {
-      firstName: form.values.firstName,
-      lastName: form.values.lastName,
-      email: form.values.email,
-      password: form.values.password,
-    };
-    await axios
-      .post(endpoint, body)
-      .then((resp: AxiosResponse) => {
-        if (resp.status === 200) {
-          // to change based on response payload
-          loginUser({
-            email: form.values.email,
-            isCreator: form.values.email.includes("creator"),
-            role: form.values.email.includes("creator")
-              ? Role.ADMIN
-              : Role.USER,
-            firstName: resp.data.firstName,
-            lastName: resp.data.lastName,
-          });
-        } else {
-          setError(true);
-        }
-      })
-      .catch((e: AxiosResponse) => {
-        setError(true);
-      });
-    setLoading(false);
-  };
   return (
     <div className="flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+      <h1 className="text-4xl font-bold text-gray-900">Sign up now!</h1>
       <form
-        onSubmit={form.onSubmit(handleSubmit)}
-        className="mt-8 flex w-full max-w-md flex-col items-center gap-4"
+        onSubmit={form.onSubmit(({ firstName, lastName, email, password }) =>
+          handleSubmit(firstName, lastName, email, password)
+        )}
+        className="mt-4 flex w-full max-w-md flex-col items-center gap-4"
       >
         {error && (
           <div className="w-full">
@@ -128,7 +93,13 @@ function Register() {
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
         />
-        <Button loading={loading} type="submit" fullWidth className="mt-1">
+        <Button
+          color="indigo"
+          loading={loading}
+          type="submit"
+          fullWidth
+          className="mt-1"
+        >
           Register
         </Button>
       </form>

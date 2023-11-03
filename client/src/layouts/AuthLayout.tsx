@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect } from "react";
 import { useAuthStore } from "store/auth";
 import { Role, UserInfo } from "store/types";
+import { SERVER_API_URL } from "utils/globals";
 
 export default function AuthLayout({
   children,
@@ -22,18 +23,25 @@ export default function AuthLayout({
   useEffect(() => {
     // tentative session persistence function
     const getUser = async () => {
-      const endpoint = `http://localhost:9090/api/user`;
-      const resp = await axios.get(endpoint);
-      if (resp.status === 200) {
-        loginUser(resp.data.username);
-      } else {
-        logoutUser();
-        if (strict) router.push("/404");
+      try {
+        const endpoint = `${SERVER_API_URL}/api/auth/validateJwt`;
+        const resp = await axios.post(endpoint, {}, { withCredentials: true });
+        if (resp.status === 200) {
+          loginUser({
+            email: resp.data.email,
+            firstName: "x",
+            lastName: "x",
+            isCreator: resp.data.role === "CREATOR",
+            role: resp.data.role === "CREATOR" ? Role.ADMIN : Role.USER,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
 
     if (loading) {
-      //   getUser();
+      getUser();
     } else if (strict && !user) {
       logoutUser();
       router.push("/404");
@@ -42,6 +50,7 @@ export default function AuthLayout({
   }, []);
 
   useEffect(() => {
+    if (!router) return;
     if (!user && !permissions.includes(Role.GUEST)) {
       router.push(`/login${router.asPath}`);
     } else if (
@@ -51,7 +60,7 @@ export default function AuthLayout({
     ) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
 
   if (strict && !user) return <Loading />;
 

@@ -1,79 +1,16 @@
 import { ActionIcon, Button, Divider } from "@mantine/core";
 import { IconShoppingCart, IconX } from "@tabler/icons-react";
 import Drawer from "components/Drawer/Drawer";
-import React, { useState } from "react";
+import { useCheckout } from "hooks/useCheckout";
+import { useState } from "react";
 import { useStore } from "store/seat";
 import { CartItem, SeatNode } from "store/types";
-import { magic } from "utils/magicSDK";
-import { ethers } from "ethers";
-import SeatedNFTabi from  "abi/contracts/SeatedNftContract.sol/SeatedNftContract.json";
-import StandingNFTabi from "abi/contracts/StandingNftContract.sol/StandingNftContract.json"
-import testNftAbi from "abi/contracts/testNFT.sol/testNFT.json"
-import {USDCTyping} from "utils/generated-typings/USDCTyping"
-import USDC from "utils/USDC.json"
 // import tempAbi from  "abi/contracts/testNFT.sol/testNFT.json";
-
 
 function Cart() {
   const [opened, setOpened] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { cart, setSelectedNode } = useStore();
-  
-  const checkoutHandler = async () => {
-    setLoading(true);
-    try {
-      let user = await magic?.wallet.connectWithUI() ?? [];
-      
-      let userPublicKey = user[0];
-      console.log(userPublicKey);
-      const provider = magic?.rpcProvider ? new ethers.BrowserProvider(magic?.rpcProvider) : null;
-
-      if (provider == null) {
-        throw new Error('Provider not available. Contract cannot be initialized.');
-      };
-
-      const signer = await provider?.getSigner();
-      //Simple test NFT contract address
-      const contractAddr = '0x499924EcDA9927f5fEd7040fc9A01A0C9A6c5FFb';
-
-      // Get Session address
-      
-      
-      // Get section address from session 
-      
-      // Create a contract interface of session using ethers
-
-
-
-      //actual SeatedNFT contract address
-      //0x4CBfc13d57f79895C0c1F74866cFF4F3551345f3
-
-      const contract = new ethers.Contract(contractAddr, testNftAbi, signer);
-      let nftContractAddr = await contract.getAddress();
-      // const mintAmount = await contract.getStartPrice?.();
-      // Will require minting to be done asap
-      // const USDC_Contract = new ethers.Contract("0x52D800ca262522580CeBAD275395ca6e7598C014",USDC,signer) as unknown as USDCTyping;
-      // await USDC_Contract.approve(nftContractAddr, mintAmount);
-      console.log("approved")
-
-      const estimatedGas = await contract.mint?.estimateGas?.(userPublicKey);
-      // console.log("This is mint amount: " +mintAmount);
-      console.log("This is estimated Gas: " + estimatedGas);
-      // const gasPrice = ethers.parseUnits("40", "gwei");
-      // console.log(gasPrice);
-      const tx = await contract.mint?.(userPublicKey,{gasLimit: estimatedGas})
-      const receipt = await tx.wait();
-      // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
-      // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);
-      // console.log(`You spent ${transactionFeeHuman} matic`)
-
-      await magic?.wallet.showUI();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { cart, setSelectedNode, eventSession } = useStore();
+  const { loading, checkoutHandler } = useCheckout();
 
   return (
     <div>
@@ -113,7 +50,10 @@ function Cart() {
                 </span>
                 <span>${cart.totalPrice.toFixed(2)}</span>
               </div>
-              <Button loading={loading} onClick={() => checkoutHandler()}>
+              <Button
+                loading={loading}
+                onClick={() => checkoutHandler(eventSession?.sessionAddress!)}
+              >
                 Checkout
               </Button>
             </div>
@@ -155,7 +95,11 @@ const CartItem = ({ item }: { item: CartItem }) => {
     const cartItems = cart.cartItems.filter((c) => c.seatId != item.seatId);
 
     setNodes(newNodes);
-    setCart({ ...cart, cartItems: cartItems });
+    setCart({
+      ...cart,
+      cartItems: cartItems,
+      totalPrice: cart.totalPrice - item.price * item.totalSeats,
+    });
   };
 
   return (
