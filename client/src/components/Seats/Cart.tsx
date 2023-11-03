@@ -1,97 +1,16 @@
 import { ActionIcon, Button, Divider } from "@mantine/core";
 import { IconShoppingCart, IconX } from "@tabler/icons-react";
 import Drawer from "components/Drawer/Drawer";
-import React, { useState } from "react";
+import { useCheckout } from "hooks/useCheckout";
+import { useState } from "react";
 import { useStore } from "store/seat";
 import { CartItem, SeatNode } from "store/types";
-import { magic } from "utils/magicSDK";
-import { ethers } from "ethers";
-import abi from "compiledContracts/contracts/SeatedNftContract.sol/SeatedNftContract.json";
-import sessionAbi from "compiledContracts/contracts/Session.sol/Session.json";
-import usdcAbi from "../../../deploy/USDC.json";
-import axios from "axios";
-import { SERVER_API_URL } from "utils/globals";
 // import tempAbi from  "abi/contracts/testNFT.sol/testNFT.json";
 
 function Cart() {
   const [opened, setOpened] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { cart, setSelectedNode } = useStore();
-
-  const checkoutHandler = async () => {
-    setLoading(true);
-    if (cart.cartItems.length == 0) return;
-    try {
-      let user = (await magic?.wallet.connectWithUI()) ?? [];
-      console.log(user);
-
-      let userPublicKey = user[0];
-      console.log(userPublicKey);
-      const provider = magic?.rpcProvider
-        ? new ethers.BrowserProvider(magic?.rpcProvider)
-        : null;
-
-      if (provider == null) {
-        throw new Error(
-          "Provider not available. Contract cannot be initialized."
-        );
-      }
-      const signer = await provider?.getSigner();
-
-      // Retrieve session ID
-      // Get Session ID transaction/contract addr
-      // Make sessionId contract interface to interact with session contract
-      // Call getSectionToAddress(*place section ID here*) to get section address
-      // Make Section contract interface to interact with section contract
-      // Use USDC to approve section to spend signer's money
-      // Call mint on section contract
-
-      const sessionContract = new ethers.Contract(
-        "0x0739Ab67Dd1dB81d1b41415c5C1ddDD4578C1907",
-        sessionAbi["abi"],
-        signer
-      );
-
-      //Official new address for Seated contract
-      // const contractAddr = "0x18bf8d00302EfD826f01daEae39CaCc0E2A29803";
-
-      const contractAddr = await sessionContract.getSectionToAddress?.(
-        cart.cartItems[0]?.seatId
-      );
-
-      console.log(contractAddr);
-      let testAbi = abi["abi"];
-
-      const USDCcontract = new ethers.Contract(
-        "0x52D800ca262522580CeBAD275395ca6e7598C014",
-        usdcAbi,
-        signer
-      );
-
-      const contract = new ethers.Contract(contractAddr, testAbi, signer);
-      await USDCcontract.connect(signer).approve(
-        contract,
-        ethers.parseUnits("2000", 6)
-      );
-      const mintAmount = await contract.getStartPrice?.();
-
-      console.log("This is mint amount: " + mintAmount);
-      const gasPrice = ethers.parseUnits("40", "gwei");
-      // console.log(gasPrice);
-      const tx = await contract.mint?.();
-      const receipt = await tx.wait();
-      console.log(receipt);
-      // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
-      // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);
-      // console.log(`You spent ${transactionFeeHuman} matic`)
-
-      await magic?.wallet.showUI();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { cart, setSelectedNode, eventSession } = useStore();
+  const { loading, checkoutHandler } = useCheckout();
 
   return (
     <div>
@@ -131,7 +50,10 @@ function Cart() {
                 </span>
                 <span>${cart.totalPrice.toFixed(2)}</span>
               </div>
-              <Button loading={loading} onClick={() => checkoutHandler()}>
+              <Button
+                loading={loading}
+                onClick={() => checkoutHandler(eventSession?.sessionAddress!)}
+              >
                 Checkout
               </Button>
             </div>
@@ -173,7 +95,11 @@ const CartItem = ({ item }: { item: CartItem }) => {
     const cartItems = cart.cartItems.filter((c) => c.seatId != item.seatId);
 
     setNodes(newNodes);
-    setCart({ ...cart, cartItems: cartItems });
+    setCart({
+      ...cart,
+      cartItems: cartItems,
+      totalPrice: cart.totalPrice - item.price * item.totalSeats,
+    });
   };
 
   return (

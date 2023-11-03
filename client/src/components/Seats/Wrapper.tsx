@@ -41,6 +41,7 @@ function Wrapper() {
       //     })),
       //     sessionid: resp.data[0].session.sessionId,
       //     date: new Date(resp.data[0].session.date).toString(),
+      //     sessionAddress: resp.data[0].session.transaction_addr,
       //   };
       //   store.setEventSession(eventSession);
       // } else {

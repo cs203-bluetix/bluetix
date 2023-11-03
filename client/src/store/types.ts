@@ -30,6 +30,7 @@ export interface EventSession {
   seats: SeatInfo[];
   event: Event;
   date: string;
+  sessionAddress: string;
 }
 
 export interface SeatNode {
