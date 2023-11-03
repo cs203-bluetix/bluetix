@@ -5,9 +5,7 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 
@@ -25,12 +23,11 @@ contract StandingNftContract is ERC1155, Ownable{
     uint public startPrice;
     //Keeps track of how many times the contract has been minted
     uint public mintCount;
-    string public eventName;
-    IERC20 public usdcToken;
+    string nftMeta;
 
 
-    constructor(uint _eventId, uint _session, string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _event, address _usdc)
-    ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","0.json"))){
+    constructor(uint _eventId, uint _session, string memory _section, uint _supply, uint _startPrice, uint _priceCap, string memory _nftMeta)
+    ERC1155(_nftMeta){
         eventId = _eventId;
         sessionId = _session;
         section = _section;
@@ -38,18 +35,15 @@ contract StandingNftContract is ERC1155, Ownable{
         startPrice = _startPrice;
         priceCap=_priceCap;
         mintCount = 0;
-        eventName = _event;
-        usdcToken = IERC20(_usdc);
+        nftMeta = _nftMeta;
     }
 
     /*
     sets our URI and makes the ERC1155 OpenSea compatible
     */
     function uri(uint256 _tokenid) override public view returns (string memory) {
-        return string(abi.encodePacked("https://myapi.com/api/NFT/",eventName,"/",
-                Strings.toString(_tokenid),".json"
-            )
-        );
+        require(_tokenid==0,"tokenId not 0");
+        return nftMeta;
     }
 
     function getTokenURI(uint256 _tokenid) public view returns (string memory) {
@@ -59,7 +53,7 @@ contract StandingNftContract is ERC1155, Ownable{
     function mint() public payable
     {
         //Mint fee has to be equal to start price
-        require(usdcToken.transferFrom(msg.sender, address(this), startPrice), "USDC transfer failed");
+        require(msg.value ==startPrice, "transfer amount failed");
         //Number of tickets sold cannot exceed supply
         require(mintCount<supply,"Sorry, we're sold out");
         
@@ -72,7 +66,7 @@ contract StandingNftContract is ERC1155, Ownable{
         require(_amount>1,"To use this function, there has to be more NFTs minted");
         require(_amount+mintCount<=supply,"The amount you wish to purchase is more than the tickets left");
         uint256 requiredAmt = _amount * startPrice;
-        require(usdcToken.transferFrom(msg.sender, address(this), requiredAmt), "USDC transfer failed");
+        require(msg.value == requiredAmt, "transfer amount false");
         uint[] memory myArray = new uint[](1);
         uint[] memory tokenIds = new uint[](1);
         myArray[0] = _amount;
@@ -117,10 +111,6 @@ contract StandingNftContract is ERC1155, Ownable{
 
     function getStartPrice() external view returns(uint){
         return startPrice;
-    }
-
-    function getEventName() external view returns(string memory){
-        return eventName;
     }
 }
 

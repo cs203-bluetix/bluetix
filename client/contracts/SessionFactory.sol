@@ -9,7 +9,7 @@ contract SessionFactory is Ownable {
     mapping(uint => address) public sessionToAddress;
     uint internal eventId;
     uint numSessions;
-    string internal eventName;
+    string[] internal nftMeta;
     uint[] internal supplyPerSection;
     string[] internal sections;
     uint[] internal sessionId;
@@ -28,7 +28,7 @@ contract SessionFactory is Ownable {
         uint[] memory _startPrice,
         uint _priceCap,
         uint[] memory _startSeats,
-        string memory _eventName
+        string[] memory _nftMeta
     ) {
         eventId = _eventId;
         numSessions = _numSessions;
@@ -38,7 +38,7 @@ contract SessionFactory is Ownable {
         startPrice = _startPrice;
         priceCap = _priceCap;
         startSeats = _startSeats;
-        eventName = _eventName;
+        nftMeta = _nftMeta;
         createSession(
             _standingFactory,
             _seatedFactory,
@@ -50,7 +50,7 @@ contract SessionFactory is Ownable {
             _sessionId,
             _priceCap,
             _startSeats,
-            _eventName
+            _nftMeta
         );
     }
 
@@ -65,7 +65,7 @@ contract SessionFactory is Ownable {
         uint[] memory _sessionId,
         uint _priceCap,
         uint[] memory _startSeats,
-        string memory _eventName
+        string[] memory _nftMeta
     ) public onlyOwner {
         for (uint i = 0; i < numSessions; i++) {
             Session sessionInstance = new Session(
@@ -79,7 +79,7 @@ contract SessionFactory is Ownable {
                 _sessionId[i],
                 _priceCap,
                 _startSeats,
-                _eventName
+                _nftMeta
             );
             sessionToAddress[_sessionId[i]] = address(sessionInstance);
             sessionsId.push(_sessionId[i]);

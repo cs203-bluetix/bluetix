@@ -11,7 +11,7 @@ contract Session is Ownable {
     IStandingFactory private standingFactory;
     ISeatedFactory private seatedFactory;
     address sessionFactory;
-    string public eventName;
+    string[] nftMeta;
     uint public sessionId; 
 
     constructor(
@@ -25,14 +25,14 @@ contract Session is Ownable {
         uint _sessionId,
         uint _priceCap,
         uint[] memory _startSeats,
-        string memory _eventName
+        string[] memory _nftMeta
     ){
         standingFactory = IStandingFactory(_standingFactory);
         seatedFactory = ISeatedFactory(_seatedFactory);
         sessionFactory = _sessionFactory;
-        eventName = _eventName;
-        addStandingNFTContract(_eventId,_sessionId,_section[0],_supply[0],_startPrice[0],_priceCap,_eventName);
-        addSeatedNFTContract(_eventId,_sessionId,_section,_supply,_startPrice,_priceCap,_startSeats,_eventName);
+        nftMeta = _nftMeta;
+        addStandingNFTContract(_eventId,_sessionId,_section[0],_supply[0],_startPrice[0],_priceCap,_nftMeta[0]);
+        addSeatedNFTContract(_eventId,_sessionId,_section,_supply,_startPrice,_priceCap,_startSeats,_nftMeta[1]);
     }
 
     function addStandingNFTContract(
@@ -42,8 +42,8 @@ contract Session is Ownable {
         uint _supply,
         uint _startPrice,
         uint _priceCap,
-        string memory _eventName) public onlyOwner{
-            address standingInstance = standingFactory.addStandingNft(_eventId, _sessionId, _section, _supply, _startPrice, _priceCap, _eventName);
+        string memory _nftMeta) public onlyOwner{
+            address standingInstance = standingFactory.addStandingNft(_eventId, _sessionId, _section, _supply, _startPrice, _priceCap, _nftMeta);
             sectionToAddress[_section] = standingInstance;
             sections.push(_section);
     }
@@ -56,10 +56,10 @@ contract Session is Ownable {
         uint[] memory _startPrice,
         uint _priceCap,
         uint[] memory _startSeats,
-        string memory _eventName) public onlyOwner{
+        string memory _nftMeta) public onlyOwner{
             uint length = _section.length;
             for(uint i = 1; i < length ;i++){
-                address seatedInstance = seatedFactory.addSeatedNft(_eventId, _sessionId, _section[i], _supply[i], _startPrice[i], _priceCap, _startSeats[i], _eventName);
+                address seatedInstance = seatedFactory.addSeatedNft(_eventId, _sessionId, _section[i], _supply[i], _startPrice[i], _priceCap, _startSeats[i], _nftMeta);
                 sectionToAddress[_section[i]]=seatedInstance;
                 sections.push(_section[i]);
             }

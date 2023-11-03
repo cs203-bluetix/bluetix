@@ -5,11 +5,9 @@ pragma solidity ^0.8.9;
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 using Counters for Counters.Counter;
@@ -24,8 +22,7 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     uint public priceCap;
     uint public startPrice;
     uint public startSeat;
-    string public eventName;
-    IERC20 public usdcToken;
+    string nftMeta;
 
     Counters.Counter private tokenId;
 
@@ -34,8 +31,8 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     //Maps token to its current owner
     mapping(uint256=>address) public tokenOwner;
 
-    constructor(uint _eventId, uint _sessionId, string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event, address _usdc) 
-    ERC1155(string(abi.encodePacked("https://myapi.com/api/NFT/",_event,"/","{id}.json"))){
+    constructor(uint _eventId, uint _sessionId, string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _nftMeta) 
+    ERC1155(_nftMeta){
         eventId = _eventId;
         sessionId = _sessionId;
         section = _section;
@@ -43,23 +40,19 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
         priceCap=_priceCap;
         startSeat=_startSeat;
         startPrice = _startPrice;
-        eventName = _event;
-        usdcToken = IERC20(_usdc);
+        nftMeta = _nftMeta;
     }
 
     /*
     sets our URI and makes the ERC1155 OpenSea compatible
     */
     function uri(uint256 _tokenid) override public view  returns (string memory) {
-        return string(abi.encodePacked("https://myapi.com/api/NFT/",eventName,"/",
-                Strings.toString(_tokenid),".json"
-            )
-        );
+        require(_tokenid != 0,"TokenId cannot be 0");
+        return nftMeta;
     }
 
     function getTokenURI(uint256 _tokenId) public view  returns (string memory) {
-        return string(abi.encodePacked("https://myapi.com/api/NFT/",eventName,"/", 
-        Strings.toString(_tokenId), ".json"));
+        return uri(_tokenId);     
     }
 
     /*
@@ -70,11 +63,11 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     amount - amount of tokens to mint
     */
 
-    function mint() external
+    function mint() external payable
     {   
         require(tokenId.current()<supply,"Sorry, we're sold out");
         //Mint fee has to be equal to start price
-        require(usdcToken.transferFrom(msg.sender, address(this), startPrice), "USDC transfer failed");
+        require(msg.value == startPrice, "transfer failed");
         //Number of tickets sold cannot exceed supply
         //Assign seat Number
         uint256 newTokenId = startSeat+tokenId.current();
@@ -93,14 +86,14 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     // amounts - amount of tokens to mint given ID
     // bytes - additional field to pass data to function
     // */
-    function mintBatch(uint256 _amounts) public
+    function mintBatch(uint256 _amounts) public payable
     {
         //Number of tickets sold cannot exceed supply
         require(tokenId.current().add(_amounts) <= supply, "Sorry, we're sold out");
 
         //Amount sent has to be lower than the required price
         uint256 totalRequiredPrice = _amounts.mul(startPrice);
-        require(usdcToken.transferFrom(msg.sender,address(this),totalRequiredPrice),"USDC transfer failed");
+        require(msg.value == totalRequiredPrice,"USDC transfer failed");
 
         //Create an array of Ids & Create an array of item assigned to each ID
         uint256[] memory tmpIDArr = new uint256[](_amounts);
@@ -150,9 +143,6 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     function getStartPrice() external view returns(uint){
         return startPrice;
     }
-    
-    function getEventName() external view returns(string memory){
-        return eventName;
-    }
+
 }
 
