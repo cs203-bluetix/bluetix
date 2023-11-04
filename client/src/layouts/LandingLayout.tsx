@@ -23,6 +23,19 @@ export default function LandingLayout({
   withFooter?: boolean;
   strict?: boolean;
 }) {
+
+  // const backgroundStyle = {
+  //   background: `
+  //   linear-gradient(rgba(0, 0, 0, 0), rgba(255, 165, 0, 0.1)),
+  //   url('/assets/Svg1-Hero-2.svg') no-repeat center center fixed
+  // `,    backgroundSize: 'cover',
+  // };
+  const backgroundStyle = {
+    background: `
+    url('/assets/Svg1-Hero-2.svg') repeat center
+  `,    backgroundSize: 'cover',
+  };
+
   return (
     <>
       <AuthLayout
@@ -33,8 +46,11 @@ export default function LandingLayout({
         {(user) => (
           <>
             {withNavbar && <Navbar user={user!} />}
-            <main className="bg-[#fafafd]">
+            <main className="bg-[#f6f2f2] bg-opacity-70">
+            {/* <main className="bg-gray-800"> */}
+              <div style={backgroundStyle} >
               {typeof children === "function" ? children(user!) : children}
+              </div>
             </main>
             {withFooter && <Footer />}
           </>

@@ -1,4 +1,4 @@
-import { Button, Card, Group, Image, Input, Popover, RangeSlider, Select, Text } from "@mantine/core";
+import { Badge, Button, Card, Group, Image, Input, Popover, RangeSlider, Select, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { IconCalendarQuestion, IconMapPin, IconSearch } from "@tabler/icons-react";
 import { Section } from "layouts/Section";
@@ -75,8 +75,8 @@ function EventList({ events, venues,
 
       <Section title="" >
         <div className="flex w-full flex-col items-center justify-center gap-4 pt-4">
-          <div className="rounded-xl w-full px-6 pb-5 bg-gradient-to-r from-white-400 to-white-400  ">
-            <h1 className="text-black font-semibold  py-[0.5]">Trending</h1>
+          <div className="rounded-xl w-full px-6 pb-5 bg-gray-400 backdrop-blur-sm bg-opacity-10  ">
+            <h1 className="text-black font-bold  py-[0.5] pt-2">Trending</h1>
             <div className="flex w-full">
               <div className="grid h-full w-full  gap-6  sm:grid-cols-2 lg:grid-cols-4">
               {eventsToDisplay.slice(eventsToDisplay.length-4, eventsToDisplay.length).map((e) => {
@@ -84,12 +84,13 @@ function EventList({ events, venues,
               })}
             </div>
             </div>
-          </div>
-          <div className="bg-gradient-to-r from-white-400 to-white-400 w-full px-8 rounded-xl">
+          </div><div className="bg-gray-400 w-full px-8 rounded-xl backdrop-blur-sm bg-opacity-10">
+
           <h1 className="w-full text-black text-left font-bold pt-2">Events</h1>
           <div className="flex h-fit w-full flex-col items-center gap-2 rounded-xl  sm:max-w-7xl sm:flex-row sm:py-0">
             <div className="w-full ">
               <Input
+                radius={10}
                 placeholder="Search events..."
                 className="grow"
                 value={filterName}
@@ -99,6 +100,7 @@ function EventList({ events, venues,
             </div>
             <div className="flex w-full  gap-2">
               <DateInput
+                radius={10}
                 className="grow-0"
                 icon={<IconCalendarQuestion size={18} />}
                 value={filterDate}
@@ -107,6 +109,7 @@ function EventList({ events, venues,
                 clearable
               />
               <Select
+                radius={10}
                 className="grow-[2]"
                 clearable
                 placeholder="Location"
@@ -118,7 +121,7 @@ function EventList({ events, venues,
               <div className="grow">
                 <Popover>
                   <Popover.Target>
-                    <Button variant="default" color="blue" fullWidth>
+                    <Button radius={10} variant="default" c="#b2bac1" color="blue" fw={400} fullWidth>
                       Price
                     </Button>
                   </Popover.Target>
@@ -140,9 +143,9 @@ function EventList({ events, venues,
               </div>
             </div>
           </div>
-          <div className="grid h-full w-full grid-cols-1 gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3 ">
+          <div className="grid h-full w-full grid-cols-1 gap-8 py-6 sm:grid-cols-2 lg:grid-cols-3 ">
             {eventsToDisplay.map((e) => {
-              return <EventCard event={e} key={e.eventId} />;
+              return <EventCard1 event={e} key={e.eventId} />;
             })}
           </div>
           </div>
@@ -154,6 +157,60 @@ function EventList({ events, venues,
 }
 
 export default EventList;
+
+
+const EventCard1 = ({ event }: { event: Event }) => {
+  const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
+  return (
+    <Link href={`/venues/${event.eventId}`} className="flex flex-wrap">
+      <Card
+        style={{ border: "none" }}
+        shadow="sm"
+        padding="md"
+        radius="md"
+        withBorder
+        className="duration-400 w-full transform transition-transform hover:scale-105"
+      >
+        <Card.Section className="border-t border-gray-300">
+          <Image
+            src={`${CDN_API_URL}/events/${event.image_url}`}
+            alt={event.name}
+            height={210}
+          />
+        </Card.Section>
+
+        <Group mt="sm">
+          <Text size="xl" fw={700}>{event.name}</Text>
+          {/* <Badge variant="light">
+        {venue.address}
+        </Badge> */}
+        </Group>
+
+        <Group>
+          <Text size="sm" color="#909296">Starts from <span style={{ fontWeight: '600' }}>${event.prices[0]}</span></Text>
+        </Group>
+        <Group>
+              <Text size="sm" color="#909296">
+                {event.venue.name}
+              </Text>
+
+          <Text size="sm" className="ml-auto" color="#909296">
+            <Badge color="blue">{formattedDate && <span>{formattedDate}</span>}</Badge>
+            <Badge color="red" className="ml-1">{event.type}</Badge>
+          </Text>
+        </Group>
+
+        {/* <Button radius="md" style={{ flex: 1 }}>
+            Show details
+          </Button> */}
+        {/* <ActionIcon variant="default" radius="md" size={36}>
+              <IconHeart className={classes.like} stroke={1.5} />
+            </ActionIcon> */}
+        {/* </Group> */}
+      </Card>
+    </Link>
+  );
+};
 
 const EventCard = ({ event }: { event: Event }) => {
   const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
@@ -172,7 +229,7 @@ const EventCard = ({ event }: { event: Event }) => {
           height={280}
         />
 
-        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b opacity-80 from-transparent via-transparent to-black" />
 
         <div className="z-1 relative flex h-full flex-col justify-end">
           <div>
@@ -214,20 +271,20 @@ const UpcomingEventCard = ({ event }: { event: Event }) => {
           height={280}
         />
 
-        <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-gradient-to-b from-transparent via-transparent to-black" />
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full opacity-90 bg-gradient-to-b from-transparent via-transparent to-black" />
 
         <div className="z-1 relative flex h-full flex-col justify-end">
           <div className="flex-row">
-            <Text size="lg" className="mb-1 text-white flex-col" fw={500} color="white">
+            <Text size="lg" className="mb-1 text-white flex-col" fw={600} color="white">
               {event.name}
             </Text>
 
             <Group className="flex-row">
-              <Text size="sm" color="#909296" className="flex-col">
+              <Text size="sm" color="#f1f1f1" className="flex-col">
                 {event.venue.name}
               </Text>
 
-              <Text size="sm" className="ml-auto flex-col" color="#909296">
+              <Text size="sm" className="ml-auto flex-col" color="#f1f1f1">
                 {formattedDate && <span>{formattedDate}</span>}
               </Text>
             </Group>

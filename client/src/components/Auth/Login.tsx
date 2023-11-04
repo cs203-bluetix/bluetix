@@ -20,8 +20,8 @@ function Login() {
   });
 
   return (
-    <div className="mt-10 flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-4xl font-bold text-gray-900">Welcome back!</h1>
+    <div className="mt-10 flex w-full max-w-3xl flex-col items-center ">
+      <h1 className="text-4xl font-bold text-gray-900">Welcome back :)</h1>
       <form
         onSubmit={form.onSubmit(({ email, password }) =>
           handleSubmit(email, password)
@@ -63,7 +63,7 @@ function Login() {
           Login
         </Button>
       </form>
-    </div>
+      </div>
   );
 }
 

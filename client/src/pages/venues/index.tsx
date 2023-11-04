@@ -21,7 +21,7 @@ function VenueList({ venues }: VenueListProps) {
   return (
     <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
       <Section title="Venues">
-        <div className=" grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {venues.map((venue) => {
             return <VenueCard venue={venue} key={venue.venueid} />;
           })}

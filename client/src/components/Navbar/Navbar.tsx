@@ -85,7 +85,7 @@ function Navbar({ classProps, user }: NavbarProps) {
                 <UserOptions user={user} />
               ) : (
                 <Link href="/login">
-                  <Button color="indigo" variant="filled">
+                  <Button color="orange" variant="filled">
                     Login
                   </Button>
                 </Link>

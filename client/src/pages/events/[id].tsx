@@ -16,7 +16,7 @@ function Event({
     <LandingLayout title={`BlueTix - ${event.name}`} withNavbar withFooter>
       <Section>
         <div className="h-fit w-full">
-          <div className="flex w-full flex-col items-center justify-center gap-4">
+          <div className="flex w-full flex-col items-center justify-center gap-4 bg-white">
             <div className="mx-auto w-full sm:px-6 xl:px-8">
               <Image
                 className="mt-4 mb-4"
