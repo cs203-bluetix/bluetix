@@ -227,7 +227,7 @@ export default function Create() {
   const [retEventId, setRetEventId] = useState();
   const [retStartSeats, setRetStartSeats] = useState();
   const [nftDetails, setNftDetails] = useState(null);
-
+  const [nftMeta,setNftMeta] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     const image_url = eventDetails.name
@@ -367,7 +367,7 @@ export default function Create() {
       startPrice: retStartPrice,
       priceCap: 1000,
       startSeats: retStartSeats,
-      eventName: eventDetails.name,
+      nftMeta: nftMeta,
     };
     console.log(nftDetails);
     console.log("This is event name"+eventDetails.name)
@@ -384,6 +384,7 @@ export default function Create() {
         const signer = await provider?.getSigner();
         const SessionFactory = new ethers.ContractFactory(compiledSessionFactory.abi,compiledSessionFactory.bytecode,signer);
         console.log(`Deploying...`);
+        console.log(nftDetails.nftMeta);
         const SessionFactoryInstance = await SessionFactory.deploy(
               nftDetails.standingFactoryAddress,
               nftDetails.seatedFactoryAddress,
@@ -395,7 +396,7 @@ export default function Create() {
               nftDetails.startPrice,
               nftDetails.priceCap,
               nftDetails.startSeats,
-              nftDetails.eventName         
+              nftDetails.nftMeta,
         );
         await SessionFactoryInstance.waitForDeployment();
         console.log(`Deployed!`);
@@ -426,7 +427,7 @@ export default function Create() {
       }
     }
     deploySessionFactoryContract();
-  },[retSessionId]);
+  },[retSessionId, nftMeta]);
 
   
 
@@ -438,6 +439,9 @@ export default function Create() {
   const [queriedEventName, setQueriedEventName] = useState("");
   const [fileList, setFileList] = useState([]);
 
+  
+
+
   const handleUploadChange = (event: any) => {
     setEventNameUpload(event.target.value);
   };
@@ -446,50 +450,58 @@ export default function Create() {
   };
 
   const handleFileUpload = async () => {
-    if (!seatNFT) {
+    if (!seatNFT || !standingNFT) {
       console.error("No file selected.");
       return;
     }
     const formData = new FormData();
-    formData.append("file", seatNFT);
-    try {
-      const response = await axios.post(
-        "http://localhost:9090/api/nft/upload/" + eventNameUpload,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+    formData.append("eventName", "nimama");
+    formData.append("file1", standingNFT);
+    formData.append("file2", seatNFT);
+  
+    // Send the formData to your API endpoint using a fetch or axios request.
+    // Replace '/your-api-endpoint' with your actual API endpoint.
+    try{
+      const response = await axios.post('/api/upload/route', formData, {
+        "headers": {
+          "Content-Type": "multipart/form-data"
         }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.error("File upload failed:", error);
-    }
+      })
+        if (response.status === 200) {
+          const standingEventUrl = response.data.standingEventUrl as string;
+          const seatedEventUrl = response.data.seatedEventUrl as string;
+          console.log(standingEventUrl, seatedEventUrl);
+          setNftMeta([standingEventUrl, seatedEventUrl]);
+        }
+        console.log(response);
+      } catch (error) {
+        console.error("File upload failed:", error);
+      }
+      
   };
 
   // Function to fetch and update the file list
-  const fetchFileList = async () => {
-    try {
-      if (eventNameQuery) {
-        const response = await axios.get(
-          "http://localhost:9090/api/nft/events/" + eventNameQuery
-        );
-        setFileList(response.data);
-        setQueriedEventName(eventNameQuery);
-      } else {
-        console.log("Missing name query input");
-        setFileList([]);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 404) {
-        // Handle 404 error here by setting fileList to an empty array
-        setFileList([]);
-      } else {
-        console.error("Failed to fetch file list:", error);
-      }
-    }
-  };
+  // const fetchFileList = async () => {
+  //   try {
+  //     if (eventNameQuery) {
+  //       const response = await axios.get(
+  //         "http://localhost:9090/api/nft/events/" + eventNameQuery
+  //       );
+  //       setFileList(response.data);
+  //       setQueriedEventName(eventNameQuery);
+  //     } else {
+  //       console.log("Missing name query input");
+  //       setFileList([]);
+  //     }
+  //   } catch (error: any) {
+  //     if (error.response && error.response.status === 404) {
+  //       // Handle 404 error here by setting fileList to an empty array
+  //       setFileList([]);
+  //     } else {
+  //       console.error("Failed to fetch file list:", error);
+  //     }
+  //   }
+  // };
 
     return (
         <>
@@ -643,7 +655,7 @@ export default function Create() {
                                         <div className="md:w-1/2 w-full md:pl-6">
                                             <FileInput type="button" accept="image/png,image/jpeg" onChange={setStandingNFT} icon={<IconUpload className="size[1rem] " />} label="Upload NFT image for Standing" placeholder="Click Me to Upload: .png, .jpeg" required />
                                         </div>
-                                        {/* <Button onClick={handleFileUpload}>Upload File</Button> */}
+                                        <Button onClick={handleFileUpload}>Upload File</Button>
                                     </div>
                                 </div>
                                 <Group className="mt-12 flex justify-between">
@@ -653,7 +665,7 @@ export default function Create() {
                                     </Button>
                                 </Group>
                             </form>
-                            <Button onClick={handleSessionFactory}>nigganigniga</Button>
+                            {/* <Button onClick={handleFileUpload}>nigganigniga</Button> */}
 
 
 
