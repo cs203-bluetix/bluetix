@@ -54,18 +54,8 @@ export const useCheckout = () => {
       console.log(contractAddr);
       let testAbi = abi["abi"];
 
-      // Contract to transact in USDC
-      const USDCcontract = new ethers.Contract(
-        "0x52D800ca262522580CeBAD275395ca6e7598C014",
-        usdcAbi,
-        signer
-      );
-
       const contract = new ethers.Contract(contractAddr, testAbi, signer);
-      await USDCcontract.connect(signer).approve(
-        contract,
-        ethers.parseUnits("2000", 6)
-      );
+
       console.log("shown");
       const mintAmount = await contract.getStartPrice?.();
 
@@ -73,7 +63,13 @@ export const useCheckout = () => {
       const gasPrice = ethers.parseUnits("40", "gwei");
       // console.log(gasPrice);
       // do some error handling here
-      const tx = await contract.mint?.();
+      const estimatedGas = await contract.mint?.estimateGas?.({
+        value: mintAmount,
+      });
+      const tx = await contract.mint?.({
+        value: mintAmount,
+        gasLimit: estimatedGas,
+      });
       console.log("here");
       const receipt = await tx.wait();
       console.log(receipt);

@@ -1,11 +1,12 @@
 "use client";
 import "leaflet/dist/leaflet.css";
 
-import Wrapper from "components/Seats/Wrapper";
+import SeatWrapper from "components/Seats/SeatWrapper";
 import LandingLayout from "layouts/LandingLayout";
 import { Role } from "store/types";
+import QueueWrapper from "components/Seats/QueueWrapper";
 
-function Leaf() {
+function SeatSelection() {
   return (
     <LandingLayout
       strict={true}
@@ -13,9 +14,11 @@ function Leaf() {
       title="Ticket Seating"
       withNavbar
     >
-      <Wrapper />
+      <QueueWrapper>
+        <SeatWrapper />
+      </QueueWrapper>
     </LandingLayout>
   );
 }
 
-export default Leaf;
+export default SeatSelection;

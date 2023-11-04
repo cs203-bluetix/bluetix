@@ -19,66 +19,83 @@ function Event({
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <div className="mx-auto w-full sm:px-6 xl:px-8">
               <Image
-                className="mt-4 mb-4"
+                className="mb-4 mt-4"
                 radius="lg"
                 src={`${CDN_API_URL}/events/${event.image_url}`}
                 alt={event.name}
-                height={500}>
-              </Image>
-
+                height={500}
+              ></Image>
 
               <div className="flex">
-                <div className="w-[70%] mt-4">
-                  <div className="gap-4  mb-6">
-                  <h1 className="font-bold text-6xl">{event.name}</h1>
-                  <div>
-                    <span className="text-lg font-semibold">
-                      {getReadableDate(event.sessions[0]?.date!).formattedDate} - {getReadableDate(event.sessions[event.sessions.length-1]?.date!).formattedDate}
-                    </span>
-                    <Badge className="ml-4" size="xl" color="orange">{event.venue.name}</Badge>
+                <div className="mt-4 w-[70%]">
+                  <div className="mb-6  gap-4">
+                    <h1 className="text-6xl font-bold">{event.name}</h1>
+                    <div>
+                      <span className="text-lg font-semibold">
+                        {
+                          getReadableDate(event.sessions[0]?.date!)
+                            .formattedDate
+                        }{" "}
+                        -{" "}
+                        {
+                          getReadableDate(
+                            event.sessions[event.sessions.length - 1]?.date!
+                          ).formattedDate
+                        }
+                      </span>
+                      <Badge className="ml-4" size="xl" color="orange">
+                        {event.venue.name}
+                      </Badge>
+                    </div>
                   </div>
-                  </div>
-                  
+
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Event Details</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">{event.description}</p>
+                    <p className="mt-2 leading-relaxed text-gray-600">
+                      {event.description}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Ticket Pricing</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">{event.ticket_pricing}</p>
+                    <p className="mt-2 leading-relaxed text-gray-600">
+                      {event.ticket_pricing}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">FAQ</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">{event.faq}</p>
+                    <p className="mt-2 leading-relaxed text-gray-600">
+                      {event.faq}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Admissions Policy</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">{event.admission_policy}</p>
+                    <p className="mt-2 leading-relaxed text-gray-600">
+                      {event.admission_policy}
+                    </p>
                   </div>
                 </div>
-                <div className="w-[30%] mt-4">
-                  
-                <div className="sticky top-32">
-                      <Menu >
-                        <Menu.Target >
-                          <div className="px-6">
+                <div className="mt-4 w-[30%]">
+                  <div className="sticky top-32">
+                    <Menu>
+                      <Menu.Target>
+                        <div className="px-6">
                           <Button color="orange" size="xl" mx="lg" fullWidth>
                             Buy Tickets
                           </Button>
-                          </div>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                          {event.sessions.map((s) => (
-                            <Link href={`/buy/${event.eventId}/${s.sessionId}`}>
-                              <Menu.Item>
-                                {getReadableDate(s.date).formattedDate} ·{" "}
-                                {s.start_time} - {s.end_time}
-                              </Menu.Item>
-                            </Link>
-                          ))}
-                        </Menu.Dropdown>
-                      </Menu>
-                    </div>
+                        </div>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        {event.sessions.map((s) => (
+                          <Link href={`/buy/${event.eventId}/${s.sessionId}`}>
+                            <Menu.Item>
+                              {getReadableDate(s.date).formattedDate} ·{" "}
+                              {s.start_time} - {s.end_time}
+                            </Menu.Item>
+                          </Link>
+                        ))}
+                      </Menu.Dropdown>
+                    </Menu>
+                  </div>
                 </div>
               </div>
 
@@ -138,7 +155,6 @@ function Event({
 }
 
 export default Event;
-
 
 export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   params,
