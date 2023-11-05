@@ -19,12 +19,16 @@ interface VenueListProps {
 function VenueList({ venues }: VenueListProps) {
 
   return (
-    <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
-      <Section title="Venues">
+    <LandingLayout title="BlueTix - Venues" withNavbar withFooter withGrad>
+      <Section title="">
+            <div className="w-full px-8 rounded-xl bg-gray-900 backdrop-blur-sm bg-opacity-40">
+
+              <h1 className="w-full text-white text-left font-bold py-2">Events</h1>
         <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {venues.map((venue) => {
             return <VenueCard venue={venue} key={venue.venueid} />;
           })}
+        </div>
         </div>
       </Section>
     </LandingLayout>

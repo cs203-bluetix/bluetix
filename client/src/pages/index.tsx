@@ -77,11 +77,11 @@ export default function Home() {
             </button> */}
           </div>
           <div className="absolute w-full h-[150px] bg-cover bg-no-repeat bg-center sectiondivider" style={{ backgroundImage: 'url("/assets/landing-bg3.png")' }}></div>
-          <div className="w-full h-[90vh] bg-gradient-to-b from-[#e8e9eb] via-transparent to-transparent mb-12" >
-            <div className=" text-5xl font-bold text-center pt-36">
+          <div className="w-full h-[90vh] bg-gradient-to-b from-[#] via-transparent to-transparent mb-12" >
+            <div className=" text-5xl font-bold text-center pt-36 text-white">
               Trending
             </div>
-            <div className="text-center pb-4">
+            <div className="text-center pb-4 text-white">
               <br></br>
               Where the world's latest buzz meets the eager crowd.
             </div>

@@ -9,7 +9,7 @@ function Auth() {
   const [mode, setMode] = useState<"Login" | "Register">("Login");
   const router = useRouter();
   return (
-    <LandingLayout title={`BlueTix - ${mode}`} withNavbar>
+    <LandingLayout title={`BlueTix - ${mode}`} withNavbar withGrad>
       {(user) => {
         if (user) {
           const slug = router.query.slug;
@@ -22,12 +22,12 @@ function Auth() {
         }
         return (
           // <div className="w-full bg-cover bg-no-repeat bg-center" style={{ backgroundImage: 'url("/assets/login.png")' }}>
-          <div className="mt-16">
+          <div className="pt-16">
             {/* <Section> */}
             <div className="flex h-[92vh] w-full justify-center">
               <div className="w-1/2 mt-14">
                 <div className="">
-                  <div  className="mt-4 ml-auto w-[80%] bg-white rounded-xl backdrop-blur-sm bg-opacity-80 px-6 py-4 ">
+                  <div  className="mt-4 ml-auto w-[80%] bg-black rounded-xl backdrop-blur-sm bg-opacity-20 px-6 py-4 text-white">
                   {mode === "Login" ? <Login /> : <Register />}
                   <div className="mt-4">
                     {mode === "Login" ? (

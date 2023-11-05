@@ -31,12 +31,12 @@ function Navbar({ classProps, user }: NavbarProps) {
     <div className="relative">
       <div
         id="root"
-        className={`${classProps} header fixed inset-x-0 left-0 top-0 z-50`}
+        className={`${classProps} header absolute inset-x-0 left-0 top-0 z-50`}
       >
         <nav
           className={`mx-auto max-w-[1280px] items-center justify-between px-7 py-3 md:flex md:px-5`}
         >
-          <Link href="/" className="text-3xl font-bold">
+          <Link href="/" className="text-3xl font-bold text-white">
             {/* <img src="/logoblue.png" width={24} className="inline-block pb-1.5"/> */}
             <span style={{ color: "#4c6ef5" }}>Blue</span>tix
           </Link>
@@ -57,16 +57,16 @@ function Navbar({ classProps, user }: NavbarProps) {
               isOpen ? "top-12" : "top-[-1024px]"
             }`}
           >
-            <li className="my-12 md:my-0 md:ml-8">
+            <li className="my-12 md:my-0 md:ml-8 text-white">
               <Link href="/aboutus">About</Link>
             </li>
-            <li className="my-12 md:my-0 md:ml-8">
+            <li className="my-12 md:my-0 md:ml-8 text-white">
               <Link href="/events">Events</Link>
             </li>
-            <li className="my-12 md:my-0 md:ml-8">
+            <li className="my-12 md:my-0 md:ml-8 text-white">
               <Link href="/venues">Venues</Link>
             </li>
-            <li className="my-12 md:my-0 md:ml-8">
+            <li className="my-12 md:my-0 md:ml-8 text-white">
               <Link href="/faq">FAQ</Link>
             </li>
 
@@ -85,7 +85,7 @@ function Navbar({ classProps, user }: NavbarProps) {
                 <UserOptions user={user} />
               ) : (
                 <Link href="/login">
-                  <Button color="orange" variant="filled">
+                  <Button color="indigo" variant="filled">
                     Login
                   </Button>
                 </Link>

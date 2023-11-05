@@ -77,7 +77,7 @@ export default function AuthLayout({
       <Head>
         <title>{title ?? "BlueTix"}</title>
         <meta name="description" content="bluetix" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logoblue.ico" />
       </Head>
       {typeof children === "function" ? children(user) : children}
     </>

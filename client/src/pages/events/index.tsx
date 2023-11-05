@@ -68,89 +68,90 @@ function EventList({ events, venues,
   }, [filterName, filterDate, filterLocation, filterPrice]);
 
   return (
-    <LandingLayout title="BlueTix - Events" withNavbar withFooter>
-    <div 
+    <LandingLayout title="BlueTix - Events" withNavbar withFooter withGrad>
+      <div
       // className="items-center justify-center gap-4 pt-4 bg-cover bg-no-repeat bg-center bg-fixed" style={{ backgroundImage: 'url("/images/bg.png")' }}
-    >
+      >
 
-      <Section title="" >
-        <div className="flex w-full flex-col items-center justify-center gap-4 pt-4">
-          <div className="rounded-xl w-full px-6 pb-5 bg-gray-400 backdrop-blur-sm bg-opacity-10  ">
-            <h1 className="text-black font-bold  py-[0.5] pt-2">Trending</h1>
-            <div className="flex w-full">
-              <div className="grid h-full w-full  gap-6  sm:grid-cols-2 lg:grid-cols-4">
-              {eventsToDisplay.slice(eventsToDisplay.length-4, eventsToDisplay.length).map((e) => {
-                return <UpcomingEventCard event={e} key={e.eventId} />;
-              })}
+        <Section title="" >
+          <div className="flex w-full flex-col items-center justify-center gap-4 pt-4">
+            <div className="rounded-xl w-full px-6 pb-5 bg-gray-900 backdrop-blur-sm bg-opacity-40">
+              <h1 className="text-white font-bold  py-2">Trending</h1>
+              <div className="flex w-full">
+                <div className="grid h-full w-full  gap-6  sm:grid-cols-2 lg:grid-cols-4">
+                  {eventsToDisplay.slice(eventsToDisplay.length - 4, eventsToDisplay.length).map((e) => {
+                    return <UpcomingEventCard event={e} key={e.eventId} />;
+                  })}
+                </div>
+              </div>
             </div>
-            </div>
-          </div><div className="bg-gray-400 w-full px-8 rounded-xl backdrop-blur-sm bg-opacity-10">
+            <div className="w-full px-8 rounded-xl bg-gray-900 backdrop-blur-sm bg-opacity-40">
 
-          <h1 className="w-full text-black text-left font-bold pt-2">Events</h1>
-          <div className="flex h-fit w-full flex-col items-center gap-2 rounded-xl  sm:max-w-7xl sm:flex-row sm:py-0">
-            <div className="w-full ">
-              <Input
-                radius={10}
-                placeholder="Search events..."
-                className="grow"
-                value={filterName}
-                onChange={(e) => setFilterName(e.target.value)}
-                icon={<IconSearch size={18} />}
-              />
-            </div>
-            <div className="flex w-full  gap-2">
-              <DateInput
-                radius={10}
-                className="grow-0"
-                icon={<IconCalendarQuestion size={18} />}
-                value={filterDate}
-                onChange={setFilterDate}
-                placeholder="Date"
-                clearable
-              />
-              <Select
-                radius={10}
-                className="grow-[2]"
-                clearable
-                placeholder="Location"
-                data={venues}
-                value={filterLocation}
-                onChange={setFilterLocation}
-                icon={<IconMapPin size={18} />}
-              />
-              <div className="grow">
-                <Popover>
-                  <Popover.Target>
-                    <Button radius={10} variant="default" c="#b2bac1" color="blue" fw={400} fullWidth>
-                      Price
-                    </Button>
-                  </Popover.Target>
-                  <Popover.Dropdown>
-                    <div className="flex w-[300px] flex-col gap-2">
-                      <span className="tracking-tight">
-                        Filter by price ($)
-                      </span>
-                      <RangeSlider
-                        min={0}
-                        max={1000}
-                        size="sm"
-                        value={filterPrice}
-                        onChange={setFilterPrice}
-                      />
-                    </div>
-                  </Popover.Dropdown>
-                </Popover>
+              <h1 className="w-full text-white text-left font-bold py-2">Events</h1>
+              <div className="flex h-fit w-full flex-col items-center gap-2 rounded-xl  sm:max-w-7xl sm:flex-row sm:py-0">
+                <div className="w-full ">
+                  <Input
+                    radius={10}
+                    placeholder="Search events..."
+                    className="grow"
+                    value={filterName}
+                    onChange={(e) => setFilterName(e.target.value)}
+                    icon={<IconSearch size={18} />}
+                  />
+                </div>
+                <div className="flex w-full  gap-2">
+                  <DateInput
+                    radius={10}
+                    className="grow-0"
+                    icon={<IconCalendarQuestion size={18} />}
+                    value={filterDate}
+                    onChange={setFilterDate}
+                    placeholder="Date"
+                    clearable
+                  />
+                  <Select
+                    radius={10}
+                    className="grow-[2]"
+                    clearable
+                    placeholder="Location"
+                    data={venues}
+                    value={filterLocation}
+                    onChange={setFilterLocation}
+                    icon={<IconMapPin size={18} />}
+                  />
+                  <div className="grow">
+                    <Popover>
+                      <Popover.Target>
+                        <Button radius={10} variant="default" c="#b2bac1" color="blue" fw={400} fullWidth>
+                          Price
+                        </Button>
+                      </Popover.Target>
+                      <Popover.Dropdown>
+                        <div className="flex w-[300px] flex-col gap-2">
+                          <span className="tracking-tight">
+                            Filter by price ($)
+                          </span>
+                          <RangeSlider
+                            min={0}
+                            max={1000}
+                            size="sm"
+                            value={filterPrice}
+                            onChange={setFilterPrice}
+                          />
+                        </div>
+                      </Popover.Dropdown>
+                    </Popover>
+                  </div>
+                </div>
+              </div>
+              <div className="grid h-full w-full grid-cols-1 gap-8 py-6 sm:grid-cols-2 lg:grid-cols-3 ">
+                {eventsToDisplay.map((e) => {
+                  return <EventCard1 event={e} key={e.eventId} />;
+                })}
               </div>
             </div>
           </div>
-          <div className="grid h-full w-full grid-cols-1 gap-8 py-6 sm:grid-cols-2 lg:grid-cols-3 ">
-            {eventsToDisplay.map((e) => {
-              return <EventCard1 event={e} key={e.eventId} />;
-            })}
-          </div>
-          </div>
-        </div>
-      </Section>
+        </Section>
       </div>
     </LandingLayout>
   );
@@ -162,14 +163,14 @@ export default EventList;
 const EventCard1 = ({ event }: { event: Event }) => {
   const { formattedDate } = getReadableDate(event.sessions[0]?.date!);
   return (
-    <Link href={`/venues/${event.eventId}`} className="flex flex-wrap">
+    <Link href={`/events/${event.eventId}`} className="flex flex-wrap ">
       <Card
         style={{ border: "none" }}
         shadow="sm"
-        padding="md"
+        padding="sm"
         radius="md"
         withBorder
-        className="duration-400 w-full transform transition-transform hover:scale-105"
+        className="bg-[gray-400] duration-400 w-full transform transition-transform hover:scale-105 "
       >
         <Card.Section className="border-t border-gray-300">
           <Image
@@ -179,26 +180,28 @@ const EventCard1 = ({ event }: { event: Event }) => {
           />
         </Card.Section>
 
-        <Group mt="sm">
-          <Text size="xl" fw={700}>{event.name}</Text>
-          {/* <Badge variant="light">
+        <div className="px-1">
+          <Group className="mt-1">
+            <Text size="xl" fw={700}>{event.name}</Text>
+            {/* <Badge variant="light">
         {venue.address}
         </Badge> */}
-        </Group>
+          </Group>
 
-        <Group>
-          <Text size="sm" color="#909296">Starts from <span style={{ fontWeight: '600' }}>${event.prices[0]}</span></Text>
-        </Group>
-        <Group>
-              <Text size="sm" color="#909296">
-                {event.venue.name}
-              </Text>
+          <Group>
+            <Text size="sm" color="#909296">Starts from <span style={{ fontWeight: '600' }}>${event.prices[0]}</span></Text>
+          </Group>
+          <Group>
+            <Text size="sm" color="#909296">
+              {event.venue.name}
+            </Text>
 
-          <Text size="sm" className="ml-auto" color="#909296">
-            <Badge color="blue">{formattedDate && <span>{formattedDate}</span>}</Badge>
-            <Badge color="red" className="ml-1">{event.type}</Badge>
-          </Text>
-        </Group>
+            <Text size="sm" className="ml-auto" color="#909296">
+              <Badge color="blue">{formattedDate && <span>{formattedDate}</span>}</Badge>
+              <Badge color="red" className="ml-1">{event.type}</Badge>
+            </Text>
+          </Group>
+        </div>
 
         {/* <Button radius="md" style={{ flex: 1 }}>
             Show details

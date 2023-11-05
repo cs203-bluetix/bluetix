@@ -31,7 +31,7 @@ function Register() {
 
   return (
     <div className="flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-4xl font-bold text-gray-900">Sign up now!</h1>
+      <h1 className="text-4xl font-bold">Sign up now!</h1>
       <form
         onSubmit={form.onSubmit(({ firstName, lastName, email, password }) =>
           handleSubmit(firstName, lastName, email, password)
@@ -52,6 +52,7 @@ function Register() {
           icon={<IconUser size={"16"} />}
           placeholder="First Name"
           {...form.getInputProps("firstName")}
+          styles={{ label: { color: 'white' } }}
         />
         <TextInput
           size="md"
@@ -62,6 +63,7 @@ function Register() {
           icon={<IconUser size={"16"} />}
           placeholder="Last Name"
           {...form.getInputProps("lastName")}
+          styles={{ label: { color: 'white' } }}
         />
         <TextInput
           size="md"
@@ -72,6 +74,7 @@ function Register() {
           icon={<IconUser size={"16"} />}
           placeholder="Email"
           {...form.getInputProps("email")}
+          styles={{ label: { color: 'white' } }}
         />
         <PasswordInput
           size="md"
@@ -82,6 +85,7 @@ function Register() {
           icon={<IconPassword size={"16"} />}
           placeholder="Password"
           {...form.getInputProps("password")}
+          styles={{ label: { color: 'white' } }}
         />
         <PasswordInput
           size="md"
@@ -92,6 +96,7 @@ function Register() {
           icon={<IconPassword size={"16"} />}
           placeholder="Confirm Password"
           {...form.getInputProps("confirmPassword")}
+          styles={{ label: { color: 'white' } }}
         />
         <Button
           color="indigo"
