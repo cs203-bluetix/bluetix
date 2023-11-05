@@ -9,43 +9,48 @@ import {
   Image,
   Text,
   Group,
-  Badge,
-  Button,
-  ActionIcon,
 } from "@mantine/core";
-import classes from "./BadgeCard.module.css";
 import { CDN_API_URL } from "utils/globals";
 
-function VenueList() {
-  const [venues, setVenues] = useState<Venue[]>([]);
+interface VenueListProps {
+  venues: Venue[];
+}
 
-  useEffect(() => {
-    axiosConfig
-      .get("/api/venues")
-      .then((response) => {
-        setVenues(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching venues:", error);
-      });
-  }, []);
+function VenueList({ venues }: VenueListProps) {
 
   return (
-    <LandingLayout title="BlueTix - Venues" withNavbar withFooter>
-      <Section title="Venues">
+    <LandingLayout title="BlueTix - Venues" withNavbar withFooter withGrad>
+      <Section title="">
+            <div className="w-full px-8 rounded-xl bg-gray-900 backdrop-blur-sm bg-opacity-40">
+
+              <h1 className="w-full text-white text-left font-bold py-2">Events</h1>
         <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {venues.map((venue) => {
             return <VenueCard venue={venue} key={venue.venueid} />;
           })}
         </div>
+        </div>
       </Section>
     </LandingLayout>
   );
 }
-
 export default VenueList;
 
-// const endpoint = `${env.NEXT_PUBLIC_SERVER_URL}/api/auth/signin`;
+export async function getServerSideProps() {
+  try {
+    const response = await axiosConfig.get('/api/venues');
+    const venues: Venue[] = response.data;
+
+    return {
+      props: { venues },
+    };
+  } catch (error) {
+    console.error('Error fetching venues:', error);
+    return {
+      props: { venues: [] }, 
+    };
+  }
+}
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
@@ -66,7 +71,7 @@ const VenueCard = ({ venue }: { venue: Venue }) => {
           />
         </Card.Section>
 
-        <Group justify="space-between" mt="md">
+        <Group mt="md">
           <Text fw={500}>{venue.name}</Text>
           {/* <Badge variant="light">
         {venue.address}

@@ -1,7 +1,7 @@
 import React from "react";
 import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
-import { Accordion } from '@mantine/core';
+import { Accordion, Text } from '@mantine/core';
 
 export default function faq() {
   const groceries = [
@@ -46,21 +46,34 @@ export default function faq() {
     },
   ];
 
-  
+
   const items = groceries.map((item) => (
-    <Accordion.Item key={item.value} value={item.value}>
+    <Accordion.Item sx={(theme) => ({
+      '&:hover': {
+        backgroundColor: "",
+      },
+    })} key={item.value} value={item.value} >
       {/* <Accordion.Control icon={item.emoji}>{item.value}</Accordion.Control> */}
-      <Accordion.Control>{item.value}</Accordion.Control>
-      <Accordion.Panel className="text-sm">{item.description}</Accordion.Panel>
+      <Accordion.Control
+        sx={(theme) => ({
+          '&:hover': {
+            backgroundColor: theme.colors.indigo[6],
+          },
+        })}><Text color="white" >{item.value}</Text></Accordion.Control>
+      <Accordion.Panel className="text-sm"><Text color="white">{item.description}</Text></Accordion.Panel>
     </Accordion.Item>
   ));
-  
-    return (
-      <>
-        <LandingLayout withNavbar withFooter title="BlueTix - FAQ">
-          <Section title="Frequently Asked Questions">
-            <div className="p-[30px]">
-            <Accordion defaultValue="Apples">
+
+  return (
+    <>
+      <LandingLayout withNavbar withFooter withGrad title="BlueTix - FAQ">
+        <Section>
+          <div className="pb-[30px] px-8 mt-4 bg-gray-900 backdrop-blur-sm bg-opacity-40 rounded-xl text-white">
+              <h1 className="w-full text-white text-left font-bold py-2">Events</h1>
+            <Accordion styles={{
+              control: { color: 'white' },
+            }}
+            >
               {items}
             </Accordion>
             {/* <div className="h-full w-full">
@@ -105,8 +118,8 @@ export default function faq() {
             </div>
           </div> */}
           </div>
-          </Section>
-        </LandingLayout>
-      </>
-    );
-  }
+        </Section>
+      </LandingLayout>
+    </>
+  );
+}
