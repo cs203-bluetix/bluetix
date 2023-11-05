@@ -397,6 +397,7 @@ export default function Create() {
               nftDetails.priceCap,
               nftDetails.startSeats,
               nftDetails.nftMeta,
+              
         );
         await SessionFactoryInstance.waitForDeployment();
         console.log(`Deployed!`);
@@ -427,7 +428,7 @@ export default function Create() {
       }
     }
     deploySessionFactoryContract();
-  },[retSessionId, nftMeta]);
+  },[retSessionId]);
 
   
 

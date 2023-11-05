@@ -41,7 +41,7 @@ describe('SessionFactory', function () {
         [30,40,50],
         60,
         [100,20,40],
-        "Miley"
+        ['https://gateway.pinata.cloud/ipfs/QmP9A4q4zAjpcm5oygcmxkuhi2j1EXNABSXzj2Tw8aedaq', 'https://gateway.pinata.cloud/ipfs/QmU7zGv2hicSeZuqumjJwvU2YXcwUwdbJ2dzjXx5rNwfX1']
       );
   
       // Wait for the contract to be mined
