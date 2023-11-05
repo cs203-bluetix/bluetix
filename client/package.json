@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.0.4",
-    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/eslint": "^8.37.0",
     "@types/jest": "^29.5.6",
