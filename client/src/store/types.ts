@@ -127,3 +127,26 @@ export interface Cart {
   walletAddress: string;
   totalPrice: number;
 }
+
+export interface NFTOrder {
+  from: string;
+  contractDeployer: string;
+  deployedBlockNumber: number;
+  tokenId: string;
+  tokenType: string;
+  title: string;
+  description: string;
+  timeLastUpdated: string;
+  image?: string;
+  balance: number;
+}
+
+export interface Transaction {
+  to: string;
+  value: number;
+  asset: string;
+  hash: string;
+  timestamp: string;
+  category: string;
+  title?: string;
+}

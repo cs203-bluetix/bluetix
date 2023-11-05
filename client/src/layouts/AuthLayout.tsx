@@ -43,8 +43,7 @@ export default function AuthLayout({
     };
 
     if (!validatedJwt) {
-      getUser();
-      setValidatedJwt(true);
+      getUser().then(() => setValidatedJwt(true));
     } else if (strict) {
       logoutUser();
       router.push("/404");
@@ -63,7 +62,7 @@ export default function AuthLayout({
     ) {
       router.push("/");
     }
-  }, [user, router]);
+  }, [user, router, validatedJwt]);
 
   if (strict && !user) return <Loading />;
 

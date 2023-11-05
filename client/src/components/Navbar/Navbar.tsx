@@ -24,7 +24,6 @@ interface NavbarProps {
 }
 
 function Navbar({ classProps, user }: NavbarProps) {
-
   let [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -117,21 +116,27 @@ export default Navbar;
 
 const UserOptions = ({ user }: { user: UserInfo }) => {
   const { logoutUser } = useAuthStore();
+  const router = useRouter();
   return (
     <Menu shadow="md" width={200} zIndex={1000}>
       <Menu.Target>
         <Button variant="transparent">
-        <div className="flex h-auto cursor-pointer items-center">
-          <IconUserCircle
-            className="hover:stroke-gray-700 user-icon"
-            size={28}
-          />
-        </div>
+          <div className="flex h-auto cursor-pointer items-center">
+            <IconUserCircle
+              className="user-icon hover:stroke-gray-700"
+              size={28}
+            />
+          </div>
         </Button>
       </Menu.Target>
       <Menu.Dropdown className="z-20">
         <Menu.Label>User</Menu.Label>
-        <Menu.Item icon={<IconShoppingBagCheck size={16} />}>Orders</Menu.Item>
+        <Menu.Item
+          onClick={() => router.push("/orders")}
+          icon={<IconShoppingBagCheck size={16} />}
+        >
+          Orders
+        </Menu.Item>
         <Menu.Item icon={<IconSettings size={16} />}>Settings</Menu.Item>
         <Menu.Item
           icon={<IconWallet size={16} />}

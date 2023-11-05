@@ -1,18 +1,25 @@
+import axios from "axios";
 import abi from "compiledContracts/contracts/SeatedNftContract.sol/SeatedNftContract.json";
 import sessionAbi from "compiledContracts/contracts/Session.sol/Session.json";
 import { ethers } from "ethers";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useStore } from "store/seat";
+import { SERVER_API_QUEUE_LEAVE_URL } from "utils/globals";
 import { magic } from "utils/magicSDK";
-import usdcAbi from "../../deploy/USDC.json";
 
 export const useCheckout = () => {
   const { cart, setSelectedNode } = useStore();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const checkoutHandler = async (sessionAddress: string) => {
+    if (cart.cartItems.length == 0 || !router) return;
     setLoading(true);
-    if (cart.cartItems.length == 0) return;
+    const params = router.query;
+    const leaveEndpoint = `${SERVER_API_QUEUE_LEAVE_URL}/${params.slug![0]}/${
+      params.slug![1]
+    }`;
     try {
       let userPublicKey = (await magic?.wallet.connectWithUI())![0] ?? "";
 
@@ -38,7 +45,7 @@ export const useCheckout = () => {
 
       // This is the session address you fetch from the db.
       const sessionContract = new ethers.Contract(
-        sessionAddress,
+        "0xB7893A9DeBb4885d5fc3453f20252e7195f974E0",
         sessionAbi["abi"],
         signer
       );
@@ -47,9 +54,7 @@ export const useCheckout = () => {
       // const contractAddr = "0x18bf8d00302EfD826f01daEae39CaCc0E2A29803";
 
       // Use the session address to get specific sections.
-      const contractAddr = await sessionContract.getSectionToAddress?.(
-        cart.cartItems[0]?.seatId
-      );
+      const contractAddr = await sessionContract.getSectionToAddress?.("F01");
 
       console.log(contractAddr);
       let testAbi = abi["abi"];
@@ -71,8 +76,12 @@ export const useCheckout = () => {
         gasLimit: estimatedGas,
       });
       console.log("here");
+      console.log(tx);
       const receipt = await tx.wait();
       console.log(receipt);
+      const resp = await axios
+        .delete(leaveEndpoint)
+        .finally(() => (window.location.href = "/orders"));
       // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
       // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);
       // console.log(`You spent ${transactionFeeHuman} matic`)
