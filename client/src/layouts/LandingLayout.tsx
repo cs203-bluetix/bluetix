@@ -34,7 +34,7 @@ export default function LandingLayout({
   // };
   const backgroundStyle = {
     background: `
-    url('/assets/Svg1-Hero-2.svg') repeat center
+    url('/assets/Svg1-Hero-5.svg') center repeat
   `, backgroundSize: 'cover',
   };
 

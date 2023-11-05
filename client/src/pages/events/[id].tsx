@@ -30,7 +30,7 @@ function Event({
               <div className="flex text-white px-8">
                 <div className="w-[70%] mt-4">
                   <div className="gap-4  mb-6">
-                  <h1 className="font-bold text-6xl text-white ">{event.name}</h1>
+                  <h1 className="font-bold text-5xl text-white ">{event.name}</h1>
                   <div className="mt-2">
                     <span className="text-lg font-semibold ">
                       {getReadableDate(event.sessions[0]?.date!).formattedDate} - {getReadableDate(event.sessions[event.sessions.length-1]?.date!).formattedDate}
