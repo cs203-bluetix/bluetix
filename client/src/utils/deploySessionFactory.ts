@@ -14,7 +14,7 @@ export interface NFTDetails {
     startPrice: number[]; // You may need to specify the correct data type for startPrice
     priceCap: number;
     startSeats?: number[]; // You may need to specify the correct data type for startSeats
-    eventName: string;
+    nftMeta: string[]
 }
   
 
