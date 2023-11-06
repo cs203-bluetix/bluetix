@@ -4,6 +4,7 @@ import sessionAbi from "compiledContracts/contracts/Session.sol/Session.json";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useStore } from "store/seat";
 import { SERVER_API_QUEUE_LEAVE_URL } from "utils/globals";
 import { magic } from "utils/magicSDK";
@@ -49,7 +50,9 @@ export const useCheckout = () => {
         sessionAbi["abi"],
         signer
       );
-
+      function timeout(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
       //Official new address for Seated contract
       // const contractAddr = "0x18bf8d00302EfD826f01daEae39CaCc0E2A29803";
 
@@ -81,9 +84,13 @@ export const useCheckout = () => {
       console.log(tx);
       const receipt = await tx.wait();
       console.log(receipt);
-      const resp = await axios
-        .delete(leaveEndpoint)
-        .finally(() => (window.location.href = "/orders"));
+      const resp = await axios.delete(leaveEndpoint).finally(async () => {
+        toast.success(
+          "Transaction successful! Redirecting you to the orders page!"
+        );
+        await timeout(1200);
+        window.location.href = "/orders";
+      });
       // const transactionFee = receipt.gasPrice.mul(receipt.gasUsed);
       // const transactionFeeHuman = ethers.formatUnits(transactionFee, 18);
       // console.log(`You spent ${transactionFeeHuman} matic`)

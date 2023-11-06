@@ -200,7 +200,9 @@ export default function Create() {
     },
     [allEvents, setAllEvents, newEvents, setNewEvents]
   );
-
+  function timeout(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setEventDetails((prevDetails) => ({
@@ -286,8 +288,13 @@ export default function Create() {
         );
 
         if (response.status === 200) {
+          toast.success("Created events and sessions", {
+            position: "bottom-center",
+          });
+          await timeout(1800);
           console.log("Form data sent successfully.");
-          toast.success("NFTs Uploaded Successfully");
+          toast.success("Created NFT contracts", { position: "bottom-center" });
+          await timeout(1000);
           router.push("/creators");
         } else {
           console.error("Failed to send form data.");
