@@ -22,7 +22,9 @@ subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS).setAction(
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   networks: {
-    hardhat: {},
+    hardhat: {
+      allowUnlimitedContractSize: true,
+    },
     polygon_mumbai: {
       url: process.env.NEXT_PUBLIC_MUMBAI_RPC_URL,
       accounts: [process.env.PRIVATE_KEY],
@@ -40,7 +42,6 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 10, // You can adjust the number of runs as needed
       },
     },
   },
@@ -54,4 +55,5 @@ module.exports = {
     cache: "./src/compiledContracts",
     artifacts: "./src/compiledContracts",
   },
+  
 };

@@ -3,7 +3,7 @@ import AuthLayout from "layouts/AuthLayout";
 import LandingLayout from "layouts/LandingLayout";
 import { Section } from "layouts/Section";
 import Link from "next/link";
-import { JSX, useCallback, useEffect, useState } from "react";
+import { JSX, useCallback, useEffect, useState, useRef } from "react";
 import { env } from "env.mjs";
 import {
   CalendarDate,
@@ -25,7 +25,6 @@ import compiledSessionFactory from "compiledContracts/contracts/SessionFactory.s
 import {NFTDetails} from "utils/deploySessionFactory" // Replace 'yourModule' with the actual path to the module containing the function.
 import { magic } from "utils/magicSDK";
 import { ethers } from "ethers";
-
 import {
   Paper,
   Select,
@@ -36,10 +35,16 @@ import {
   FileInput,
   Slider,
   Text,
+  Box,
+  LoadingOverlay,
+  Notification,rem
 } from "@mantine/core";
-import { IconUpload } from "@tabler/icons-react";
+import { IconUpload, IconX,IconCheck} from "@tabler/icons-react";
+import { useDisclosure } from '@mantine/hooks';
+import {CheckCircle} from 'react-bootstrap-icons'
 import router from "next/router";
 import { log } from "console";
+import toast from 'react-hot-toast';
 
 export default function Create() {
   const localizer = momentLocalizer(moment);
@@ -219,7 +224,7 @@ export default function Create() {
       date: date,
     }));
   };
-
+  const isInitialRender = useRef(true);
   const [retSessionId, setRetSessionId] = useState([]);
   const [retSectionId, setRetSectionId] = useState([]);
   const [retSupplyPerSection, setRetSupplyPerSection] = useState([]);
@@ -228,6 +233,7 @@ export default function Create() {
   const [retStartSeats, setRetStartSeats] = useState();
   const [nftDetails, setNftDetails] = useState(null);
   const [nftMeta,setNftMeta] = useState<string[]>([]);
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     const image_url = eventDetails.name
@@ -292,7 +298,6 @@ export default function Create() {
         setTimeout(() => {
           handleSessionFactory();
         }, 1000);
-        // router.push('/creators');
       } else {
         console.error("Failed to send form data.");
       }
@@ -306,28 +311,30 @@ export default function Create() {
   
   
   const handleSessionFactory = () => {
-    //Handle Information collection
+    //Sets eventID
+    handleFileUpload();
+
     axiosConfig
     .get("/api/creators/" + 1) //NEED TO CHANGE
     .then((response) => {
-      const retEventId1 = response.data[response.data.length-1].eventId;
-      console.log("This is event ID:"+retEventId1)
-      setRetEventId(retEventId1);
+      const retEventId_1 = response.data[response.data.length-1].eventId;
+      console.log("This is event ID:"+retEventId_1)
+      setRetEventId(retEventId_1);
+      axiosConfig
+        .get("/api/ticket/getUnique/" + retEventId_1 + "/" + eventDetails.venue_id)
+        .then((response) => {
+          const sessionIds = response.data.map((item) => item);
+          setRetSessionId(sessionIds);
+        })
+        .catch((error) => {
+          console.error("Error fetching available sessions:", error);
+        });
     })
     .catch((error) => {
       console.error("Error fetching last event id:", error);
     });
 
-    axiosConfig
-    .get("/api/ticket/getUnique/" + retEventId + "/" + eventDetails.venue_id)
-    .then((response) => {
-      const sessionIds = response.data.map((item) => item);
-      setRetSessionId(sessionIds);
-    })
-    .catch((error) => {
-      console.error("Error fetching available sessions:", error);
-    });
-
+    //Gets the session ids
     axiosConfig
     .get("/api/sections/" + eventDetails.venue_id)
     .then((response) => {
@@ -355,7 +362,10 @@ export default function Create() {
   }
 
   useEffect(() => {
-
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return; 
+    }
     const nftDetails:NFTDetails = {
       standingFactoryAddress: env.NEXT_PUBLIC_STANDING_FACTORY,
       seatedFactoryAddress: env.NEXT_PUBLIC_SEATED_FACTORY,
@@ -375,57 +385,65 @@ export default function Create() {
     //deploys the Session Factory contract
     const deploySessionFactoryContract = async () => {
       try{
-        let user = await magic?.wallet.connectWithUI() ?? [];
-        let userPublicKey = user[0];
-        const provider = magic?.rpcProvider ? new ethers.BrowserProvider(magic?.rpcProvider) : null;
-        if (provider == null) {
-          throw new Error('Provider not available. Contract cannot be initialized.');
-      };
-        const signer = await provider?.getSigner();
-        const SessionFactory = new ethers.ContractFactory(compiledSessionFactory.abi,compiledSessionFactory.bytecode,signer);
-        console.log(`Deploying...`);
-        console.log(nftDetails.nftMeta);
-        const SessionFactoryInstance = await SessionFactory.deploy(
-              nftDetails.standingFactoryAddress,
-              nftDetails.seatedFactoryAddress,
-              nftDetails.eventId,
-              nftDetails.numSessions,
-              nftDetails.sessionId,
-              nftDetails.sectionId,
-              nftDetails.supplyPerSection,
-              nftDetails.startPrice,
-              nftDetails.priceCap,
-              nftDetails.startSeats,
-              nftDetails.nftMeta,
-              
-        );
-        await SessionFactoryInstance.waitForDeployment();
-        console.log(`Deployed!`);
-        const SessionFactoryAddress = await SessionFactoryInstance.getAddress();
-        console.log(`SessionFactory Address: ${SessionFactoryAddress}`);
-      // let contractAddr = "0x46CB039034Ce705f5efd981F40817ac0F42aCbdB";
-      let contract = new ethers.Contract(SessionFactoryAddress, compiledSessionFactory.abi, signer);
+      //   let user = await magic?.wallet.connectWithUI() ?? [];
+      //   let userPublicKey = user[0];
+      //   console.log(userPublicKey)
+      //   const provider = magic?.rpcProvider ? new ethers.BrowserProvider(magic?.rpcProvider) : null;
+      //   if (provider == null) {
+      //     throw new Error('Provider not available. Contract cannot be initialized.');
+      //   };
+      //   let price = [0.1,0.05,0.02,0.07,0.06,0.07,0.03,0.04,0.03,0.01]
+      //   const maticToWeiConversionFactor = 10**18;
+      //   const weiPrices = price.map(priceInMatic => BigInt(Math.floor(priceInMatic * maticToWeiConversionFactor)));
+      //   const signer = await provider?.getSigner();
+      //   const SessionFactory = new ethers.ContractFactory(compiledSessionFactory.abi,compiledSessionFactory.bytecode,signer);
+      //   console.log(`Deploying...`);
+      //   // console.log(SessionFactory.runner)
+      //   console.log(nftDetails.nftMeta);
+      //   const SessionFactoryInstance = await SessionFactory.deploy(
+      //         nftDetails.standingFactoryAddress,
+      //         nftDetails.seatedFactoryAddress,
+      //         1,
+      //         1,
+      //         [1],
+      //         ["F01","F02","F03"],
+      //         [10,20,30],
+      //         [10,20,30],
+      //         100,
+      //         [1,20,30],
+      //   ["https://gateway.pinata.cloud/ipfs/QmP9A4q4zAjpcm5oygcmxkuhi2j1EXNABSXzj2Tw8aedaq", "https://gateway.pinata.cloud/ipfs/QmU7zGv2hicSeZuqumjJwvU2YXcwUwdbJ2dzjXx5rNwfX1"]
+      // );
+      //   await SessionFactoryInstance.waitForDeployment();
+      //   console.log(`Deployed!`);
+      //   const SessionFactoryAddress = await SessionFactoryInstance.getAddress();
+      //   console.log(`SessionFactory Address: ${SessionFactoryAddress}`);
+      // // let contractAddr = "0x46CB039034Ce705f5efd981F40817ac0F42aCbdB";
+      // let contract = new ethers.Contract(SessionFactoryAddress, compiledSessionFactory.abi, signer);
 
-        for(let i = 0;i<nftDetails.numSessions;i++){
-          let sessionId = nftDetails.sessionId[i];
-          let sessionAddresses = await contract.getSessionAddresses(sessionId);
-          console.log("This is Contract address: ",sessionAddresses);
-          console.log(sessionAddresses)
-          console.log(typeof(sessionAddresses));          
-          try {
-            const response = await axiosConfig.put(
-              "/api/sessions/updateAddr/"+nftDetails.eventId+"/"+sessionId,
-              sessionAddresses
-            );
-              console.log(response.data);
-            } catch (error) {
-              console.error("File upload failed:", error);
-              } 
-            }
+      //   for(let i = 0;i<nftDetails.numSessions;i++){
+      //     let sessionId = nftDetails.sessionId[i];
+      //     let sessionAddresses = await contract.getSessionAddresses(sessionId);
+      //     console.log("This is Contract address: ",sessionAddresses);
+      //     console.log(sessionAddresses)
+      //     console.log(typeof(sessionAddresses));          
+      //     try {
+      //       const response = await axiosConfig.put(
+      //         "/api/sessions/updateAddr/"+nftDetails.eventId+"/"+sessionId,
+      //         sessionAddresses
+      //       );
+      //       if(response.status === 200){
+      //         console.log(response.data);
+      //         router.push('/creators');
+      //         }
+      //       } catch (error) {
+      //         console.error("File upload failed:", error);
+      //         } 
+      //       }
           }
       catch(error:any){
         console.log(error);
       }
+      
     }
     deploySessionFactoryContract();
   },[retSessionId]);
@@ -439,7 +457,8 @@ export default function Create() {
   const [eventNameQuery, setEventNameQuery] = useState("");
   const [queriedEventName, setQueriedEventName] = useState("");
   const [fileList, setFileList] = useState([]);
-
+  const [visible, toggle ] = useDisclosure(false);
+  const [vis, checkMark] = useDisclosure(false);
   
 
 
@@ -449,14 +468,16 @@ export default function Create() {
   const handleQueryChange = (event: any) => {
     setEventNameQuery(event.target.value);
   };
-
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }}/>
   const handleFileUpload = async () => {
     if (!seatNFT || !standingNFT) {
       console.error("No file selected.");
       return;
     }
+    toggle.open();
     const formData = new FormData();
-    formData.append("eventName", "nimama");
+    formData.append("eventName", "Astroworld Festival");
     formData.append("file1", standingNFT);
     formData.append("file2", seatNFT);
   
@@ -473,36 +494,17 @@ export default function Create() {
           const seatedEventUrl = response.data.seatedEventUrl as string;
           console.log(standingEventUrl, seatedEventUrl);
           setNftMeta([standingEventUrl, seatedEventUrl]);
+          toggle.close();
+          toast.success('NFTs Uploaded Successfully');
+          setTimeout(() => {
+            router.push('/creators');
+          }, 500);
         }
         console.log(response);
       } catch (error) {
-        console.error("File upload failed:", error);
+        toast.error('NFTs Upload Failed');
       }
-      
   };
-
-  // Function to fetch and update the file list
-  // const fetchFileList = async () => {
-  //   try {
-  //     if (eventNameQuery) {
-  //       const response = await axios.get(
-  //         "http://localhost:9090/api/nft/events/" + eventNameQuery
-  //       );
-  //       setFileList(response.data);
-  //       setQueriedEventName(eventNameQuery);
-  //     } else {
-  //       console.log("Missing name query input");
-  //       setFileList([]);
-  //     }
-  //   } catch (error: any) {
-  //     if (error.response && error.response.status === 404) {
-  //       // Handle 404 error here by setting fileList to an empty array
-  //       setFileList([]);
-  //     } else {
-  //       console.error("Failed to fetch file list:", error);
-  //     }
-  //   }
-  // };
 
     return (
         <>
@@ -514,6 +516,7 @@ export default function Create() {
                 {(user) => (
                     <Section title="For Creators - Create New Event">
                             <form onSubmit={handleSubmit}>
+                            <Box pos="relative">   
                                 <div className="">
                                     <h1 className="font-bold text-size-lg mt-8">Basic Information</h1>
                                     <span className="font-light text-size-lg">Craft your event's identity: Name it, share its unique story, and classify its genre. Lay the foundation for an unforgettable experience.</span>
@@ -641,6 +644,9 @@ export default function Create() {
                                     <div className="mt-4">
                                         <FileInput type="file" accept="image/png,image/jpeg" onChange={setEventImage} icon={<IconUpload className="size[1rem]" />} label="Upload Event Banner Image" placeholder="Click Me to Upload: .png, .jpeg" required />
                                     </div>
+                                    
+                                      <LoadingOverlay visible={visible} zIndex={8000}/>
+                                  
                                     <h1 className="font-bold mt-10">NFT Tokens</h1>
                                     <span className="font-light">Make Your Event Memorable! Personalize it with Your Unique NFTs, From Flying Cats to Rainbow Wonders – Let Your Imagination Soar!</span>
                                     <div className="mt-8 flex flex-col md:flex-row">
@@ -656,9 +662,12 @@ export default function Create() {
                                         <div className="md:w-1/2 w-full md:pl-6">
                                             <FileInput type="button" accept="image/png,image/jpeg" onChange={setStandingNFT} icon={<IconUpload className="size[1rem] " />} label="Upload NFT image for Standing" placeholder="Click Me to Upload: .png, .jpeg" required />
                                         </div>
-                                        <Button onClick={handleFileUpload}>Upload File</Button>
+                                      
+                                        {/* <Button onClick={handleFileUpload}>Upload File</Button> */}
                                     </div>
+                                    
                                 </div>
+                                </Box>
                                 <Group className="mt-12 flex justify-between">
                                     <Link href="/creators"><Button>Back to Dashboard</Button></Link>
                                     <Button type="submit" variant="filled" color="blue" className="ml-auto">
@@ -666,6 +675,7 @@ export default function Create() {
                                     </Button>
                                 </Group>
                             </form>
+                            
                             {/* <Button onClick={handleFileUpload}>nigganigniga</Button> */}
 
 
