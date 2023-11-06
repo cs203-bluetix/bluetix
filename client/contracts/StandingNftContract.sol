@@ -7,9 +7,11 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
 using Counters for Counters.Counter;
+using SafeMath for uint256;
 
 contract StandingNftContract is ERC1155, Ownable{
     uint eventId;
@@ -18,9 +20,9 @@ contract StandingNftContract is ERC1155, Ownable{
     uint public sessionId;
     uint public supply;
     //Keeps a price Cap on the ticket to ensure no reselling
-    uint public priceCap;
+    uint256 public priceCap;
     //Indisectiones startPrice of the NFT
-    uint public startPrice;
+    uint256 public startPrice;
     //Keeps track of how many times the contract has been minted
     uint public mintCount;
     string nftMeta;
@@ -65,7 +67,7 @@ contract StandingNftContract is ERC1155, Ownable{
     function mintBatch(uint256 _amount) public payable{
         require(_amount>1,"To use this function, there has to be more NFTs minted");
         require(_amount+mintCount<=supply,"The amount you wish to purchase is more than the tickets left");
-        uint256 requiredAmt = _amount * startPrice;
+        uint256 requiredAmt = _amount.mul(startPrice);
         require(msg.value == requiredAmt, "transfer amount false");
         uint[] memory myArray = new uint[](1);
         uint[] memory tokenIds = new uint[](1);
