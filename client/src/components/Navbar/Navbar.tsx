@@ -17,6 +17,8 @@ import {
 import { useAuthStore } from "store/auth";
 import { useRouter } from "next/router";
 import { magic } from "utils/magicSDK";
+import axios from "axios";
+import { SERVER_API_LOGOUT_URL } from "utils/globals";
 
 interface NavbarProps {
   classProps?: string;
@@ -116,6 +118,14 @@ export default Navbar;
 
 const UserOptions = ({ user }: { user: UserInfo }) => {
   const { logoutUser } = useAuthStore();
+  const logoutHandler = async () => {
+    try {
+      logoutUser();
+      await axios.get(SERVER_API_LOGOUT_URL, { withCredentials: true });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const router = useRouter();
   return (
     <Menu shadow="md" width={200} zIndex={1000}>
@@ -144,7 +154,10 @@ const UserOptions = ({ user }: { user: UserInfo }) => {
         >
           Wallet
         </Menu.Item>
-        <Menu.Item onClick={() => logoutUser()} icon={<IconLogout size={16} />}>
+        <Menu.Item
+          onClick={async () => await logoutHandler()}
+          icon={<IconLogout size={16} />}
+        >
           Logout
         </Menu.Item>
         {user.isCreator && (

@@ -75,7 +75,7 @@ export default async function (
 
     const hashToTitle = new Map<string, string>();
     const datesToNfts = new Map<string, NFTOrder[]>();
-    const datesToTransaction = new Map<string, Transaction[]>();
+    const datesToTransactions = new Map<string, Transaction[]>();
 
     const structuredNfts: NFTOrder[] = nfts.map((nft) => {
       if (!hashToTitle.has(nft.contract.address)) {
@@ -89,9 +89,9 @@ export default async function (
         from: nft.contract.address,
         contractDeployer: nft.contract.contractDeployer ?? "",
         deployedBlockNumber: nft.contract.deployedBlockNumber ?? -1,
-        tokenId: nft.tokenId,
+        tokenId: nft.tokenId, //
         tokenType: nft.tokenType,
-        title: nft.title,
+        title: nft.title, // Right side
         description: nft.description,
         timeLastUpdated: nft.timeLastUpdated,
         image: nft.rawMetadata?.image ?? "",
@@ -106,8 +106,8 @@ export default async function (
         const { formattedDate } = getReadableDate(
           assetTransfer.metadata.blockTimestamp
         );
-        if (!datesToTransaction.has(formattedDate))
-          datesToTransaction.set(formattedDate, []);
+        if (!datesToTransactions.has(formattedDate))
+          datesToTransactions.set(formattedDate, []);
         const txn: Transaction = {
           to: assetTransfer.to!,
           value: assetTransfer.value!,
@@ -117,14 +117,14 @@ export default async function (
           category: assetTransfer.category,
           title: hashToTitle.get(assetTransfer.to!),
         };
-        datesToTransaction.get(formattedDate)?.push(txn);
+        datesToTransactions.get(formattedDate)?.push(txn);
         return txn;
       }
     );
 
     res.status(200).json({
       nfts: Object.fromEntries(datesToNfts),
-      transactions: Object.fromEntries(datesToTransaction),
+      transactions: Object.fromEntries(datesToTransactions),
     });
   } catch (e) {
     console.warn(e);

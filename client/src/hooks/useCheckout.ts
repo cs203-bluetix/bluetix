@@ -45,7 +45,7 @@ export const useCheckout = () => {
 
       // This is the session address you fetch from the db.
       const sessionContract = new ethers.Contract(
-        "0xB7893A9DeBb4885d5fc3453f20252e7195f974E0",
+        sessionAddress,
         sessionAbi["abi"],
         signer
       );
@@ -54,7 +54,9 @@ export const useCheckout = () => {
       // const contractAddr = "0x18bf8d00302EfD826f01daEae39CaCc0E2A29803";
 
       // Use the session address to get specific sections.
-      const contractAddr = await sessionContract.getSectionToAddress?.("F01");
+      const contractAddr = await sessionContract.getSectionToAddress?.(
+        cart.cartItems[0]?.seatId
+      );
 
       console.log(contractAddr);
       let testAbi = abi["abi"];

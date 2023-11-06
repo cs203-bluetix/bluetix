@@ -1,6 +1,19 @@
-import { ActionIcon, Menu, Title } from "@mantine/core";
-import { IconTriangleInverted } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Avatar,
+  Badge,
+  Divider,
+  Menu,
+  Tabs,
+  Title,
+} from "@mantine/core";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconTriangleInverted,
+} from "@tabler/icons-react";
 import axios from "axios";
+import dayjs from "dayjs";
 import LandingLayout from "layouts/LandingLayout";
 import { useRouter } from "next/router";
 import Loading from "pages/load/loading";
@@ -54,39 +67,34 @@ const OrderPage = () => {
   }, [router.pathname]);
 
   useEffect(() => {
+    if (!data.nfts) return;
     const isWalletConnected = async () => {
       const isLogged = await magic?.user.isLoggedIn();
       setIsLogged(isLogged);
     };
     isWalletConnected();
-  }, [magic?.user]);
+  }, [data, magic?.user]);
 
   return (
-    <div className="mx-auto h-screen max-w-[920px] px-7 py-[4.2rem] md:px-5">
+    <div className="mx-auto min-h-screen  max-w-[920px] px-3 py-[4.2rem] sm:px-5 md:px-7">
       {isLogged != null && isLogged && !isLoading ? (
         <div className="flex w-full flex-col pt-4 ">
           <div className="w-fit">
-            <Menu>
-              <Menu.Target>
-                <div className="flex items-center gap-4 bg-gray-100 px-2 py-2 hover:cursor-pointer hover:bg-gray-200">
-                  <Title>{type === "nft" ? "NFTs" : "Transactions"}</Title>
-                  <ActionIcon variant="subtle" className="pt-2">
-                    <IconTriangleInverted size={16} />
-                  </ActionIcon>
-                </div>
-              </Menu.Target>
-              <Menu.Dropdown className="w-full">
-                <Menu.Item
-                  onClick={() =>
-                    setType((prev) => (prev === "nft" ? "transaction" : "nft"))
-                  }
+            <Tabs variant="pills" radius="md" value={type}>
+              <Tabs.List>
+                <Tabs.Tab value="nft" onClick={() => setType("nft")}>
+                  NFTs
+                </Tabs.Tab>
+                <Tabs.Tab
+                  value="transaction"
+                  onClick={() => setType("transaction")}
                 >
-                  {type === "nft" ? "Transactions" : "NFTs"}
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+                  Transactions
+                </Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
           </div>
-          <div className="w-full pt-12">
+          <div className="w-full">
             {type === "nft" ? (
               <NFTViewer nfts={data.nfts} />
             ) : (
@@ -102,7 +110,63 @@ const OrderPage = () => {
 };
 
 const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
-  return <div>nft</div>;
+  return (
+    <div>
+      {Object.entries(nfts).map(([date, arr]) => (
+        <div className="mt-8">
+          <span>{dayjs(date).format("MMMM D, YYYY")}</span>
+          <div className="mb-4"></div>
+          <Divider />
+          <div>
+            {arr.map((nft) => (
+              <div
+                className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-200"
+                onClick={() =>
+                  window.open(
+                    `https://testnets.opensea.io/assets/mumbai/${nft.from}/${nft.tokenId}`,
+                    "_blank"
+                  )
+                }
+              >
+                <div className="flex w-fit  items-center gap-2 ">
+                  <div>
+                    <ActionIcon
+                      radius="xl"
+                      size="lg"
+                      variant="light"
+                      className="gray"
+                    >
+                      <IconArrowDown color="green" />
+                    </ActionIcon>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold">Receive</span>
+                    <span className="text-gray-400"></span>
+                  </div>
+                </div>
+                <div className="flex w-fit items-center gap-3">
+                  <Avatar
+                    variant="filled"
+                    radius="xl"
+                    size="lg"
+                    src={nft.image}
+                  />
+                  <span>{nft.title}</span>
+                </div>
+                <div className="flex max-w-[100px] flex-col gap-2">
+                  <span className="pl-2 text-sm text-gray-500">From</span>
+                  <Badge color="Gray" variant="light" className="w-full">
+                    <span className="truncate">{nft.contractDeployer}</span>
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Divider />
+        </div>
+      ))}
+    </div>
+  );
 };
 
 const TransactionViewer = ({
@@ -110,5 +174,67 @@ const TransactionViewer = ({
 }: {
   transactions: { [k: string]: Transaction[] };
 }) => {
-  return <div>txn</div>;
+  console.log(transactions);
+  return (
+    <div>
+      {Object.entries(transactions).map(([date, arr]) => (
+        <div className="mt-8">
+          <span>{dayjs(date).format("MMMM D, YYYY")}</span>
+          <div className="mb-4"></div>
+          <Divider />
+          <div>
+            {arr.map((transaction) => (
+              <div
+                className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-200"
+                onClick={() =>
+                  window.open(
+                    `https://mumbai.polygonscan.com/tx/${transaction.hash}`,
+                    "_blank"
+                  )
+                }
+              >
+                <div className="flex w-fit  items-center gap-2 ">
+                  <div>
+                    <ActionIcon
+                      radius="xl"
+                      size="lg"
+                      variant="light"
+                      className="gray"
+                    >
+                      <IconArrowUp color="red" />
+                    </ActionIcon>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold">Send</span>
+                    <span className="text-gray-400"></span>
+                  </div>
+                </div>
+                <div className="flex w-fit items-center gap-3">
+                  <Avatar
+                    variant="filled"
+                    radius="xl"
+                    size="md"
+                    src="/matic-logo.png"
+                  />
+                  <div className="flex flex-col ">
+                    <span>{transaction.asset}</span>
+                    <span className="tracking-tight text-gray-500">
+                      ${transaction.value}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex max-w-[100px] flex-col gap-2">
+                  <span className="pl-2 text-sm text-gray-500">From</span>
+                  <Badge color="Gray" variant="light" className="w-full">
+                    <span className="truncate">{transaction.to}</span>
+                  </Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Divider />
+        </div>
+      ))}
+    </div>
+  );
 };
