@@ -121,8 +121,8 @@ const UserOptions = ({ user }: { user: UserInfo }) => {
   const { logoutUser } = useAuthStore();
   const logoutHandler = async () => {
     try {
-      logoutUser();
       await axios.get(SERVER_API_LOGOUT_URL, { withCredentials: true });
+      logoutUser();
     } catch (e) {
       console.log(e);
     }
