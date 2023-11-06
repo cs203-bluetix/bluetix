@@ -137,7 +137,7 @@ export default function Creators() {
                   shadow="lg"
                   radius="md"
                   component="a"
-                  href={`/events/${event.id}`}
+                  href={`/events/${event.eventId}`}
                   target="_blank"
                 >
                   <Image

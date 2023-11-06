@@ -152,7 +152,7 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
                     <span className="text-gray-400"></span>
                   </div>
                 </div>
-                <div className="flex w-fit items-center gap-3">
+                <div className="flex w-[300px] items-center justify-start gap-3">
                   <Avatar
                     variant="filled"
                     radius="xl"
@@ -164,7 +164,7 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
                 <div className="flex max-w-[100px] flex-col gap-2">
                   <span className="pl-2 text-sm text-gray-400">From</span>
                   <Badge color="Gray" variant="light" className="w-full">
-                    <span className="truncate">{nft.contractDeployer}</span>
+                    <span className="truncate">{nft.from}</span>
                   </Badge>
                 </div>
               </div>
@@ -218,7 +218,7 @@ const TransactionViewer = ({
                     <span className="text-gray-400"></span>
                   </div>
                 </div>
-                <div className="flex w-fit items-center gap-3">
+                <div className="flex w-[300px] w-fit items-center gap-3">
                   <Avatar
                     variant="filled"
                     radius="xl"
