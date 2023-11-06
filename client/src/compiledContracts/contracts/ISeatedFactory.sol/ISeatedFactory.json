@@ -42,7 +42,7 @@
         },
         {
           "internalType": "string",
-          "name": "_event",
+          "name": "_nftMeta",
           "type": "string"
         }
       ],

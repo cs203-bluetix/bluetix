@@ -9,31 +9,25 @@ describe("Testing Seated NFT Contract's function", function() {
     let addr1;
     let seatedContract;
     let DeployedUSDC;
-
     beforeEach(async function() {
         [owner, addr1] = await ethers.getSigners();
         
-        let USDC = await ethers.getContractFactory("MockUSDC");
-        let usdcToken = await USDC.deploy();
-        let DeployedUSDC = await usdcToken.waitForDeployment();
-        let usdcAddress = await DeployedUSDC.getAddress();
-        let seatedFactory = await ethers.getContractFactory("testNFT");
-        
-        // string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _event
+        let seatedFactory = await ethers.getContractFactory("SeatedNftContract");
+
+        // uint _eventId, uint _sessionId, string memory _section, uint _supply, uint _startPrice, uint _priceCap, uint _startSeat, string memory _nftMeta
         const seatedInstance = await seatedFactory.deploy(
+            1, //eventId
+            2,
             "A", //Section
             100, //supply
-            10, //startprice
-            100,//price Cap
-            1,//startSeat
-            "Miley Cyrus", //event Name
-            usdcAddress
+            BigInt(1000000000000000000), //startprice
+            BigInt(1000000000000000000),//price Cap
+            1, //start seat
+            "www.haha.com"//nftMeta
         );
         seatedContract = await seatedInstance.waitForDeployment();
 
-        await DeployedUSDC.mint(addr1.address, ethers.parseUnits("2000", 6)); // 2000 USDC
-        await DeployedUSDC.connect(addr1).approve(seatedContract.getAddress(), ethers.parseUnits("2000", 6));
-        console.log("USDC balance: ", )
+        
         console.log("VerificationInstance address:", await seatedContract.getAddress());
       });
 
@@ -46,16 +40,20 @@ describe("Testing Seated NFT Contract's function", function() {
         // Check the initial values of the contract
         expect(await seatedContract.section()).to.equal("A");
         expect(await seatedContract.supply()).to.equal(100);
-        expect(await seatedContract.startPrice()).to.equal(10);
-        expect(await seatedContract.priceCap()).to.equal(100);
+        expect(await seatedContract.startPrice()).to.equal(1000000000000000000n);
+        expect(await seatedContract.priceCap()).to.equal(1000000000000000000n);
         expect(await seatedContract.startSeat()).to.equal(1);
-        expect(await seatedContract.eventName()).to.equal("Miley Cyrus");
+        // expect(await seatedContract.nftMeta()).to.equal("www.haha.com");
     });
 
     it("Should mint an NFT correctly", async function (){
         // Mint a single ticket
 
-        await seatedContract.connect(addr1).mint();
+        await seatedContract.connect(addr1).mint(
+            {
+                value: 1000000000000000000n
+            }
+        );
 
         // Check the balance of the user
         const balance = await seatedContract.balanceOf(addr1.address, 1);
@@ -68,7 +66,11 @@ describe("Testing Seated NFT Contract's function", function() {
 
     it("Should mint a batch of tickets correctly", async function() {
         // Mint a batch of 5 tickets
-        await seatedContract.connect(addr1).mintBatch(5);
+        await seatedContract.connect(addr1).mintBatch(5,
+            {
+                value: 5000000000000000000n 
+            }
+        );
 
         // Check the balance of the user for each ticket
         for (let i = 1; i <= 5; i++) {
@@ -82,18 +84,26 @@ describe("Testing Seated NFT Contract's function", function() {
     });
 
     it("Should map tokens to the right owners", async function(){
-        await seatedContract.connect(addr1).mintBatch(5);
+        await seatedContract.connect(addr1).mintBatch(5,
+            {
+                value: 5000000000000000000n 
+            });
         
         for(let i = 1;i<=5;i++){
             expect(await seatedContract.tokenOwner(i)).to.equal(addr1.address);
         }
         
-        await seatedContract.connect(addr1).mint();
+        await seatedContract.connect(addr1).mint({
+            value: 1000000000000000000n
+        });
         expect(await seatedContract.tokenOwner(6)).to.equal(addr1.address);
     });
 
     it("Should revert with no more seats",async function()  {
-        await seatedContract.connect(addr1).mintBatch(100);
+        await seatedContract.connect(addr1).mintBatch(100,
+            {
+                value: 100000000000000000000n
+            });
         expect(await seatedContract.getTicketsLeft()).to.equal(0);
         await expect(seatedContract.connect(addr1).mint()).to.be.revertedWith("Sorry, we're sold out");
     });

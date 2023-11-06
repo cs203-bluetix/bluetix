@@ -18,10 +18,10 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
     uint sessionId;
     address public marketPlaceAddress;
     string public section;
-    uint public supply;
-    uint public priceCap;
-    uint public startPrice;
-    uint public startSeat;
+    uint256 public supply;
+    uint256 public priceCap;
+    uint256 public startPrice;
+    uint256 public startSeat;
     string nftMeta;
 
     Counters.Counter private tokenId;
@@ -39,7 +39,7 @@ contract SeatedNftContract is ERC1155, Ownable, ReentrancyGuard{
         supply=_supply;
         priceCap=_priceCap;
         startSeat=_startSeat;
-        startPrice = _startPrice;
+        startPrice = _startPrice; 
         nftMeta = _nftMeta;
     }
 
