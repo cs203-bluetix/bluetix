@@ -1,5 +1,5 @@
 import Loading from "components/Suspense/Loading";
-import * as seats from "mock/cat1.json";
+import * as seats from "mock/allcat.json";
 import * as stage from "mock/stage.json";
 import { useEffect } from "react";
 import { GeoJSON, MapContainer, useMap } from "react-leaflet";
@@ -7,20 +7,38 @@ import { useStore } from "store/seat";
 import { SeatNode } from "store/types";
 
 function LeafletMap() {
-  const { eventSession, addNode, nodes, setSelectedNode } = useStore();
+  const { eventSession, addNode, nodes, setSelectedNode, map } = useStore();
+
   if (!eventSession) return <Loading />;
   return (
     <>
       <MapContainer
         className="h-full w-full"
-        zoom={7}
-        center={{ lat: 1.701939977460562, lng: -4.899902343750001 }}
+        zoom={2}
+        center={{ lat: 12.224351672863321, lng: -56.32772132652329 }}
       >
         <MapFunctions />
         <GeoJSON
           data={{ type: "FeatureCollection", ...seats }}
-          style={{ color: "green", fillColor: "red" }}
           onEachFeature={(f, l) => {
+            l.once("autopanstart", (e) => {
+              if (f.properties.id === "Stage")
+                e.target.setStyle({ color: "#000000", weight:0.5, fillColor: "#FFFFFF" });
+              else if (f.properties.cat === 1)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "yellow" });
+              else if (f.properties.cat === 2)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "blue" });
+              else if (f.properties.cat === 3)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "red" });
+              else if (f.properties.cat === 4)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "green" });
+              else if (f.properties.cat === 5)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "orange" });
+              else if (f.properties.cat === 6)
+                e.target.setStyle({ color: "black", weight:0.5, fillColor: "purple" });
+              
+            });
+            l.fireEvent("autopanstart");
             const id = f.properties.id;
             const info = eventSession.seats.find((s) => s.id == id);
             if (!info) return;
@@ -44,9 +62,11 @@ function LeafletMap() {
             l.on("mouseover", (e) =>
               e.target.setStyle({ color: "blue", fillColor: "yellow" })
             );
-            l.on("mouseout", (e) => {
-              e.target.setStyle({ color: "green", fillColor: "red" });
-            });
+
+            // l.on("mouseout", (e) => {
+            //   e.target.setStyle({ color: "white", fillColor: "white" });
+            // });
+
             l.bindTooltip(`${f.properties.id}`, {
               direction: "center",
               className: "label",
@@ -54,7 +74,7 @@ function LeafletMap() {
             });
           }}
         ></GeoJSON>
-        <GeoJSON
+        {/* <GeoJSON
           data={{ type: "FeatureCollection", ...stage }}
           onEachFeature={(f, l) =>
             l.bindTooltip("STAGE", {
@@ -63,7 +83,7 @@ function LeafletMap() {
               permanent: true,
             })
           }
-        ></GeoJSON>
+        ></GeoJSON> */}
       </MapContainer>
     </>
   );
