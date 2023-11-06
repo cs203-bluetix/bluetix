@@ -13,25 +13,32 @@ function Event({
   event,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <LandingLayout title={`BlueTix - ${event.name}`} withNavbar withFooter>
+    <LandingLayout
+      title={`BlueTix - ${event.name}`}
+      withNavbar
+      withFooter
+      withGrad
+    >
       <Section>
-        <div className="h-fit w-full">
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="mx-auto w-full sm:px-6 xl:px-8">
+        <div className="mt-4 h-fit w-full">
+          <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-black bg-opacity-40 backdrop-blur-sm">
+            <div className="mx-auto w-full ">
               <Image
-                className="mb-4 mt-4"
+                className="mb-4"
                 radius="lg"
                 src={`${CDN_API_URL}/events/${event.image_url}`}
                 alt={event.name}
                 height={500}
               ></Image>
 
-              <div className="flex">
+              <div className="flex px-8 text-white">
                 <div className="mt-4 w-[70%]">
                   <div className="mb-6  gap-4">
-                    <h1 className="text-6xl font-bold">{event.name}</h1>
-                    <div>
-                      <span className="text-lg font-semibold">
+                    <h1 className="text-5xl font-bold text-white ">
+                      {event.name}
+                    </h1>
+                    <div className="mt-2">
+                      <span className="text-lg font-semibold ">
                         {
                           getReadableDate(event.sessions[0]?.date!)
                             .formattedDate
@@ -43,7 +50,7 @@ function Event({
                           ).formattedDate
                         }
                       </span>
-                      <Badge className="ml-4" size="xl" color="orange">
+                      <Badge className="ml-4" size="lg" color="blue">
                         {event.venue.name}
                       </Badge>
                     </div>
@@ -51,25 +58,25 @@ function Event({
 
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Event Details</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">
+                    <p className="mt-2 leading-relaxed text-gray-300">
                       {event.description}
                     </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Ticket Pricing</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">
+                    <p className="mt-2 leading-relaxed text-gray-300">
                       {event.ticket_pricing}
                     </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">FAQ</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">
+                    <p className="mt-2 leading-relaxed text-gray-300">
                       {event.faq}
                     </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Admissions Policy</h2>
-                    <p className="mt-2 leading-relaxed text-gray-600">
+                    <p className="mt-2 leading-relaxed text-gray-300">
                       {event.admission_policy}
                     </p>
                   </div>
@@ -78,7 +85,7 @@ function Event({
                   <div className="sticky top-32">
                     <Menu>
                       <Menu.Target>
-                        <div className="px-6">
+                        <div className="mt-2 px-6">
                           <Button color="orange" size="xl" mx="lg" fullWidth>
                             Buy Tickets
                           </Button>

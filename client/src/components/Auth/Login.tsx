@@ -20,8 +20,8 @@ function Login() {
   });
 
   return (
-    <div className="mt-10 flex w-full max-w-3xl flex-col items-center">
-      <h1 className="text-4xl font-bold text-gray-900">Welcome back!</h1>
+    <div className="mt-10 flex w-full max-w-3xl flex-col items-center ">
+      <h1 className="text-4xl font-bold">Welcome back :)</h1>
       <form
         onSubmit={form.onSubmit(({ email, password }) =>
           handleSubmit(email, password)
@@ -37,18 +37,20 @@ function Login() {
           size="md"
           radius="md"
           label="Email"
-          labelProps={{ className: "mb-1" }}
+          labelProps={{ className: "mb-1" } }
+          styles={{ label: { color: 'white' } }}
           className="w-full"
           icon={<IconUser size={"16"} />}
           placeholder="Email"
           {...form.getInputProps("email")}
         />
         <PasswordInput
+          className="w-full"
           size="md"
           radius="md"
           label="Password"
           labelProps={{ className: "mb-1" }}
-          className="w-full"
+          styles={{ label: { color: 'white' } }}
           icon={<IconPassword size={"16"} />}
           placeholder="Password"
           {...form.getInputProps("password")}
@@ -63,7 +65,7 @@ function Login() {
           Login
         </Button>
       </form>
-    </div>
+      </div>
   );
 }
 

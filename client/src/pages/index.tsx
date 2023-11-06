@@ -96,11 +96,11 @@ export default function Home() {
             className="sectiondivider absolute h-[150px] w-full bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: 'url("/assets/landing-bg3.png")' }}
           ></div>
-          <div className="mb-12 h-[90vh] w-full bg-gradient-to-b from-[#e8e9eb] via-transparent to-transparent">
-            <div className=" pt-36 text-center text-5xl font-bold">
+          <div className="mb-12 h-[90vh] w-full bg-gradient-to-b from-[#] via-transparent to-transparent">
+            <div className=" pt-36 text-center text-5xl font-bold text-white">
               Trending
             </div>
-            <div className="pb-4 text-center">
+            <div className="pb-4 text-center text-white">
               <br></br>
               Where the world's latest buzz meets the eager crowd.
             </div>

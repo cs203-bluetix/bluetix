@@ -1,12 +1,11 @@
-import dynamic from "next/dynamic";
+import axios from "axios";
 import { useRouter } from "next/router";
+import Loading from "pages/load/loading";
 import { useEffect, useState } from "react";
-import SeatWrapper from "./SeatWrapper";
 import {
   SERVER_API_QUEUE_INSERVICE_URL,
   SERVER_API_QUEUE_JOIN_URL,
 } from "utils/globals";
-import axios from "axios";
 
 function QueueWrapper({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -43,7 +42,7 @@ function QueueWrapper({ children }: { children: React.ReactNode }) {
     };
     getInfo();
   }, [router]);
-  return <>{inService && children}</>;
+  return <>{inService ? children : <Loading />}</>;
 }
 
 export default QueueWrapper;

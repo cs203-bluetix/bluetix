@@ -70,11 +70,16 @@ function QueuePage() {
       permissions={[Role.USER, Role.ADMIN]}
       title="Ticket Queue"
       withNavbar
+      overWhite={true}
     >
       <div className="flex h-screen w-full flex-col items-center justify-center">
         <Loader />
-        <h2 className="mt-4 text-lg font-semibold">You are now in line!</h2>
-        <span>When it is your turn, you will have 15 minutes to checkout.</span>
+        <h2 className="mt-4 text-lg font-semibold text-white">
+          You are now in line!
+        </h2>
+        <span className="text-white">
+          When it is your turn, you will have 15 minutes to checkout.
+        </span>
       </div>
     </LandingLayout>
   );

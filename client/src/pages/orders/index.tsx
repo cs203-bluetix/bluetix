@@ -1,17 +1,5 @@
-import {
-  ActionIcon,
-  Avatar,
-  Badge,
-  Divider,
-  Menu,
-  Tabs,
-  Title,
-} from "@mantine/core";
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconTriangleInverted,
-} from "@tabler/icons-react";
+import { ActionIcon, Avatar, Badge, Divider, Tabs } from "@mantine/core";
+import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import axios from "axios";
 import dayjs from "dayjs";
 import LandingLayout from "layouts/LandingLayout";
@@ -29,6 +17,7 @@ function Orders() {
       title="Ticket Orders"
       withNavbar
       withFooter
+      withStyle={false}
     >
       <OrderPage />
     </LandingLayout>
@@ -76,20 +65,37 @@ const OrderPage = () => {
   }, [data, magic?.user]);
 
   return (
-    <div className="mx-auto min-h-screen  max-w-[920px] px-3 py-[4.2rem] sm:px-5 md:px-7">
+    <div className="mx-auto min-h-screen  max-w-[920px] px-3 py-[4.2rem] text-white sm:px-5 md:px-7">
       {isLogged != null && isLogged && !isLoading ? (
         <div className="flex w-full flex-col pt-4 ">
           <div className="w-fit">
             <Tabs variant="pills" radius="md" value={type}>
               <Tabs.List>
-                <Tabs.Tab value="nft" onClick={() => setType("nft")}>
-                  NFTs
+                <Tabs.Tab
+                  className="group"
+                  value="nft"
+                  onClick={() => setType("nft")}
+                >
+                  <span
+                    className={`text-white ${
+                      type === "transaction" && "group-hover:text-black"
+                    }`}
+                  >
+                    NFTs
+                  </span>
                 </Tabs.Tab>
                 <Tabs.Tab
+                  className="group"
                   value="transaction"
                   onClick={() => setType("transaction")}
                 >
-                  Transactions
+                  <span
+                    className={`text-white ${
+                      type === "nft" && "group-hover:text-black"
+                    }`}
+                  >
+                    Transactions
+                  </span>
                 </Tabs.Tab>
               </Tabs.List>
             </Tabs>
@@ -114,13 +120,15 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
     <div>
       {Object.entries(nfts).map(([date, arr]) => (
         <div className="mt-8">
-          <span>{dayjs(date).format("MMMM D, YYYY")}</span>
+          <span className="font-semibold tracking-tight">
+            {dayjs(date).format("MMMM D, YYYY")}
+          </span>
           <div className="mb-4"></div>
           <Divider />
           <div>
             {arr.map((nft) => (
               <div
-                className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-200"
+                className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-700"
                 onClick={() =>
                   window.open(
                     `https://testnets.opensea.io/assets/mumbai/${nft.from}/${nft.tokenId}`,
@@ -128,7 +136,7 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
                   )
                 }
               >
-                <div className="flex w-fit  items-center gap-2 ">
+                <div className="flex w-fit  items-center gap-4 ">
                   <div>
                     <ActionIcon
                       radius="xl"
@@ -154,7 +162,7 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
                   <span>{nft.title}</span>
                 </div>
                 <div className="flex max-w-[100px] flex-col gap-2">
-                  <span className="pl-2 text-sm text-gray-500">From</span>
+                  <span className="pl-2 text-sm text-gray-400">From</span>
                   <Badge color="Gray" variant="light" className="w-full">
                     <span className="truncate">{nft.contractDeployer}</span>
                   </Badge>
@@ -174,18 +182,19 @@ const TransactionViewer = ({
 }: {
   transactions: { [k: string]: Transaction[] };
 }) => {
-  console.log(transactions);
   return (
     <div>
       {Object.entries(transactions).map(([date, arr]) => (
         <div className="mt-8">
-          <span>{dayjs(date).format("MMMM D, YYYY")}</span>
+          <span className="font-semibold tracking-tight">
+            {dayjs(date).format("MMMM D, YYYY")}
+          </span>
           <div className="mb-4"></div>
           <Divider />
           <div>
             {arr.map((transaction) => (
               <div
-                className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-200"
+                className="flex h-[80px] w-full justify-between rounded-md px-4 py-2 hover:cursor-pointer hover:bg-gray-700"
                 onClick={() =>
                   window.open(
                     `https://mumbai.polygonscan.com/tx/${transaction.hash}`,
@@ -193,7 +202,7 @@ const TransactionViewer = ({
                   )
                 }
               >
-                <div className="flex w-fit  items-center gap-2 ">
+                <div className="flex w-fit  items-center gap-4 ">
                   <div>
                     <ActionIcon
                       radius="xl"
@@ -218,13 +227,13 @@ const TransactionViewer = ({
                   />
                   <div className="flex flex-col ">
                     <span>{transaction.asset}</span>
-                    <span className="tracking-tight text-gray-500">
+                    <span className="tracking-tight text-gray-400">
                       ${transaction.value}
                     </span>
                   </div>
                 </div>
                 <div className="flex max-w-[100px] flex-col gap-2">
-                  <span className="pl-2 text-sm text-gray-500">From</span>
+                  <span className="pl-2 text-sm text-gray-400">From</span>
                   <Badge color="Gray" variant="light" className="w-full">
                     <span className="truncate">{transaction.to}</span>
                   </Badge>

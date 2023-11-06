@@ -26,8 +26,8 @@ const AboutRow = (props: AboutRowProps) => {
       }`}
     >
       <div className="w-full text-center sm:w-1/2 sm:px-6">
-        <h3 className="text-3xl font-semibold text-gray-900">{props.title}</h3>
-        <div className="mt-6 text-xl leading-9">{props.description}</div>
+        <h3 className="text-3xl font-semibold ">{props.title}</h3>
+        <div className="mt-6 text-xl leading-9 text-gray-300">{props.description}</div>
       </div>
 
       <div className="w-full p-6 sm:w-1/2">
@@ -39,11 +39,12 @@ const AboutRow = (props: AboutRowProps) => {
 
 export default function About() {
   return (
-    <LandingLayout title="BlueTix - About Us" withNavbar withFooter>
+    <LandingLayout title="BlueTix - About Us" withNavbar withFooter withGrad>
       <Section>
+      <div className="w-full px-8 rounded-xl bg-gray-900 backdrop-blur-sm bg-opacity-40">
         <div>
           <div className="w-full pt-12 text-center sm:px-6">
-            <h2 className="text-4xl font-bold text-gray-900">About BlueTix</h2>
+            <h2 className="text-4xl font-bold">About BlueTix</h2>
             <div className="mt-6 text-xl leading-9">
               Welcome to BlueTix, your ultimate destination for hassle-free
               event ticketing! BlueTix is more than just a ticketing
@@ -82,6 +83,7 @@ export default function About() {
               ))}
             </ul>
           </div>
+        </div>
         </div>
       </Section>
     </LandingLayout>

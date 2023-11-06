@@ -13,6 +13,8 @@ function SeatSelection() {
       permissions={[Role.USER, Role.ADMIN]}
       title="Ticket Seating"
       withNavbar
+      overWhite={true}
+      withStyle={false}
     >
       <QueueWrapper>
         <SeatWrapper />
