@@ -2,7 +2,7 @@ import axios from "axios";
 import Loading from "components/Suspense/Loading";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAuthStore } from "store/auth";
 import { Role, UserInfo } from "store/types";
 import { SERVER_API_URL } from "utils/globals";
@@ -19,13 +19,15 @@ export default function AuthLayout({
   permissions?: Role[];
 }) {
   const { user, loading, setLoading, loginUser, logoutUser } = useAuthStore();
+  const [validatedJwt, setValidatedJwt] = useState(false);
   const router = useRouter();
   useEffect(() => {
+    if (user) return;
     // tentative session persistence function
     const getUser = async () => {
       try {
         const endpoint = `${SERVER_API_URL}/api/auth/validateJwt`;
-        const resp = await axios.post(endpoint, {}, { withCredentials: true });
+        const resp = await axios.get(endpoint, { withCredentials: true });
         if (resp.status === 200) {
           loginUser({
             email: resp.data.email,
@@ -40,18 +42,18 @@ export default function AuthLayout({
       }
     };
 
-    if (loading) {
-      getUser();
-    } else if (strict && !user) {
+    if (!validatedJwt) {
+      getUser().then(() => setValidatedJwt(true));
+    } else if (strict) {
       logoutUser();
       router.push("/404");
     }
     setLoading(false);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!router) return;
-    if (!user && !permissions.includes(Role.GUEST)) {
+    if (!user && !permissions.includes(Role.GUEST) && validatedJwt) {
       router.push(`/login${router.asPath}`);
     } else if (
       user &&
@@ -60,7 +62,7 @@ export default function AuthLayout({
     ) {
       router.push("/");
     }
-  }, [user, router]);
+  }, [user, router, validatedJwt]);
 
   if (strict && !user) return <Loading />;
 

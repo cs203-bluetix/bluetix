@@ -13,72 +13,96 @@ function Event({
   event,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <LandingLayout title={`BlueTix - ${event.name}`} withNavbar withFooter withGrad>
+    <LandingLayout
+      title={`BlueTix - ${event.name}`}
+      withNavbar
+      withFooter
+      withGrad
+    >
       <Section>
-        <div className="h-fit w-full mt-4">
-          <div className="flex w-full flex-col items-center justify-center gap-4 bg-black backdrop-blur-sm bg-opacity-40 rounded-lg">
+        <div className="mt-4 h-fit w-full">
+          <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-black bg-opacity-40 backdrop-blur-sm">
             <div className="mx-auto w-full ">
               <Image
                 className="mb-4"
                 radius="lg"
                 src={`${CDN_API_URL}/events/${event.image_url}`}
                 alt={event.name}
-                height={500}>
-              </Image>
+                height={500}
+              ></Image>
 
+              <div className="flex px-8 text-white">
+                <div className="mt-4 w-[70%]">
+                  <div className="mb-6  gap-4">
+                    <h1 className="text-5xl font-bold text-white ">
+                      {event.name}
+                    </h1>
+                    <div className="mt-2">
+                      <span className="text-lg font-semibold ">
+                        {
+                          getReadableDate(event.sessions[0]?.date!)
+                            .formattedDate
+                        }{" "}
+                        -{" "}
+                        {
+                          getReadableDate(
+                            event.sessions[event.sessions.length - 1]?.date!
+                          ).formattedDate
+                        }
+                      </span>
+                      <Badge className="ml-4" size="lg" color="blue">
+                        {event.venue.name}
+                      </Badge>
+                    </div>
+                  </div>
 
-              <div className="flex text-white px-8">
-                <div className="w-[70%] mt-4">
-                  <div className="gap-4  mb-6">
-                  <h1 className="font-bold text-5xl text-white ">{event.name}</h1>
-                  <div className="mt-2">
-                    <span className="text-lg font-semibold ">
-                      {getReadableDate(event.sessions[0]?.date!).formattedDate} - {getReadableDate(event.sessions[event.sessions.length-1]?.date!).formattedDate}
-                    </span>
-                    <Badge className="ml-4" size="lg" color="blue">{event.venue.name}</Badge>
-                  </div>
-                  </div>
-                  
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Event Details</h2>
-                    <p className="mt-2 leading-relaxed text-gray-300">{event.description}</p>
+                    <p className="mt-2 leading-relaxed text-gray-300">
+                      {event.description}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Ticket Pricing</h2>
-                    <p className="mt-2 leading-relaxed text-gray-300">{event.ticket_pricing}</p>
+                    <p className="mt-2 leading-relaxed text-gray-300">
+                      {event.ticket_pricing}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">FAQ</h2>
-                    <p className="mt-2 leading-relaxed text-gray-300">{event.faq}</p>
+                    <p className="mt-2 leading-relaxed text-gray-300">
+                      {event.faq}
+                    </p>
                   </div>
                   <div className="mb-10">
                     <h2 className="text-2xl font-bold">Admissions Policy</h2>
-                    <p className="mt-2 leading-relaxed text-gray-300">{event.admission_policy}</p>
+                    <p className="mt-2 leading-relaxed text-gray-300">
+                      {event.admission_policy}
+                    </p>
                   </div>
                 </div>
-                <div className="w-[30%] mt-4">
-                  
-                <div className="sticky top-32">
-                      <Menu >
-                        <Menu.Target >
-                          <div className="px-6 mt-2">
+                <div className="mt-4 w-[30%]">
+                  <div className="sticky top-32">
+                    <Menu>
+                      <Menu.Target>
+                        <div className="mt-2 px-6">
                           <Button color="orange" size="xl" mx="lg" fullWidth>
                             Buy Tickets
                           </Button>
-                          </div>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                          {event.sessions.map((s) => (
-                            <Link href={`/buy/${event.eventId}/${s.sessionId}`}>
-                              <Menu.Item>
-                                {getReadableDate(s.date).formattedDate} ·{" "}
-                                {s.start_time} - {s.end_time}
-                              </Menu.Item>
-                            </Link>
-                          ))}
-                        </Menu.Dropdown>
-                      </Menu>
-                    </div>
+                        </div>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        {event.sessions.map((s) => (
+                          <Link href={`/buy/${event.eventId}/${s.sessionId}`}>
+                            <Menu.Item>
+                              {getReadableDate(s.date).formattedDate} ·{" "}
+                              {s.start_time} - {s.end_time}
+                            </Menu.Item>
+                          </Link>
+                        ))}
+                      </Menu.Dropdown>
+                    </Menu>
+                  </div>
                 </div>
               </div>
 
@@ -138,7 +162,6 @@ function Event({
 }
 
 export default Event;
-
 
 export const getServerSideProps: GetServerSideProps<{ event: Event }> = async ({
   params,

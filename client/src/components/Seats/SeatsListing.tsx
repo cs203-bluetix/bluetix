@@ -12,7 +12,7 @@ function SeatsListing({ nodesToDisplay }: { nodesToDisplay: SeatNode[] }) {
   return (
     <div className="mt-4 flex max-h-full flex-col">
       <div className="mx-4 flex items-center justify-between md:mx-6">
-        <h2 className="text-lg font-semibold tracking-tight">
+        <h2 className="text-lg font-semibold tracking-tight text-white">
           {nodesToDisplay.length} listings
         </h2>
       </div>

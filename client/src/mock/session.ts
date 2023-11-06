@@ -7,4 +7,5 @@ export const mockEventSession: EventSession = {
   seats: mockSeats,
   sessionid: "abcdef",
   date: "2023-11-15",
+  sessionAddress: "0x0739Ab67Dd1dB81d1b41415c5C1ddDD4578C1907",
 };

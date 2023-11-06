@@ -34,7 +34,7 @@ function SeatsFilter({
   return (
     <div className="mx-6 mb-2 mt-2 w-full">
       <div className="flex w-full flex-col gap-2">
-        <h2 className="text-lg">Filter by</h2>
+        <h2 className="text-lg text-white">Filter by</h2>
         <div className="flex w-full gap-2">
           <Select
             data={categories}
