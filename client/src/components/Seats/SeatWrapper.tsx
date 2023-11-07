@@ -15,6 +15,9 @@ import toast from "react-hot-toast";
 const LeafletMap = dynamic(() => import("./LeafletMap"), {
   ssr: false,
 });
+const LeafletMapTest = dynamic(() => import("./LeafletMapTest"), {
+  ssr: false,
+});
 
 function SeatWrapper() {
   const router = useRouter();
@@ -88,7 +91,7 @@ function SeatWrapper() {
             <SeatsView />
           </div>
           <div className="h-full w-full">
-            <LeafletMap />
+            <LeafletMapTest />
           </div>
         </div>
       ) : (
