@@ -4,12 +4,7 @@ import { Section } from "layouts/Section";
 import Link from "next/link";
 import { Venue } from "store/types";
 import axiosConfig from "utils/axiosConfig";
-import {
-  Card,
-  Image,
-  Text,
-  Group,
-} from "@mantine/core";
+import { Card, Image, Text, Group } from "@mantine/core";
 import { CDN_API_URL } from "utils/globals";
 
 interface VenueListProps {
@@ -17,18 +12,16 @@ interface VenueListProps {
 }
 
 function VenueList({ venues }: VenueListProps) {
-
   return (
     <LandingLayout title="BlueTix - Venues" withNavbar withFooter withGrad>
       <Section title="">
-            <div className="w-full px-8 rounded-xl bg-gray-900 backdrop-blur-sm bg-opacity-40">
-
-              <h1 className="w-full text-white text-left font-bold py-2">Events</h1>
-        <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {venues.map((venue) => {
-            return <VenueCard venue={venue} key={venue.venueid} />;
-          })}
-        </div>
+        <div className="w-full rounded-xl bg-gray-900 bg-opacity-40 px-8 backdrop-blur-sm">
+          <h1 className="w-full py-2 text-left font-bold text-white">Events</h1>
+          <div className="grid h-full w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {venues.map((venue) => {
+              return <VenueCard venue={venue} key={venue.venueid} />;
+            })}
+          </div>
         </div>
       </Section>
     </LandingLayout>
@@ -38,60 +31,60 @@ export default VenueList;
 
 export async function getServerSideProps() {
   try {
-    const response = await axiosConfig.get('/api/venues');
+    const response = await axiosConfig.get("/api/venues");
     const venues: Venue[] = response.data;
 
     return {
       props: { venues },
     };
   } catch (error) {
-    console.error('Error fetching venues:', error);
+    console.error("Error fetching venues:", error);
     return {
-      props: { venues: [] }, 
+      props: { venues: [] },
     };
   }
 }
 
 const VenueCard = ({ venue }: { venue: Venue }) => {
   return (
-    <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
-      <Card
-        style={{ border: "none" }}
-        shadow="sm"
-        padding="lg"
-        radius="md"
-        withBorder
-        className="duration-400 w-full transform transition-transform hover:scale-105"
-      >
-        <Card.Section className="border-t border-gray-300">
-          <Image
-            src={`${CDN_API_URL}/venues/${venue.image_url}`}
-            alt={venue.name}
-            height={220}
-          />
-        </Card.Section>
+    // <Link href={`/venues/${venue.venueid}`} className="flex flex-wrap">
+    <Card
+      style={{ border: "none" }}
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      className="duration-400 w-full transform transition-transform hover:scale-105"
+    >
+      <Card.Section className="border-t border-gray-300">
+        <Image
+          src={`${CDN_API_URL}/venues/${venue.image_url}`}
+          alt={venue.name}
+          height={220}
+        />
+      </Card.Section>
 
-        <Group mt="md">
-          <Text fw={500}>{venue.name}</Text>
-          {/* <Badge variant="light">
+      <Group mt="md">
+        <Text fw={500}>{venue.name}</Text>
+        {/* <Badge variant="light">
         {venue.address}
         </Badge> */}
-        </Group>
+      </Group>
 
-        <Text size="sm" c="dimmed" mb="xs">
-          {venue.address}
-        </Text>
+      <Text size="sm" c="dimmed" mb="xs">
+        {venue.address}
+      </Text>
 
-        <Text size="sm">{venue.description}</Text>
+      <Text size="sm">{venue.description}</Text>
 
-        {/* <Button radius="md" style={{ flex: 1 }}>
+      {/* <Button radius="md" style={{ flex: 1 }}>
             Show details
           </Button> */}
-        {/* <ActionIcon variant="default" radius="md" size={36}>
+      {/* <ActionIcon variant="default" radius="md" size={36}>
               <IconHeart className={classes.like} stroke={1.5} />
             </ActionIcon> */}
-        {/* </Group> */}
-      </Card>
-    </Link>
+      {/* </Group> */}
+    </Card>
+    // </Link>
   );
 };

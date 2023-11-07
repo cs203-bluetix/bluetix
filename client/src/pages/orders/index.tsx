@@ -126,7 +126,7 @@ const NFTViewer = ({ nfts }: { nfts: { [k: string]: NFTOrder[] } }) => {
           <div className="mb-4"></div>
           <Divider />
           <div>
-            {arr.map((nft) => (
+            {arr.reverse().map((nft) => (
               <div
                 className=" flex h-[80px] w-full justify-between px-2 py-2 hover:cursor-pointer hover:bg-gray-700"
                 onClick={() =>

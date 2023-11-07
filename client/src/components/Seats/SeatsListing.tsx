@@ -33,7 +33,7 @@ function SeatsListing({ nodesToDisplay }: { nodesToDisplay: SeatNode[] }) {
                 onMouseEnter={() => {
                   (n.layer as any).setStyle({
                     color: "blue",
-                    fillColor: "yellow",
+                    fillColor: "green",
                   });
                   (n.layer as any).bindPopup(
                     `Number of seats: ${n.info.numSeats}`,
@@ -45,10 +45,57 @@ function SeatsListing({ nodesToDisplay }: { nodesToDisplay: SeatNode[] }) {
                   (n.layer as any).openPopup();
                 }}
                 onMouseLeave={() => {
-                  (n.layer as any).setStyle({
-                    color: "green",
-                    fillColor: "red",
-                  });
+                  console.log(n.info);
+                  if (n.info.id === "Stage")
+                    (n.layer as any).setStyle({
+                      color: "#000000",
+                      weight: 0.5,
+                      fillColor: "#FFFFFF",
+                    });
+                  else if (n.info.category === 1)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "yellow",
+                    });
+                  else if (n.info.category === 2)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "blue",
+                    });
+                  else if (n.info.category === 3)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "red",
+                    });
+                  else if (n.info.category === 4)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "green",
+                    });
+                  else if (n.info.category === 5)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "orange",
+                    });
+                  else if (n.info.category === 6)
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "purple",
+                    });
+                  else {
+                    (n.layer as any).setStyle({
+                      color: "black",
+                      weight: 0.5,
+                      fillColor: "yellow",
+                    });
+                  }
+
                   (n.layer as any).closePopup();
                 }}
               >

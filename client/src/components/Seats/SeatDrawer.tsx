@@ -67,7 +67,7 @@ function SeatDrawer() {
               onClick={() => {
                 setSelectedNode(null);
                 setValue(0);
-                map?.setZoom(7);
+                map?.setZoom(3);
                 map?.setView(map.getBounds().getCenter());
               }}
             >
